@@ -1,0 +1,11 @@
+.input_focus:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.clear_a {
+  text-decoration: none;
+  color: #000;
+}
+
+/*# sourceMappingURL=Header.module.css.map */
