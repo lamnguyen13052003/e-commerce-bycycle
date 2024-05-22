@@ -2,7 +2,6 @@ import React from 'react';
 import {Nav, Navbar} from "react-bootstrap";
 import {DropdownSubmenu, MenuItem, NavDropdownMenu} from "react-bootstrap-submenu";
 import {Box} from "@mui/material";
-import './scss/Menu.module.css';
 
 function Menu(props: any) {
     return (
