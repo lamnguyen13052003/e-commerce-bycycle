@@ -90,7 +90,7 @@ function Footer() {
             <hr className={`my-0 bg-dark`}/>
             <section className={`bg-primary py-5`}>
                 <p className={`text-center text-white mb-0`}>
-                    © {currentYear} Xe Đạp Giá Kho. All Rights Reserved. Web Design by
+                    © {currentYear} Xe Đạp Kimi. All Rights Reserved. Web Design by
                     <Link to={"#"} className={`text-decoration-none text-white`}> KIMI</Link></p>
             </section>
         </footer>
