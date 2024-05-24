@@ -1,4 +1,4 @@
-import {Box, Button, Stack} from "@mui/material";
+import {Box, Button, Container, Stack} from "@mui/material";
 import styles from './scss/Product.module.css';
 import BoltIcon from '@mui/icons-material/Bolt';
 import React from "react";
@@ -15,9 +15,9 @@ interface productProps{
 }
 function Product(props:productProps){
     return (
-        <Box className={' mx-2 shadow-lg rounded-4 overflow-hidden'} sx={{width:'306px', height: '376px'}}>
+        <Box className={' m-2 shadow-lg rounded-4 overflow-hidden'} sx={{width:'306px', height: '376px'}}>
             <Box className={'position-relative'} sx={{height:'218px'}}>
-                <LabelDiscount discount={props.discount}/>
+                {props.isSale && <LabelDiscount discount={props.discount}/>}
                 <Box className={'object-fit-cover position-absolute top-0 start-0 z-0'} sx={{width: '306px', height:'218px'}}>
                     <Image className={`${styles.image_hover}`} src={ImageCycleBike} alt={props.name} style={{width: '100%'}}/>
                 </Box>
@@ -57,4 +57,22 @@ function LabelDiscount(prop: {discount: number}){
     )
 }
 
-export default Product
+function ProductList(){
+    return(
+        <>
+            <Container maxWidth={"md"}>
+                <Stack direction={'row'} gap={1}>
+                    <Product isSale={true} discount={3} image={{}}
+                             name={'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha'}
+                             price={3000000} discountPrice={2500000}/>
+                    <Product isSale={false} discount={3} image={{}}
+                             name={'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha'}
+                             price={3000000} discountPrice={2500000}/>
+                </Stack>
+
+            </Container>
+        </>
+    )
+}
+
+export default ProductList
