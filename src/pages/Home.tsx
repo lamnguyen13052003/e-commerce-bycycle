@@ -5,7 +5,7 @@ function Home() {
     return (
         <>
             <div>Trang chủ</div>
-        <Product isSale={true} discount={3} image={{}} name={'null'} price={3} discountPrice={3}/>
+        <Product isSale={true} discount={3} image={{}} name={'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha'} price={3000000} discountPrice={2500000}/>
         </>
     );
 }
