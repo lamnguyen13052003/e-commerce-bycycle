@@ -1,10 +1,13 @@
 import React from 'react';
 import styles from './scss/Footer.module.css';
-import {Avatar, Box, Divider, Tooltip} from "@mui/material";
+import {Avatar, Box, Tooltip} from "@mui/material";
 import {green, indigo, pink} from "@mui/material/colors";
 import {Facebook, Instagram, Mail, Phone} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import GoogleMapComponent, {location} from "../google-map-component";
+import {Address} from "./Address";
+import {ItemPolicy} from "./ItemPolicy";
+import {Title} from "./Title";
 
 function Footer() {
     const center: location = {
@@ -97,44 +100,5 @@ function Footer() {
     );
 }
 
-function Title(props: {
-    title: string
-}) {
-    return (
-        <>
-            <h6 className={`text-warning ${styles.title}`}>{props.title}</h6>
-            <hr className={styles.line}/>
-        </>
-    )
-}
-
-function ItemPolicy(props: {
-    title: string,
-    to: string
-}) {
-    return (
-        <Box sx={{
-            py: '5px'
-        }}>
-            <Link to={props.to} className={`${styles.a}`}>{props.title}</Link>
-            <Divider sx={{bgcolor: 'white', height: 2}}/>
-        </Box>
-    )
-}
-
-function Address(props: {
-    title: string,
-    detail: string
-}) {
-    return (
-        <Box sx={{
-            py: '5px',
-            color: 'white'
-        }}>
-            <strong>{props.title}: </strong>
-            <span>{props.detail}</span>
-        </Box>
-    )
-}
 
 export default Footer;
