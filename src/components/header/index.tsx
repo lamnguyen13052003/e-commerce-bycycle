@@ -1,5 +1,5 @@
 import React from 'react';
-import {FloatingLabel, Form, InputGroup, Nav, Navbar, NavDropdown, NavItem} from 'react-bootstrap';
+import {Form, InputGroup} from 'react-bootstrap';
 import {Search} from "@mui/icons-material";
 import {Avatar, Badge, Box, Button, Divider} from "@mui/material";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -16,21 +16,17 @@ function Header() {
                     <Link to={"/"} className={`${styles.clear_a}`}>
                         <Box className={`justify-content-center d-flex flex-column align-items-center`}>
                             <Avatar alt="Logo" src={logo} sx={{
-                                width: 75,
-                                height: 75,
+                                width: 50,
+                                height: 50,
                             }}/>
-                            <h2>XE ĐẠP KIMI</h2>
+                            <h4>XE ĐẠP KIMI</h4>
                         </Box>
                     </Link>
                     <Menu/>
                 </Box>
                 <InputGroup className="w-50">
-                    <FloatingLabel controlId="floatingInput" label="Tìm kiếm sản phẩm...">
-                        <Form.Control id={"search-bar"} type="text" placeholder={""}
-                                      className={`${styles.input_focus}`} style={{
-                            borderRadius: "50px 0 0 50px",
-                        }}/>
-                    </FloatingLabel>
+                    <Form.Control id={"search-bar"} type="text" placeholder={""}
+                                  className={`${styles.input_focus} ${styles.input}`}/>
                     <label className={"input-group-text"} htmlFor={"search-bar"} style={{
                         borderRadius: "0 50px 50px 0",
                     }}><Search/></label>
@@ -44,7 +40,7 @@ function Header() {
                     <Badge badgeContent={4} color="secondary">
                         <ShoppingCartIcon color="info"/>
                     </Badge>
-            </Button>
+                </Button>
             </Box>
             <Divider sx={{bgcolor: 'black', height: 2}}/>
         </>

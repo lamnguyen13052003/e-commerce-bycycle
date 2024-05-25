@@ -1,11 +1,11 @@
 import React from 'react';
-import CartItem from "../components/cart";
+import ProductList from "../components/product";
 
 function Home() {
     return (
         <>
             <div>Trang chủ</div>
-            <CartItem />
+            <ProductList/>
         </>
     );
 }
