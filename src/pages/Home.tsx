@@ -10,6 +10,7 @@ import CarouselProduct from "../components/carousel-product";
 import ProductByCategory from "../components/product-by-category";
 
 
+
 function Home() {
     return (
         <>
