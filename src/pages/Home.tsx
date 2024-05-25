@@ -10,6 +10,7 @@ import CarouselProduct from "../components/carousel-product";
 import ProductByCategory from "../components/product-by-category";
 
 
+
 function Home() {
     return (
         <>
@@ -110,7 +111,6 @@ function Home() {
                     />
                 </Container>
             </Box>
-            <CartItem id={1} title={"Xe Đạp Trẻ Em 12 Inch GH Bike [GIÁ RẺ] - Xanh lá"} price={890000} qty={1}/>
         </>
     );
 }
