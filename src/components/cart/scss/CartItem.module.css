@@ -1,0 +1,25 @@
+.text-red-500 {
+  color: #EF4444;
+}
+
+.dark .text-red-400 {
+  color: #F87171;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.cart-item-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.cart-item-wrapper img {
+  width: 150px;
+}
+
+/*# sourceMappingURL=CartItem.module.css.map */

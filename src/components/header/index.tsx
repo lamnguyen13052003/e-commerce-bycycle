@@ -44,7 +44,7 @@ function Header() {
                     <Badge badgeContent={4} color="secondary">
                         <ShoppingCartIcon color="info"/>
                     </Badge>
-                </Button>
+            </Button>
             </Box>
             <Divider sx={{bgcolor: 'black', height: 2}}/>
         </>
