@@ -5,13 +5,14 @@ import Typography from "@mui/material/Typography";
 import React from "react";
 import {Container} from "react-bootstrap";
 import MenuItem from '@mui/material/MenuItem';
-import ProductByCategoryFilter from '../components/product-by-category/Filter'
+import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/filter/PriceFilter";
 
 function TitlePage(props: PageData) {
     return (
         <>
-            <Box className={'p-3 d-lg-flex justify-content-between align-items-center'}>
+            <Box className={'py-1 d-lg-flex justify-content-between align-items-center'}>
                 <Box>
                     <Breadcrumbs className={'fw-bold text-uppercase'} aria-label="breadcrumb">
                         <Link color="inherit" to="/">
@@ -73,11 +74,11 @@ function Products() {
                 <TitlePage {...pageData}/>
                 <Stack direction={'row'} gap={1} alignItems={'start'}>
                     <ProductByCategoryFilter {...brandsFilterProps}/>
-                    <ProductByCategoryFilter {...priceFilterProps}/>
+                    <PriceFilter />
                     <ProductByCategoryFilter {...wheelSizeFilterProps}/>
                     <ProductByCategoryFilter {...materialsFilterProps}/>
                     <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
-                    <Button style={{width: '104px', height: '32px', marginTop: '8px'}} variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
+                    <Button  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
                 </Stack>
             </Container>
 
@@ -107,21 +108,9 @@ const brandsFilterProps  = {
     inputLabelId: "inputLabelId-brand",
     selectLabelId: "selectLabelId-brand",
     selectId: "selectId-brand",
-    outlineInputId: "outlineInputId-brand"
-}
-const priceFilterProps  = {
-    nameLabel: "Lọc theo giá",
-    itemSelected : [
-        'Dưới 3 triệu',
-        'Từ 3 - 6 triệu',
-        'Từ 6 - 10 triệu',
-        'Từ 10 - 15 triệu',
-        'Trên 15 triệu'
-    ],
-    inputLabelId: "inputLabelId-price",
-    selectLabelId: "selectLabelId-price",
-    selectId: "selectId-price",
-    outlineInputId: "outlineInputId-price"
+    outlineInputId: "outlineInputId-brand",
+    maxHeight: MAX_HEIGHT,
+    width: 200
 }
 const wheelSizeFilterProps  = {
     nameLabel: "Kích thước bánh xe",
@@ -132,7 +121,9 @@ const wheelSizeFilterProps  = {
     inputLabelId: "inputLabelId-wheelSize",
     selectLabelId: "selectLabelId-wheelSize",
     selectId: "selectId-wheelSize",
-    outlineInputId: "outlineInputId-wheelSize"
+    outlineInputId: "outlineInputId-wheelSize",
+    maxHeight: MAX_HEIGHT,
+    width: 200
 }
 const materialsFilterProps  = {
     nameLabel: "Chất liệu",
@@ -145,7 +136,9 @@ const materialsFilterProps  = {
     inputLabelId: "inputLabelId-material",
     selectLabelId: "selectLabelId-material",
     selectId: "selectId-material",
-    outlineInputId: "outlineInputId-material"
+    outlineInputId: "outlineInputId-material",
+    maxHeight: MAX_HEIGHT,
+    width: 200
 }
 const purposeOfUseFilterProps  = {
     nameLabel: "Mục đích sử dụng",
@@ -156,5 +149,7 @@ const purposeOfUseFilterProps  = {
     inputLabelId: "inputLabelId-purposeOfUse",
     selectLabelId: "selectLabelId-purposeOfUse",
     selectId: "selectId-purposeOfUse",
-    outlineInputId: "outlineInputId-purposeOfUse"
+    outlineInputId: "outlineInputId-purposeOfUse",
+    maxHeight: MAX_HEIGHT,
+    width: 200
 }
