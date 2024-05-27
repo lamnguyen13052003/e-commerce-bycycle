@@ -8,7 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/filter/PriceFilter";
-
+import ProductList from "../components/product-list";
+import {products} from '../components/product/DataProduct'
 function TitlePage(props: PageData) {
     return (
         <>
@@ -25,7 +26,7 @@ function TitlePage(props: PageData) {
                 <Box className={'fw-bold'}>
                     <Stack  direction={'row'} alignItems={'center'} alignContent={'center'} gap={1}>
                         <Box>
-                            <span>Hiển thị tất cả x kết quả</span>
+                            <span>Hiển thị tất cả {products.length} kết quả</span>
                         </Box>
                         <SelectSmallFilter/>
                     </Stack>
@@ -72,14 +73,18 @@ function Products() {
         <>
             <Container>
                 <TitlePage {...pageData}/>
-                <Stack direction={'row'} gap={1} alignItems={'start'}>
-                    <ProductByCategoryFilter {...brandsFilterProps}/>
-                    <PriceFilter />
-                    <ProductByCategoryFilter {...wheelSizeFilterProps}/>
-                    <ProductByCategoryFilter {...materialsFilterProps}/>
-                    <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
-                    <Button  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
+                <Stack direction={"column"} gap={2}>
+                    <Stack direction={'row'} gap={1} alignItems={'start'}>
+                        <ProductByCategoryFilter {...brandsFilterProps}/>
+                        <PriceFilter />
+                        <ProductByCategoryFilter {...wheelSizeFilterProps}/>
+                        <ProductByCategoryFilter {...materialsFilterProps}/>
+                        <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
+                        <Button className={'p-3'}  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
+                    </Stack>
+                    <ProductList products={products}/>
                 </Stack>
+
             </Container>
 
         </>
