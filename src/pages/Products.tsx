@@ -5,8 +5,9 @@ import Typography from "@mui/material/Typography";
 import React from "react";
 import {Container} from "react-bootstrap";
 import MenuItem from '@mui/material/MenuItem';
+import ProductByCategoryFilter from '../components/product-by-category/Filter'
 
-function ProductPageInfo(props: PageData) {
+function TitlePage(props: PageData) {
     return (
         <>
             <Box className={'p-3 d-lg-flex justify-content-between align-items-center'}>
@@ -68,7 +69,8 @@ function Products() {
     return (
         <>
             <Container>
-                <ProductPageInfo {...pageData}/>
+                <TitlePage {...pageData}/>
+                <ProductByCategoryFilter {...brandsFilterProps}/>
             </Container>
 
         </>
@@ -81,3 +83,22 @@ interface PageData {
 
 const pageData: PageData = {nameCategory: "Xe đạp đua"}
 export default Products;
+const brandsFilterProps  = {
+    nameLabel: "Thương hiệu",
+    itemSelected : [
+        'Brave Will',
+        'Fornix',
+        'Life',
+        'Giant',
+        'Calli',
+        'Fasono',
+        'Dtfly',
+        'Thong Nhat',
+        'HTM',
+    ],
+    inputLabelId: "inputLabelId-01",
+    selectLabelId: "selectLabelId-01",
+    selectId: "selectId-01",
+    outlineInputId: "outlineInputId-01"
+}
+
