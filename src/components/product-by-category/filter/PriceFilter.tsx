@@ -8,14 +8,6 @@ interface PriceProps {
     max: number
 }
 
-// export function priceFilter() {
-//     return (
-//         <>
-//
-//         </>
-//     )
-// }
-
 function AccordionPrice() {
     return (
         <div>
@@ -33,7 +25,6 @@ function AccordionPrice() {
                             <Filter{...priceFilterProps} />
                         </Box>
                         <CustomPrice {...values}/>
-
                     </Stack>
 
                 </AccordionDetails>
@@ -55,7 +46,7 @@ function CustomPrice(props: PriceProps) {
         return (
             <Box>
                 <Box className={'d-flex justify-content-between align-items-center'}>
-                    <TextField  id="outlined-from" defaultValue={rangeValue[0]}  variant="outlined"/> <sup className={'px-1'}>đ</sup>
+                    <TextField  id="outlined-from" defaultValue={rangeValue[0]}   variant="outlined"/> <sup className={'px-1'}>đ</sup>
                     <Box className={'ms-1 me-2'} style={{width: '10%', height: '4px', backgroundColor: '#000'}}/>
                     <TextField  id="outlined-to" defaultValue={rangeValue[1]} variant="outlined"/><sup className={'px-1'}>đ</sup>
                 </Box>
