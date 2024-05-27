@@ -10,6 +10,8 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/filter/PriceFilter";
 import ProductList from "../components/product-list";
 import {products} from '../components/product/DataProduct'
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
 function TitlePage(props: PageData) {
     return (
         <>
@@ -83,6 +85,9 @@ function Products() {
                         <Button className={'p-3'}  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
                     </Stack>
                     <ProductList products={products}/>
+                    <Box className={'py-2 px-4 justify-content-center d-flex'}>
+                        <Button className={'focus-ring focus-ring-info'}  variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
+                    </Box>
                 </Stack>
 
             </Container>
