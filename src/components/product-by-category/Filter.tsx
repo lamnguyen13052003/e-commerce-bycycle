@@ -8,7 +8,6 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import {images} from '../../assets/images/brands/images'
-import fascino from "../../assets/images/brands/fascino.png";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -16,12 +15,12 @@ const MenuProps = {
     PaperProps: {
         style: {
             maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
+            width: 200,
         },
     },
 };
 
-interface FilterProps {
+export interface FilterProps {
     nameLabel: string,
     itemSelected: string[],
     inputLabelId: string,
@@ -55,9 +54,10 @@ export default function MultipleSelectChip(props: FilterProps) {
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 300 }}>
+            <FormControl sx={{ m: 1, width: 200 }}>
                 <InputLabel id={props.inputLabelId}>{props.nameLabel}</InputLabel>
                 <Select
+                    className={'text-capitalize'}
                     labelId={props.selectLabelId}
                     id={props.selectId}
                     multiple
@@ -67,7 +67,7 @@ export default function MultipleSelectChip(props: FilterProps) {
                     renderValue={(selected) => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
                             {selected.map((value) => (
-                                <Chip key={value} label={value} style={{ backgroundImage: images[1] }} />
+                                <Chip key={value} label={value}  />
                             ))}
                         </Box>
                     )}
@@ -77,7 +77,7 @@ export default function MultipleSelectChip(props: FilterProps) {
                         <MenuItem
                             key={name}
                             value={name}
-
+                            style={getStyles(name, items, theme)}
                         >
                             {name}
                         </MenuItem>

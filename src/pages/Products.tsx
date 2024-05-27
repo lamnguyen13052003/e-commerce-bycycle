@@ -1,11 +1,12 @@
 import {ProductProps} from "../components/product";
-import {Box, Breadcrumbs, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
+import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {Link} from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import {Container} from "react-bootstrap";
 import MenuItem from '@mui/material/MenuItem';
 import ProductByCategoryFilter from '../components/product-by-category/Filter'
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 function TitlePage(props: PageData) {
     return (
@@ -70,7 +71,14 @@ function Products() {
         <>
             <Container>
                 <TitlePage {...pageData}/>
-                <ProductByCategoryFilter {...brandsFilterProps}/>
+                <Stack direction={'row'} gap={1} alignItems={'start'}>
+                    <ProductByCategoryFilter {...brandsFilterProps}/>
+                    <ProductByCategoryFilter {...priceFilterProps}/>
+                    <ProductByCategoryFilter {...wheelSizeFilterProps}/>
+                    <ProductByCategoryFilter {...materialsFilterProps}/>
+                    <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
+                    <Button style={{width: '104px', height: '32px', marginTop: '8px'}} variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
+                </Stack>
             </Container>
 
         </>
@@ -96,9 +104,57 @@ const brandsFilterProps  = {
         'Thong Nhat',
         'HTM',
     ],
-    inputLabelId: "inputLabelId-01",
-    selectLabelId: "selectLabelId-01",
-    selectId: "selectId-01",
-    outlineInputId: "outlineInputId-01"
+    inputLabelId: "inputLabelId-brand",
+    selectLabelId: "selectLabelId-brand",
+    selectId: "selectId-brand",
+    outlineInputId: "outlineInputId-brand"
 }
-
+const priceFilterProps  = {
+    nameLabel: "Lọc theo giá",
+    itemSelected : [
+        'Dưới 3 triệu',
+        'Từ 3 - 6 triệu',
+        'Từ 6 - 10 triệu',
+        'Từ 10 - 15 triệu',
+        'Trên 15 triệu'
+    ],
+    inputLabelId: "inputLabelId-price",
+    selectLabelId: "selectLabelId-price",
+    selectId: "selectId-price",
+    outlineInputId: "outlineInputId-price"
+}
+const wheelSizeFilterProps  = {
+    nameLabel: "Kích thước bánh xe",
+    itemSelected : [
+        '24 Inch',
+        '26 Inch',
+    ],
+    inputLabelId: "inputLabelId-wheelSize",
+    selectLabelId: "selectLabelId-wheelSize",
+    selectId: "selectId-wheelSize",
+    outlineInputId: "outlineInputId-wheelSize"
+}
+const materialsFilterProps  = {
+    nameLabel: "Chất liệu",
+    itemSelected : [
+        'Hợp kim nhôm',
+        'Hợp kim thép',
+        'Thép',
+        'Giant',
+    ],
+    inputLabelId: "inputLabelId-material",
+    selectLabelId: "selectLabelId-material",
+    selectId: "selectId-material",
+    outlineInputId: "outlineInputId-material"
+}
+const purposeOfUseFilterProps  = {
+    nameLabel: "Mục đích sử dụng",
+    itemSelected : [
+        'Đi làm, đi học',
+        'Tập thể theo',
+    ],
+    inputLabelId: "inputLabelId-purposeOfUse",
+    selectLabelId: "selectLabelId-purposeOfUse",
+    selectId: "selectId-purposeOfUse",
+    outlineInputId: "outlineInputId-purposeOfUse"
+}
