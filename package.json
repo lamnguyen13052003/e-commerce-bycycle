@@ -35,7 +35,8 @@
     "web-vitals": "^2.1.4",
     "ts-node": "^10.9.2",
     "mongodb": "^6.6.2",
-    "mongoose": "^6.1.0"
+    "mongoose": "^6.1.0",
+    "styled-components": "^6.1.11"
   },
   "scripts": {
     "start_server": "ts-node backend/server.ts",
