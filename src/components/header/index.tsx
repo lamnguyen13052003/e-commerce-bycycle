@@ -31,6 +31,7 @@ function Header() {
                         borderRadius: "0 50px 50px 0",
                     }}><Search/></label>
                 </InputGroup>
+            <Link to={"/cart"}>
                 <Button sx={{
                     border: '1px green solid',
                     px: "20px",
@@ -41,6 +42,7 @@ function Header() {
                         <ShoppingCartIcon color="info"/>
                     </Badge>
                 </Button>
+            </Link>
             </Box>
             <Divider sx={{bgcolor: 'black', height: 2}}/>
         </>
