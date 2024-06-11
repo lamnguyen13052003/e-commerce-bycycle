@@ -11,7 +11,7 @@ function CarouselProduct(props: { products: ProductProps[] }) {
                 return (
                     <Carousel.Item>
                         <Stack direction={"row"} justifyContent={'space-between'}>
-                            <Product {...props.products[index]}/>
+                            <Product key={`CarouselProduct_${Math.random()}`} {...props.products[index]}/>
                             {props.products[index + 1] ? <Product {...props.products[index + 1]}/> : ''}
                             {props.products[index + 2] ? <Product {...props.products[index + 2]}/> : ''}
                             {props.products[index + 3] ? <Product {...props.products[index + 3]}/> : ''}
