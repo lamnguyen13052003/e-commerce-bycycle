@@ -1,10 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit'
-import {signTitleReducer} from "../slice/SignTitleSlice";
-import {logger} from 'redux-logger';
+import {signTitleReducer} from "../slice/signTitle.slice";
+import {authReducer} from "../slice/auth.slice";
 
 export const store = configureStore({
     reducer: {
-        signTitle: signTitleReducer
+        signTitle: signTitleReducer,
+        auth: authReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
 });

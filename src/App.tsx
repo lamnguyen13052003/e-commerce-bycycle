@@ -11,7 +11,7 @@ import Sign from "./pages/Sign";
 import Login from "./components/login-form";
 import Register from "./components/register-form";
 import ForgetPassword from "./components/forget-password-form";
-import ResetPassword from "./components/reset-password-form";
+import ChangePassword from "./components/reset-password-form";
 import Verify from "./components/verify-form";
 
 
@@ -25,7 +25,7 @@ function App() {
                     <Route path={"/login"} element={<Login/>}/>
                     <Route path={"/register"} element={<Register/>}/>
                     <Route path={"/forget-password"} element={<ForgetPassword/>}/>
-                    <Route path={"/reset-password"} element={<ResetPassword/>}/>
+                    <Route path={"/change-password"} element={<ChangePassword/>}/>
                     <Route path={"/verify"} element={<Verify/>}/>
                 </Route>
                 <Route path={"/xe-dap-dua"} element={<Products/>}/>

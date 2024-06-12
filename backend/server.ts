@@ -1,6 +1,16 @@
 import express from "express";
 import cors from "cors";
-import {getAll, run} from "./database.connect";
+import {run} from "./database.connect";
+import {runAuthController} from "./controller/auth.controller";
+import {runProductController} from "./controller/product.controller";
+import bodyParser = require("body-parser");
+
+export const log = (tag: string, title: string, data: object) => {
+    console.log(`=================================${tag}==================================`)
+    console.log(title)
+    console.log(data)
+}
+
 
 run().catch(() => {
     console.log("Failed to connect to MongoDB")
@@ -9,18 +19,16 @@ run().catch(() => {
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
-app.get("/all", (req, res) => {
-    getAll().then((data) => {
-        res.send(data);
-    }).catch(() => {
-        res.send("Failed to get data");
-    });
-});
+runProductController(app);
+
+runAuthController(app);
 
 app.listen(1305, () => {
     console.log("Server dep zai da chay o port 1305");
