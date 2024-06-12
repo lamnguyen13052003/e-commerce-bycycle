@@ -2,7 +2,12 @@ import {ObjectId} from "mongodb";
 
 export type Product = {
     id: ObjectId
-    title?: string,
+    sale?: boolean,
+    new?: boolean,
+    discount?: number,
     quantity?: number,
-    price?: number,
+    image: string,
+    name: string,
+    price: number,
+    category: string,
 }

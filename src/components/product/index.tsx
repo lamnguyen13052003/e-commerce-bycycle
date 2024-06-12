@@ -11,9 +11,10 @@ export interface ProductProps {
     sale?: boolean,
     new?: boolean,
     discount?: number,
-    image: object,
+    imagePath: string,
     name: string,
     price: number,
+    // category: string
 }
 
 export default function Product(props: ProductProps) {
@@ -36,7 +37,7 @@ export default function Product(props: ProductProps) {
                 </Stack>
                 <Box className={'object-fit-cover position-absolute top-0 start-0 z-0'}
                      sx={{width: '306px', height: '100%'}}>
-                    <Image className={`${styles.image_hover}`} src={ImageCycleBike} alt={props.name}
+                    <Image className={`${styles.image_hover}`} src={props.imagePath} alt={props.name}
                            style={{width: '100%'}}/>
                 </Box>
             </Box>

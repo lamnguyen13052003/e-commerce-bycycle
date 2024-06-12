@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ProductProps} from "../components/product";
 import {Box, Stack} from "@mui/material";
 import {images as banner_images} from "../assets/images/carousels/images";
@@ -8,10 +8,19 @@ import LogoBrand from "../components/logo-brand";
 import ListCategory from "../components/list-category";
 import CarouselProduct from "../components/carousel-product";
 import ProductByCategory from "../components/product-by-category";
+import axios from "axios";
 
 
 
 function Home() {
+    const [getProducts, setProducts] = useState<ProductProps[]>()
+    useEffect( () => {
+        axios.get('http://localhost:1305/api/products/all')
+            .then(response => {
+                setProducts(response.data.data)
+            })
+    }, [])
+    if (!getProducts) return null;
     return (
         <>
             <Box>
@@ -51,7 +60,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={getProducts}
                                        to={"#"}
                                        title={"XE ĐẠP TRẺ EM"}
                     />
@@ -141,7 +150,7 @@ const products: ProductProps[] = [
         sale: true,
         new: true,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
     }
@@ -149,16 +158,7 @@ const products: ProductProps[] = [
         sale: false,
         new: true,
         discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
@@ -167,7 +167,7 @@ const products: ProductProps[] = [
         sale: false,
         new: true,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
@@ -176,7 +176,7 @@ const products: ProductProps[] = [
         sale: false,
         new: true,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
@@ -185,7 +185,7 @@ const products: ProductProps[] = [
         sale: false,
         new: true,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
@@ -194,7 +194,7 @@ const products: ProductProps[] = [
         sale: false,
         new: true,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
@@ -203,7 +203,16 @@ const products: ProductProps[] = [
         sale: false,
         new: true,
         discount: 3,
-        image: {},
+        imagePath: '',
+        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
+        price: 3000000,
+
+    }
+    , {
+        sale: false,
+        new: true,
+        discount: 3,
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
@@ -215,91 +224,91 @@ const product_best_sales: ProductProps[] = [
         sale: true,
         new: true,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
     }, {
         sale: false,
         new: true,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 
     }, {
         sale: false,
         discount: 3,
-        image: {},
+        imagePath: '',
         name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
         price: 3000000,
 

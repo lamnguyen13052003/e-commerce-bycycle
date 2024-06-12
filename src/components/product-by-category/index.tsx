@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Button, Stack} from "@mui/material";
 import {ProductProps} from "../product";
 import {Link} from "react-router-dom";
 import ProductList from "../product-list";
+import axios from "axios";
 
 export interface ProductByCategoryProps {
     title: string,
@@ -11,6 +12,7 @@ export interface ProductByCategoryProps {
 }
 
 function ProductByCategory(props: ProductByCategoryProps) {
+
     return (
         <Box>
             <Stack direction={"row"} alignItems={"center"} pb={"5x"}>
