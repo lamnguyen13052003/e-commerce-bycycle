@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import SignTitleState from "../states/SignTitleState";
+import SignTitleState from "../states/signTitle.state";
 
 const initial: SignTitleState = {
     title: 'Sign In'

@@ -1,119 +1,105 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Button, Stack, TextField} from "@mui/material";
-import {useDispatch} from "react-redux";
-import {setTitle} from "../../slice/SignTitleSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {setTitle} from "../../slice/signTitle.slice";
+import {useForm} from "react-hook-form";
+import {VerifyRequest} from "../../requests/verify.request";
+import {LoginRequest} from "../../requests/login.request";
+import axios from "axios";
+import {toast} from "react-toastify";
+import {login, verify} from "../../slice/auth.slice";
+import {useNavigate} from "react-router-dom";
 
-interface focusState {
-    1: boolean,
-    2: boolean,
-    3: boolean,
-    4: boolean,
-    5: boolean,
-    6: boolean,
+interface inputCode {
+    "field_1": number,
+    "field_2": number,
+    "field_3": number,
+    "field_4": number,
+    "field_5": number,
+    "field_6": number,
 }
 
 function Verify() {
     const dispatch = useDispatch();
     dispatch(setTitle({title: "Xác thực tài khoản"}));
-    const [status, setState] = useState<focusState>({
-        1: true,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-        6: false,
-    })
+    const auth = useSelector((state: any) => state.auth)
+    const nav = useNavigate();
 
-    const nexFocus = (index: keyof focusState) => {
-        setState(prevState => {
-            const newState = {...prevState};
-            newState[index] = false;
-            if (index < 6) {
-                const nextIndex = (1 + parseInt(index.toString())) as keyof focusState;
-                newState[nextIndex] = true;
-            }
-            console.log(newState)
-            return newState;
+    const {register, handleSubmit, formState: {errors}} = useForm<inputCode>();
+
+    const verifyHandle = async (data: VerifyRequest) => {
+        return axios.request({
+            url: "http://localhost:1305/api/verify",
+            method: "POST",
+            data: data,
         })
     }
 
-    const prevFocus = (index: keyof focusState) => {
-        setState(prevState => {
-            const newState = {...prevState};
-            newState[index] = false;
-            if (index > 1) {
-                const nextIndex = (parseInt(index.toString()) - 1) as keyof focusState;
-                newState[nextIndex] = true;
-            }
-            return newState;
-        })
-    }
+    const renderInput = () => {
+        const input: any[] = []
+        for (let i = 0; i < 6; i++) {
+            const name = `field_${i + 1}`
 
-    const keyDownHandler = (e: React.KeyboardEvent, index: keyof focusState) => {
-        let keyCode = e.keyCode;
-        if (keyCode >= 60 && keyCode <= 90) {
-            // if (e.target. > 1)
-            //     e.preventDefault();
-            nexFocus(index)
+            input.push(
+                <TextField
+                    id="outlined-basic"
+                    type={"text"}
+                    label="*"
+                    style={{
+                        width: "50px",
+                    }}
+                    // @ts-ignore
+                    {...register(name,
+                        {required: "Vui lòng nhập mã xác thực"})
+                    }
+                    // @ts-ignore
+                    error={!!errors[name]}
+                    // @ts-ignore
+                    helperText={errors[name]?.message}
+                    autoComplete={"off"}
+                    variant="outlined"/>);
         }
-        if (keyCode == 8)
-            prevFocus(index)
+
+        return input
+    }
+
+    const onSubmit = (inputCode: inputCode) => {
+        const verifyRequest: VerifyRequest = {
+            username: auth.usernameVerify,
+            verifyCode: Object.values(inputCode).join("")
+        }
+
+        const promise = verifyHandle(verifyRequest)
+        toast.promise(promise, {
+            pending: "Promise is pending",
+            success: {
+                render({data}) {
+                    return data.data.message
+                },
+                autoClose: 1000,
+                onClose: () => {
+                    dispatch(verify())
+                    nav("/login")
+                },
+            },
+            error: {
+                render: ({data}) => {
+                    // @ts-ignore
+                    const response = data.response.data
+                    return `${response.message}`
+                }
+            }
+        });
     }
 
     return (
         <form className={"p-3 d-flex flex-column w-100 align-items-center"}
-              method={"POST"} action={"/reset-password"}
+              method={"POST"}
+              onSubmit={handleSubmit(onSubmit)}
         >
             <TextField hidden={true} name={"email"} id="outlined-basic" type={"email"}/>
             <Stack direction={"row"} gap={1}>
-                <TextField name={"1"} id="outlined-basic" type={"text"}
-                           label="*"
-                           style={{
-                               width: "50px",
-                           }}
-                           onKeyDown={(e) => keyDownHandler(e, 1)}
-                           focused={status["1"]}
-                           variant="outlined"/>
-                <TextField name={"2"} id="outlined-basic" type={"text"}
-                           label="*"
-                           style={{
-                               width: "50px",
-                           }}
-                           onKeyDown={(e) => keyDownHandler(e, 2)}
-                           focused={status["2"]}
-                           variant="outlined"/>
-                <TextField name={"3"} id="outlined-basic" type={"text"}
-                           label="*"
-                           style={{
-                               width: "50px",
-                           }}
-                           focused={status["3"]}
-                           onKeyDown={(e) => keyDownHandler(e, 3)}
-                           variant="outlined"/>
-                <TextField name={"4"} id="outlined-basic" type={"text"}
-                           label="*"
-                           style={{
-                               width: "50px",
-                           }}
-                           focused={status["4"]}
-                           onKeyDown={(e) => keyDownHandler(e, 4)}
-                           variant="outlined"/>
-                <TextField name={"5"} id="outlined-basic" type={"text"}
-                           label="*"
-                           style={{
-                               width: "50px",
-                           }}
-                           focused={status["5"]}
-                           onKeyDown={(e) => keyDownHandler(e, 5)}
-                           variant="outlined"/>
-                <TextField name={"6"} id="outlined-basic" type={"text"}
-                           label="*"
-                           style={{
-                               width: "50px",
-                           }}
-                           onKeyDown={(e) => keyDownHandler(e, 6)}
-                           focused={status["6"]}
-                           variant="outlined"/>
+                {renderInput()}
             </Stack>
             <br/>
             <Button className={"w-25"} type={"submit"} variant="contained" color="success">Xác
