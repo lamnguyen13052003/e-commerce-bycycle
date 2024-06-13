@@ -25,6 +25,13 @@ xe dap gap : 6
 function Home() {
     const productsState = useSelector((state: RootState) => state.product.products)
     const [babyBicycle , setBabyBicycle] = useState<ProductProps[]>(productsState)
+    const [sportBicycle , setSportBicycle] = useState<ProductProps[]>(productsState)
+    const [topographicBicycle , setTopographicBicycle] = useState<ProductProps[]>(productsState)
+    const [racingBicycle , setRacingBicycle] = useState<ProductProps[]>(productsState)
+    const [touringBicycle , setTouringBicycle] = useState<ProductProps[]>(productsState)
+    const [femaleBicycle , setFemaleBicycle] = useState<ProductProps[]>(productsState)
+    // const [foldBicycle , setFoldBicycle] = useState<ProductProps[]>(productsState)
+
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -35,12 +42,40 @@ function Home() {
         //     promise.abort()
         //
         // }
-        axios.get('http://localhost:1305/api/products/1')
+        axios.get('http://localhost:1305/api/products/0')
             .then((res) => {
                 setBabyBicycle(res.data.data)
-                // console.log(res.data.data)
             })
-            .catch(error => console.error(error));
+
+        axios.get('http://localhost:1305/api/products/1')
+            .then((res) => {
+                setSportBicycle(res.data.data)
+            })
+
+        axios.get('http://localhost:1305/api/products/2')
+            .then((res) => {
+                setTopographicBicycle(res.data.data)
+            })
+
+        axios.get('http://localhost:1305/api/products/3')
+            .then((res) => {
+                setRacingBicycle(res.data.data)
+            })
+
+        axios.get('http://localhost:1305/api/products/4')
+            .then((res) => {
+                setTouringBicycle(res.data.data)
+            })
+
+        axios.get('http://localhost:1305/api/products/5')
+            .then((res) => {
+                setFemaleBicycle(res.data.data)
+            })
+
+        // axios.get('http://localhost:1305/api/products/6')
+        //     .then((res) => {
+        //         setFoldBicycle(res.data.data)
+        //     })
     }, );
     return (
         <>
@@ -65,7 +100,7 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>Sản phẩm bán chạy</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={products}/>
+                        <CarouselProduct products={babyBicycle}/>
                     </Stack>
                 </Container>
             </Box>
@@ -74,14 +109,14 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>SẢN PHẨM NỔI BẬT</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={products}/>
+                        <CarouselProduct products={babyBicycle}/>
                     </Stack>
                 </Container>
             </Box>
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={babyBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP TRẺ EM"}
                     />
@@ -90,7 +125,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={sportBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP THỂ THAO"}
                     />
@@ -99,7 +134,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={topographicBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP ĐỊA HÌNH"}
                     />
@@ -108,7 +143,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={racingBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP ĐUA"}
                     />
@@ -117,7 +152,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={racingBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP TOURING"}
                     />
@@ -126,7 +161,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={touringBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP GẤP"}
                     />
@@ -135,7 +170,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={femaleBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP NỮ"}
                     />
