@@ -17,8 +17,8 @@ export const runProductController = (app: Express) => {
         })
     });
 
-    app.get("/api/products?category=:category", (req, res) => {
-        const category =parseInt( req.query.category as string);
+    app.get("/api/products/:category?", (req, res) => {
+        const category = parseInt( req.params.category as string);
         getProductsByCategory(category).then((response) => {
             res.send(Builder<ResponseApi<Product[]>>()
                 .code(202)

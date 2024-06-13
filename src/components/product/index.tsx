@@ -2,19 +2,20 @@ import {Box, Button, Stack} from "@mui/material";
 import styles from './scss/Product.module.css';
 import React from "react";
 import {Image} from "react-bootstrap";
-import ImageCycleBike from '../../assets/images/xe-dap-dua-calli-r6-4.jpg'
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LabelDiscount from "./LabelDiscount";
 import LabelNew from "./LabelNew";
+import {ObjectId} from "mongodb";
 
 export interface ProductProps {
+    id: ObjectId,
     sale?: boolean,
     new?: boolean,
     discount?: number,
     imagePath: string,
     name: string,
     price: number,
-    // category: string
+    category: number
 }
 
 export default function Product(props: ProductProps) {

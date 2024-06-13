@@ -8,19 +8,22 @@ import LogoBrand from "../components/logo-brand";
 import ListCategory from "../components/list-category";
 import CarouselProduct from "../components/carousel-product";
 import ProductByCategory from "../components/product-by-category";
-import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState, useAppDispatch} from "../configs/store";
+import {getProductsByCategory} from "../slice/product.slice";
 
 
+async function Home() {
+    let products = useSelector((state: RootState) => state.product.products)
+    const dispatch = useAppDispatch()
 
-function Home() {
-    const [getProducts, setProducts] = useState<ProductProps[]>()
-    useEffect( () => {
-        axios.get('http://localhost:1305/api/products/all')
-            .then(response => {
-                setProducts(response.data.data)
-            })
-    }, [])
-    if (!getProducts) return null;
+    useEffect(() => {
+        const promise = dispatch(getProductsByCategory(1))
+        return () => {
+            promise.abort()
+        }
+    }, []);
+    console.log(products)
     return (
         <>
             <Box>
@@ -44,7 +47,7 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>Sản phẩm bán chạy</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={product_best_sales}/>
+                        <CarouselProduct products={products}/>
                     </Stack>
                 </Container>
             </Box>
@@ -53,14 +56,14 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>SẢN PHẨM NỔI BẬT</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={product_best_sales}/>
+                        <CarouselProduct products={products}/>
                     </Stack>
                 </Container>
             </Box>
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={getProducts}
+                                       products={products}
                                        to={"#"}
                                        title={"XE ĐẠP TRẺ EM"}
                     />
@@ -127,7 +130,7 @@ function Home() {
 const renderCarousel = () => {
     return <Carousel key={"Carousel_asdfsaf"} className={'w-100'}>
         {banner_images.map((image, index) => {
-            return (<Carousel.Item style={{
+            return (<Carousel.Item  key={index} style={{
                 height: "600px"
             }}>
                 <Image src={image} rounded className={'h-100'} width={'100%'}/>
@@ -144,175 +147,4 @@ const renderBrand = () => {
 
 
 export default Home;
-
-const products: ProductProps[] = [
-    {
-        sale: true,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-]
-
-const product_best_sales: ProductProps[] = [
-    {
-        sale: true,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-    }, {
-        sale: false,
-        new: true,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        imagePath: '',
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    },
-]
-
 

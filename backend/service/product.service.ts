@@ -12,7 +12,7 @@ async function getAll() {
 
 async function getProductsByCategory(category: number){
     return productRepository
-        .find<Product>({"category": category}).limit(12)
+        .find<Product>({category: category}).limit(12)
         .toArray()
 }
 async function getProductsBestSale(bestSale: boolean){
@@ -23,7 +23,7 @@ async function getProductsBestSale(bestSale: boolean){
 
     }
     return productRepository
-        .find<Product>({new : true}).sort({new: -1}).limit(12)
+        .find<Product>({"new" : true}).sort({"new": -1}).limit(12)
         .toArray()
 }
 export {getAll, getProductsByCategory, getProductsBestSale};
