@@ -11,19 +11,37 @@ import ProductByCategory from "../components/product-by-category";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../configs/store";
 import {getProductsByCategory} from "../slice/product.slice";
+import axios from "axios";
 
-
-async function Home() {
-    let products = useSelector((state: RootState) => state.product.products)
+/*
+xe dap tre em: 0
+xe dap the thao: 1
+xe dap dia hinh: 2
+xe dap dua: 3
+xe dap touring: 4
+xe dap nu: 5
+xe dap gap : 6
+ */
+function Home() {
+    const productsState = useSelector((state: RootState) => state.product.products)
+    const [babyBicycle , setBabyBicycle] = useState<ProductProps[]>(productsState)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        const promise = dispatch(getProductsByCategory(1))
-        return () => {
-            promise.abort()
-        }
-    }, []);
-    console.log(products)
+        // const promise = dispatch(getProductsByCategory(1))
+        // console.log(products)
+        // console.log(promise)
+        // return () => {
+        //     promise.abort()
+        //
+        // }
+        axios.get('http://localhost:1305/api/products/1')
+            .then((res) => {
+                setBabyBicycle(res.data.data)
+                // console.log(res.data.data)
+            })
+            .catch(error => console.error(error));
+    }, );
     return (
         <>
             <Box>

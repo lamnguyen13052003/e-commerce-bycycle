@@ -2,17 +2,36 @@ import {ProductProps} from "../components/product";
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {Link} from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, {useEffect} from "react";
 import {Container} from "react-bootstrap";
 import MenuItem from '@mui/material/MenuItem';
 import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/filter/PriceFilter";
 import ProductList from "../components/product-list";
-import {products} from '../components/product/DataProduct'
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import {useSelector} from "react-redux";
+import {RootState, useAppDispatch} from "../configs/store";
+import {getProductsByCategory} from "../slice/product.slice";
 
 function TitlePage(props: PageData) {
+    const products = useSelector((state: RootState) => state.product.products)
+    // const [products , setProducts] = useState<ProductProps[]>(productsState)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        const promise = dispatch(getProductsByCategory(1))
+        console.log("run")
+        return () => {
+            promise.abort()
+        }
+        // axios.get('http://localhost:1305/api/products/1')
+        //     .then((res) => {
+        //         setProducts(res.data.data)
+        //         // console.log(res.data.data)
+        //     })
+        //     .catch(error => console.error(error));
+    }, );
     return (
         <>
             <Box className={'py-1 d-lg-flex justify-content-between align-items-center'}>
@@ -28,7 +47,7 @@ function TitlePage(props: PageData) {
                 <Box className={'fw-bold'}>
                     <Stack  direction={'row'} alignItems={'center'} alignContent={'center'} gap={1}>
                         <Box>
-                            <span>Hiển thị tất cả {products.length} kết quả</span>
+                            <span>Hiển thị tất cả x kết quả</span>
                         </Box>
                         <SelectSmallFilter/>
                     </Stack>
@@ -84,7 +103,7 @@ function Products() {
                         <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
                         <Button className={'p-3'}  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
                     </Stack>
-                    <ProductList products={products}/>
+                    {/*<ProductList products={products}/>*/}
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
                         <Button className={'focus-ring focus-ring-info'}  variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
                     </Box>

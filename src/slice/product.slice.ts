@@ -12,12 +12,12 @@ const initialState: ProductState = {
 }
 
 export const getProductsByCategory = createAsyncThunk('products/getProducts', async (category: number, thunkAPI) => {
-    const response = await axios.get<ProductProps[]>(`http://localhost:1305/api/products/${category}`, {
+    const response = await axiosHttp.get<ProductProps[]>(`api/products/${category}`, {
         signal: thunkAPI.signal
     })
+
     return response.data
 })
-
 const productSlice = createSlice({
     name: 'products',
     initialState,
