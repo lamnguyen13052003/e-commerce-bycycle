@@ -1,35 +1,42 @@
+import React from "react";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import {Stack, Typography} from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
-import React from "react";
+import { useShoppingContext } from "../../context/ShoppingContext";
 
 export interface QuantityCellProps {
-    id: number,
+    id: number;
     quantity: number;
-    onAdd: (id: number) => void;
-    onSubtract: (id: number) => void;
 }
 
-
 function QuantityCell(props: QuantityCellProps) {
+    const { increaseQty, decreaseQty } = useShoppingContext();
+
     return (
-        <Stack direction={"row"} style={{
-            height: "30px"
-        }}>
-            <Button className={"h-100"} sx={{width: "20px !important"}} onClick={() => props.onSubtract(props.id)}>
-                <RemoveIcon/>
+        <Stack direction="row" sx={{ height: "30px" }}>
+            <Button
+                className="h-100"
+                sx={{ width: "20px !important" }}
+                onClick={() => decreaseQty(props.id)}
+            >
+                <RemoveIcon />
             </Button>
-            <Typography className="text-center rounded-1 border border-1 border-black align-content-center  h-100"
-                        style={{width: "50px", margin: "0 10px"}}>
+            <Typography
+                className="text-center rounded-1 border border-1 border-black align-content-center h-100"
+                style={{ width: "50px", margin: "0 10px" }}
+            >
                 {props.quantity}
             </Typography>
-            <Button className={"h-100"} sx={{width: "20px !important"}} onClick={() => props.onAdd(props.id)}>
-                <AddIcon/>
+            <Button
+                className="h-100"
+                sx={{ width: "20px !important" }}
+                onClick={() => increaseQty(props.id)}
+            >
+                <AddIcon />
             </Button>
         </Stack>
     );
 }
-
 
 export default QuantityCell;

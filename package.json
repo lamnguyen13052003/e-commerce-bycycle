@@ -24,6 +24,7 @@
     "builder-pattern": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "json-server": "^1.0.0-beta.1",
     "mongodb": "^6.6.2",
     "mongoose": "^6.1.0",
     "react": "^18.3.1",

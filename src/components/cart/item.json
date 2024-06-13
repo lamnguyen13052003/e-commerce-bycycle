@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Xe Đạp Đua",
+      "price": 900000,
+      "thumbnail": "src/assets/images/xe-dap-dua.jpg",
+      "qty": 3
+    },
+    {
+      "id": 2,
+      "name": "Xe Đạp Gấp",
+      "price": 950000,
+      "thumbnail": "src/assets/images/xe-dap-gap.jpg",
+      "qty": 1
+    },
+    {
+      "id": 3,
+      "name": "Xe Đạp Địa Hình",
+      "price": 1000000,
+      "thumbnail": "src/assets/images/xe-dap-dia-hinh.jpg",
+      "qty": 2
+    }
+  ]
+}

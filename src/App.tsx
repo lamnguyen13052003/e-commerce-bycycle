@@ -13,6 +13,7 @@ import Register from "./components/register-form";
 import ForgetPassword from "./components/forget-password-form";
 import ChangePassword from "./components/reset-password-form";
 import Verify from "./components/verify-form";
+import ProductCart from './components/cart/ProductCart';
 
 
 function App() {
