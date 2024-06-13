@@ -17,7 +17,7 @@ export const runProductController = (app: Express) => {
         })
     });
 
-    app.get("/api/products/:category?", (req, res) => {
+    app.get("/api/products/:category", (req, res) => {
         const category = parseInt( req.params.category as string);
         getProductsByCategory(category).then((response) => {
             res.send(Builder<ResponseApi<Product[]>>()
@@ -29,17 +29,18 @@ export const runProductController = (app: Express) => {
             console.error("Failed to get products by category", error);
         })
     });
-    app.get("/api/products/:best_sale?", (req, res) => {
-        const bestSale: boolean =  req.params.best_sale == "true";
+    app.get("/api/products/:bestSale", (req, res) => {
+        const bestSale: boolean =  req.params.bestSale as string == "true";
+        console.log( req.query.bestSale)
         console.log(bestSale)
-        getProductsBestSale(bestSale).then((response) => {
+        getProductsBestSale(true).then((response) => {
             res.send(Builder<ResponseApi<Product[]>>()
                 .code(202)
                 .message("Success")
                 .data(response)
                 .build());
         }).catch((error) => {
-            console.error("Failed to get products by category", error);
+            console.error("don't load product best sale", error);
         })
     });
 }

@@ -24,6 +24,8 @@ xe dap gap : 6
  */
 function Home() {
     const productsState = useSelector((state: RootState) => state.product.products)
+    const [bestSale , setBestSale] = useState<ProductProps[]>(productsState)
+    const [newProduct , setNewProduct] = useState<ProductProps[]>(productsState)
     const [babyBicycle , setBabyBicycle] = useState<ProductProps[]>(productsState)
     const [sportBicycle , setSportBicycle] = useState<ProductProps[]>(productsState)
     const [topographicBicycle , setTopographicBicycle] = useState<ProductProps[]>(productsState)
