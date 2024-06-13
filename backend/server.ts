@@ -30,6 +30,7 @@ runProductController(app);
 
 runAuthController(app);
 
+
 app.listen(1305, () => {
     console.log("Server dep zai da chay o port 1305");
 });
