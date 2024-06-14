@@ -4,6 +4,7 @@ import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
 import any = jasmine.any;
 import {ResponseApi} from "../utils/response.type";
+import {getProductsBestSale} from "../../backend/service/product.service";
 
 interface HomeState {
     bestSale: ProductProps[],
@@ -29,14 +30,23 @@ const initialState: HomeState = {
     foldBicycle: []
 }
 
-export const getProductsByCategory = createAsyncThunk('products/getProducts', async (category: number, thunkAPI) => {
+export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (category: number, thunkAPI) => {
     const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/${category}`, {
         signal: thunkAPI.signal
     })
 
-
     return {
         category,
+        data: response.data.data
+    }
+})
+export const getProductsByBestSale = createAsyncThunk('products/getProducts/hasBestSale', async (bestSale: boolean, thunkAPI) => {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/best-sale/${bestSale}`, {
+        signal: thunkAPI.signal
+    })
+
+    return {
+        bestSale,
         data: response.data.data
     }
 })
@@ -71,6 +81,13 @@ const productSlice = createSlice({
                     break
                 default:
                     break
+            }
+        }).addCase(getProductsByBestSale.fulfilled, (state, action) => {
+            if (!action.payload.data) return
+            if(action.payload.bestSale){
+                state.bestSale = action.payload.data
+            }else{
+                state.newProduct = action.payload.data
             }
         })
     }

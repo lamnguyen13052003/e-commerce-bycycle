@@ -1,17 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {ProductProps} from "../components/product";
+import React, {useEffect} from 'react';
 import {Box, Stack} from "@mui/material";
 import {images as banner_images} from "../assets/images/carousels/images";
 import {images as brand_images} from "../assets/images/brands/images";
-import {Carousel, Image, Container} from "react-bootstrap";
+import {Carousel, Container, Image} from "react-bootstrap";
 import LogoBrand from "../components/logo-brand";
 import ListCategory from "../components/list-category";
 import CarouselProduct from "../components/carousel-product";
 import ProductByCategory from "../components/product-by-category";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../configs/store";
-import {getProductsByCategory} from "../slice/product.slice";
-import axios from "axios";
+import {getProductsByBestSale, getProductsByCategory} from "../slice/product.slice";
 
 /*
 xe dap tre em: 0
@@ -25,7 +23,7 @@ xe dap gap : 6
 function Home() {
     const productsState = useSelector((state: RootState) => state.product)
     const dispatch = useAppDispatch()
-    let {
+    const {
         babyBicycle,
         touringBicycle,
         topographicBicycle,
@@ -45,6 +43,9 @@ function Home() {
         const promise_four = dispatch(getProductsByCategory(4))
         const promise_five = dispatch(getProductsByCategory(5))
         const promise_six = dispatch(getProductsByCategory(6))
+        const promise_best_sale = dispatch(getProductsByBestSale(true))
+        const promise_new = dispatch(getProductsByBestSale(false))
+        console.log(newProduct)
         return () => {
             promise_zero.abort();
             promise_one.abort();
@@ -53,6 +54,8 @@ function Home() {
             promise_four.abort();
             promise_five.abort();
             promise_six.abort();
+            promise_best_sale.abort();
+            promise_new.abort();
         };
     }, []);
 
@@ -79,7 +82,7 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>Sản phẩm bán chạy</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={[]}/>
+                        <CarouselProduct products={bestSale}/>
                     </Stack>
                 </Container>
             </Box>
@@ -88,7 +91,7 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>SẢN PHẨM NỔI BẬT</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={[]}/>
+                        <CarouselProduct products={newProduct}/>
                     </Stack>
                 </Container>
             </Box>
@@ -104,7 +107,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={touringBicycle}
+                                       products={sportBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP THỂ THAO"}
                     />
@@ -140,7 +143,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={[]}
+                                       products={foldBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP GẤP"}
                     />

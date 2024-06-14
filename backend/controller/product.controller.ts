@@ -31,7 +31,7 @@ export const runProductController = (app: Express) => {
     });
     app.get("/api/products/best-sale/:bestSale", (req, res) => {
         const bestSale: boolean =  req.params.bestSale as string == "true";
-        getProductsBestSale(true).then((response) => {
+        getProductsBestSale(bestSale).then((response) => {
             res.send(Builder<ResponseApi<ProductProps[]>>()
                 .code(202)
                 .message("Success")
