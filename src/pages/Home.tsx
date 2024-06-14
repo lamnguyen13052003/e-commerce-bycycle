@@ -23,62 +23,39 @@ xe dap nu: 5
 xe dap gap : 6
  */
 function Home() {
-    const productsState = useSelector((state: RootState) => state.product.products)
-    const [bestSale , setBestSale] = useState<ProductProps[]>(productsState)
-    const [newProduct , setNewProduct] = useState<ProductProps[]>(productsState)
-    const [babyBicycle , setBabyBicycle] = useState<ProductProps[]>(productsState)
-    const [sportBicycle , setSportBicycle] = useState<ProductProps[]>(productsState)
-    const [topographicBicycle , setTopographicBicycle] = useState<ProductProps[]>(productsState)
-    const [racingBicycle , setRacingBicycle] = useState<ProductProps[]>(productsState)
-    const [touringBicycle , setTouringBicycle] = useState<ProductProps[]>(productsState)
-    const [femaleBicycle , setFemaleBicycle] = useState<ProductProps[]>(productsState)
-    // const [foldBicycle , setFoldBicycle] = useState<ProductProps[]>(productsState)
-
+    const productsState = useSelector((state: RootState) => state.product)
     const dispatch = useAppDispatch()
+    let {
+        babyBicycle,
+        touringBicycle,
+        topographicBicycle,
+        sportBicycle,
+        foldBicycle,
+        femaleBicycle,
+        racingBicycle,
+        newProduct,
+        bestSale
+    } = productsState
 
     useEffect(() => {
-        // const promise = dispatch(getProductsByCategory(1))
-        // console.log(products)
-        // console.log(promise)
-        // return () => {
-        //     promise.abort()
-        //
-        // }
-        axios.get('http://localhost:1305/api/products/0')
-            .then((res) => {
-                setBabyBicycle(res.data.data)
-            })
+        const promise_zero = dispatch(getProductsByCategory(0))
+        const promise_one = dispatch(getProductsByCategory(1))
+        const promise_two = dispatch(getProductsByCategory(2))
+        const promise_three = dispatch(getProductsByCategory(3))
+        const promise_four = dispatch(getProductsByCategory(4))
+        const promise_five = dispatch(getProductsByCategory(5))
+        const promise_six = dispatch(getProductsByCategory(6))
+        return () => {
+            promise_zero.abort();
+            promise_one.abort();
+            promise_two.abort();
+            promise_three.abort();
+            promise_four.abort();
+            promise_five.abort();
+            promise_six.abort();
+        };
+    }, []);
 
-        axios.get('http://localhost:1305/api/products/1')
-            .then((res) => {
-                setSportBicycle(res.data.data)
-            })
-
-        axios.get('http://localhost:1305/api/products/2')
-            .then((res) => {
-                setTopographicBicycle(res.data.data)
-            })
-
-        axios.get('http://localhost:1305/api/products/3')
-            .then((res) => {
-                setRacingBicycle(res.data.data)
-            })
-
-        axios.get('http://localhost:1305/api/products/4')
-            .then((res) => {
-                setTouringBicycle(res.data.data)
-            })
-
-        axios.get('http://localhost:1305/api/products/5')
-            .then((res) => {
-                setFemaleBicycle(res.data.data)
-            })
-
-        // axios.get('http://localhost:1305/api/products/6')
-        //     .then((res) => {
-        //         setFoldBicycle(res.data.data)
-        //     })
-    }, );
     return (
         <>
             <Box>
@@ -102,7 +79,7 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>Sản phẩm bán chạy</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={babyBicycle}/>
+                        <CarouselProduct products={[]}/>
                     </Stack>
                 </Container>
             </Box>
@@ -111,13 +88,13 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>SẢN PHẨM NỔI BẬT</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={babyBicycle}/>
+                        <CarouselProduct products={[]}/>
                     </Stack>
                 </Container>
             </Box>
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
-                    <ProductByCategory key={"a"}
+                    <ProductByCategory key={"babyBicycle"}
                                        products={babyBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP TRẺ EM"}
@@ -127,7 +104,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={sportBicycle}
+                                       products={touringBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP THỂ THAO"}
                     />
@@ -154,7 +131,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={racingBicycle}
+                                       products={touringBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP TOURING"}
                     />
@@ -163,7 +140,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={touringBicycle}
+                                       products={[]}
                                        to={"#"}
                                        title={"XE ĐẠP GẤP"}
                     />
@@ -185,7 +162,7 @@ function Home() {
 const renderCarousel = () => {
     return <Carousel key={"Carousel_asdfsaf"} className={'w-100'}>
         {banner_images.map((image, index) => {
-            return (<Carousel.Item  key={index} style={{
+            return (<Carousel.Item key={index} style={{
                 height: "600px"
             }}>
                 <Image src={image} rounded className={'h-100'} width={'100%'}/>

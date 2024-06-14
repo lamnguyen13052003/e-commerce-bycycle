@@ -1,29 +1,28 @@
-import {connection, run} from "../database.connect";
-import {Product} from "../types/product.type";
-import {Schema} from "node:inspector";
+import {connection} from "../database.connect";
+import {ProductProps} from "../types/product.type";
 
 const collection = 'xe_dap';
 const productRepository = connection.collection(collection);
 async function getAll() {
     return productRepository
-        .find<Product>({})
+        .find<ProductProps>({})
         .toArray()
 }
 
 async function getProductsByCategory(category: number){
     return productRepository
-        .find<Product>({category: category}).limit(12)
+        .find<ProductProps>({category: category}).limit(12)
         .toArray()
 }
 async function getProductsBestSale(bestSale: boolean){
     if (bestSale){
         return productRepository
-            .find<Product>({sale: true}).sort({"discount" : -1}).limit(12)
+            .find<ProductProps>({sale: true}).sort({"discount" : -1}).limit(12)
             .toArray()
 
     }
     return productRepository
-        .find<Product>({new : true}).limit(12)
+        .find<ProductProps>({new : true}).limit(12)
         .toArray()
 }
 export {getAll, getProductsByCategory, getProductsBestSale};

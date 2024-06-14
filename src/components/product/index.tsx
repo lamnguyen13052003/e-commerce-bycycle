@@ -8,7 +8,7 @@ import LabelNew from "./LabelNew";
 import {ObjectId} from "mongodb";
 
 export interface ProductProps {
-    id: ObjectId,
+    _id: ObjectId,
     sale?: boolean,
     new?: boolean,
     discount?: number,

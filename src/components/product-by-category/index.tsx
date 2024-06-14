@@ -1,11 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Box, Button, Stack} from "@mui/material";
 import {ProductProps} from "../product";
 import {Link} from "react-router-dom";
 import ProductList from "../product-list";
-import axios from "axios";
-import {useSelector} from "react-redux";
-import {RootState} from "../../configs/store";
 
 export interface ProductByCategoryProps {
     title: string,
