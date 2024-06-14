@@ -1,11 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {signTitleReducer} from "../slice/signTitle.slice";
 import {authReducer} from "../slice/auth.slice";
+import productsReducer from "../slice/product.slice";
+import {useDispatch} from "react-redux";
 
 export const store = configureStore({
     reducer: {
         signTitle: signTitleReducer,
-        auth: authReducer
+        auth: authReducer,
+        product: productsReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
 });
@@ -15,3 +18,4 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
+export const useAppDispatch = () => useDispatch<AppDispatch>()
