@@ -2,7 +2,7 @@ import {Express} from "express";
 import {Builder} from "builder-pattern";
 import {ResponseApi} from "../types/response.type";
 import {getAll as getAllProduct, getProductsBestSale, getProductsByCategory} from "../service/product.service";
-import {ProductProps} from "../../src/components/product";
+import ProductProps from "../../src/type/product.type";
 
 export const runProductController = (app: Express) => {
     app.get("/api/products/all", (req, res) => {

@@ -1,6 +1,6 @@
 import {ObjectId} from "mongodb";
 
-export interface ProductProps {
+export default interface ProductProps {
     _id: ObjectId,
     sale?: boolean,
     new?: boolean,
@@ -28,6 +28,6 @@ interface Specifications {
 
 }
 interface Model {
-   color: string,
+    color: string,
     pathImageColor: string
 }

@@ -1,10 +1,8 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {ProductProps} from "../components/product";
+import ProductProps from "../type/product.type"
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
-import any = jasmine.any;
 import {ResponseApi} from "../utils/response.type";
-import {getProductsBestSale} from "../../backend/service/product.service";
 
 interface HomeState {
     bestSale: ProductProps[],
