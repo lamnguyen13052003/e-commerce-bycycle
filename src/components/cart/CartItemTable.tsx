@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+
+import React, { useState } from 'react';
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -6,31 +7,39 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
+import QuantityCell from "./QuantityCell";
+import CheckOutTable from "./CheckOutTable";
+import productsData from "./product.json";
 import CartItem from "./index";
 
-export function CartItemTable() {
-    const [cartItems, setCartItems] = useState([
-        {id: 1, title: "Xe Đạp Trẻ Em 12 Inch GH Bike [GIÁ RẺ] - Xanh lá", qty: 1, price: 890000},
-    ]);
+const CartItemTable: React.FC = () => {
+    const initialCartItems = productsData.products.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        qty: 1
+    }));
+
+    const [cartItems, setCartItems] = useState(initialCartItems);
 
     const handleAdd = (id: number) => {
-        setCartItems((items) =>
-            items.map((item) =>
-                item.id === id ? {...item, qty: item.qty + 1} : item
+        setCartItems(items =>
+            items.map(item =>
+                item.id === id ? { ...item, qty: item.qty + 1 } : item
             )
         );
     };
 
     const handleSubtract = (id: number) => {
-        setCartItems((items) =>
-            items.map((item) =>
-                item.id === id && item.qty > 1 ? {...item, qty: item.qty - 1} : item
+        setCartItems(items =>
+            items.map(item =>
+                item.id === id && item.qty > 1 ? { ...item, qty: item.qty - 1 } : item
             )
         );
     };
 
     const handleRemove = (id: number) => {
-        setCartItems((items) => items.filter((item) => item.id !== id));
+        setCartItems(items => items.filter(item => item.id !== id));
     };
 
     return (
@@ -42,17 +51,18 @@ export function CartItemTable() {
                         <TableCell align="left"></TableCell>
                         <TableCell align="center">GIÁ</TableCell>
                         <TableCell align="center">SỐ LƯỢNG</TableCell>
-                        <TableCell align="center" sx={{
-                            width: "150px !important"
-                        }}>TỔNG CỘNG</TableCell>
+                        <TableCell align="center" sx={{ width: "150px !important" }}>TỔNG CỘNG</TableCell>
                         <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {cartItems.map((item) => (
+                    {cartItems.map(item => (
                         <CartItem
                             key={item.id}
-                            {...item}
+                            id={item.id}
+                            title={item.name}
+                            price={item.price}
+                            qty={item.qty}
                             onAdd={handleAdd}
                             onSubtract={handleSubtract}
                             onRemove={handleRemove}
@@ -60,6 +70,9 @@ export function CartItemTable() {
                     ))}
                 </TableBody>
             </Table>
+            <CheckOutTable cartItems={cartItems} />
         </TableContainer>
     );
-}
+};
+
+export default CartItemTable;
