@@ -1,6 +1,6 @@
-import {ProductProps} from "../components/product";
+import ProductProps from "../type/product.type";
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import React, {useEffect} from "react";
 import {Container} from "react-bootstrap";
@@ -8,30 +8,65 @@ import MenuItem from '@mui/material/MenuItem';
 import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/filter/PriceFilter";
-import ProductList from "../components/product-list";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../configs/store";
 import {getProductsByCategory} from "../slice/product.slice";
+import {TitleCategorySlugToNum} from "../utils/ConverNumToNameCategory";
+import Product from "../components/product";
 
-function TitlePage(props: PageData) {
-    const products = useSelector((state: RootState) => state.product.products)
-    // const [products , setProducts] = useState<ProductProps[]>(productsState)
+/*
+xe dap tre em: 0
+xe dap the thao: 1
+xe dap dia hinh: 2
+xe dap dua: 3
+xe dap touring: 4
+xe dap nu: 5
+xe dap gap : 6
+ */
+function getRootState(){
+    const {name}  = useParams(); // Lấy param từ URL
+    const category_id: number = TitleCategorySlugToNum(name)
+    let data : {category: string, products: ProductProps[]}
+    switch (category_id){
+        case 0:
+            data =  useSelector((state: RootState) => state.product.babyBicycle)
+            break
+        case 1:
+            data = useSelector((state: RootState) => state.product.sportBicycle)
+            break
+        case 2:
+            data = useSelector((state: RootState) => state.product.topographicBicycle)
+            break
+        case 3:
+            data = useSelector((state: RootState) => state.product.racingBicycle)
+            break
+        case 4:
+            data = useSelector((state: RootState) => state.product.touringBicycle)
+            break
+        case 5:
+            data = useSelector((state: RootState) => state.product.femaleBicycle)
+            break
+        case 6:
+            data = useSelector((state: RootState) => state.product.foldBicycle)
+            break
+        default:
+            data = useSelector((state: RootState) => state.product.babyBicycle)
+            break
+    }
+
     const dispatch = useAppDispatch()
-
     useEffect(() => {
-        const promise = dispatch(getProductsByCategory(1))
-        console.log("run")
+        const promise = dispatch(getProductsByCategory(category_id))
         return () => {
             promise.abort()
         }
-        // axios.get('http://localhost:1305/api/products/1')
-        //     .then((res) => {
-        //         setProducts(res.data.data)
-        //         // console.log(res.data.data)
-        //     })
-        //     .catch(error => console.error(error));
-    }, );
+    }, []);
+    return data
+}
+
+function TitlePage(title: TitleCategory) {
+    const products = getRootState()
     return (
         <>
             <Box className={'py-1 d-lg-flex justify-content-between align-items-center'}>
@@ -40,7 +75,7 @@ function TitlePage(props: PageData) {
                         <Link color="inherit" to="/">
                             Trang chủ
                         </Link>
-                        <Typography color="text.primary">{props.nameCategory}</Typography>
+                        <Typography color="text.primary">${title.name}</Typography>
                     </Breadcrumbs>
                 </Box>
 
@@ -90,10 +125,11 @@ function SelectSmallFilter() {
 }
 
 function Products() {
+    const data = getRootState()
     return (
         <>
             <Container>
-                <TitlePage {...pageData}/>
+                <TitlePage name={data.category} />
                 <Stack direction={"column"} gap={2}>
                     <Stack direction={'row'} gap={1} alignItems={'start'}>
                         <ProductByCategoryFilter {...brandsFilterProps}/>
@@ -103,7 +139,7 @@ function Products() {
                         <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
                         <Button className={'p-3'}  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
                     </Stack>
-                    {/*<ProductList products={products}/>*/}
+
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
                         <Button className={'focus-ring focus-ring-info'}  variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
                     </Box>
@@ -114,12 +150,9 @@ function Products() {
         </>
     )
 }
-
-interface PageData {
-    nameCategory: string
+interface TitleCategory{
+    name :string
 }
-
-const pageData: PageData = {nameCategory: "Xe đạp đua"}
 export default Products;
 const brandsFilterProps  = {
     nameLabel: "Thương hiệu",

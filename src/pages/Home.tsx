@@ -45,7 +45,6 @@ function Home() {
         const promise_six = dispatch(getProductsByCategory(6))
         const promise_best_sale = dispatch(getProductsByBestSale(true))
         const promise_new = dispatch(getProductsByBestSale(false))
-        console.log(newProduct)
         return () => {
             promise_zero.abort();
             promise_one.abort();
@@ -98,8 +97,8 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"babyBicycle"}
-                                       products={babyBicycle}
-                                       to={"#"}
+                                       products={babyBicycle.products}
+                                       to={"/category/xe-dap-dua"}
                                        title={"XE ĐẠP TRẺ EM"}
                     />
                 </Container>
@@ -107,7 +106,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={sportBicycle}
+                                       products={sportBicycle.products}
                                        to={"#"}
                                        title={"XE ĐẠP THỂ THAO"}
                     />
@@ -116,7 +115,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={topographicBicycle}
+                                       products={topographicBicycle.products}
                                        to={"#"}
                                        title={"XE ĐẠP ĐỊA HÌNH"}
                     />
@@ -125,7 +124,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={racingBicycle}
+                                       products={racingBicycle.products}
                                        to={"#"}
                                        title={"XE ĐẠP ĐUA"}
                     />
@@ -134,7 +133,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={touringBicycle}
+                                       products={touringBicycle.products}
                                        to={"#"}
                                        title={"XE ĐẠP TOURING"}
                     />
@@ -143,7 +142,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={foldBicycle}
+                                       products={foldBicycle.products}
                                        to={"#"}
                                        title={"XE ĐẠP GẤP"}
                     />
@@ -152,7 +151,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={femaleBicycle}
+                                       products={femaleBicycle.products}
                                        to={"#"}
                                        title={"XE ĐẠP NỮ"}
                     />

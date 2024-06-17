@@ -7,25 +7,67 @@ import {ResponseApi} from "../utils/response.type";
 interface HomeState {
     bestSale: ProductProps[],
     newProduct: ProductProps[],
-    babyBicycle: ProductProps[],
-    sportBicycle: ProductProps[],
-    topographicBicycle: ProductProps[],
-    racingBicycle: ProductProps[],
-    touringBicycle: ProductProps[],
-    femaleBicycle: ProductProps[],
-    foldBicycle: ProductProps[]
+    babyBicycle: {
+        category: string,
+        products: ProductProps[]
+    },
+    sportBicycle: {
+        category: string,
+        products: ProductProps[]
+    },
+    topographicBicycle: {
+        category: string,
+        products: ProductProps[]
+    },
+    racingBicycle: {
+        category: string,
+        products: ProductProps[]
+    },
+    touringBicycle: {
+        category: string,
+        products: ProductProps[]
+    },
+    femaleBicycle: {
+        category: string,
+        products: ProductProps[]
+    },
+    foldBicycle: {
+        category: string,
+        products: ProductProps[]
+    },
 }
 
 const initialState: HomeState = {
     bestSale: [],
     newProduct: [],
-    babyBicycle: [],
-    sportBicycle: [],
-    topographicBicycle: [],
-    racingBicycle: [],
-    touringBicycle: [],
-    femaleBicycle: [],
-    foldBicycle: []
+    babyBicycle: {
+        category: "Xe đạp trẻ em",
+        products: []
+    },
+    sportBicycle: {
+        category: "Xe đạp thể thao",
+        products: []
+    },
+    topographicBicycle:{
+        category: "Xe đạp địa hình",
+        products: []
+    },
+    racingBicycle:{
+        category: "Xe đạp đua",
+        products: []
+    },
+    touringBicycle: {
+        category: "Xe đạp touring",
+        products: []
+    },
+    femaleBicycle: {
+        category: "Xe đạp nữ",
+        products: []
+    },
+    foldBicycle: {
+        category: "Xe đạp gấp",
+        products: []
+    },
 }
 
 export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (category: number, thunkAPI) => {
@@ -57,25 +99,25 @@ const productSlice = createSlice({
             if (!action.payload.data) return
             switch (action.payload.category) {
                 case 0:
-                    state.babyBicycle = action.payload.data
+                    state.babyBicycle.products = action.payload.data
                     break
                 case 1:
-                    state.sportBicycle = action.payload.data
+                    state.sportBicycle.products = action.payload.data
                     break
                 case 2:
-                    state.topographicBicycle = action.payload.data
+                    state.topographicBicycle.products = action.payload.data
                     break
                 case 3:
-                    state.racingBicycle = action.payload.data
+                    state.racingBicycle.products = action.payload.data
                     break
                 case 4:
-                    state.touringBicycle = action.payload.data
+                    state.touringBicycle.products = action.payload.data
                     break
                 case 5:
-                    state.femaleBicycle = action.payload.data
+                    state.femaleBicycle.products = action.payload.data
                     break
                 case 6:
-                    state.foldBicycle = action.payload.data
+                    state.foldBicycle.products = action.payload.data
                     break
                 default:
                     break
