@@ -1,8 +1,8 @@
 import ProductProps from "../type/product.type";
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
-import {Link, useParams} from "react-router-dom";
+import {Link, useLocation, useParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Container} from "react-bootstrap";
 import MenuItem from '@mui/material/MenuItem';
 import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
@@ -25,8 +25,12 @@ xe dap touring: 4
 xe dap nu: 5
 xe dap gap : 6
  */
-function getRootState(){
-    const {name}  = useParams(); // Lấy param từ URL
+function getRootState(page: number | undefined){
+    // const location = useLocation();
+    // const queryParams = new URLSearchParams(location.search);
+
+    const {name} = useParams();
+    // const seeMore = parseInt(queryParams.get('seeMore') as string)
     const category_id: number = TitleCategorySlugToNum(name)
     let data : {category: string, products: ProductProps[]}
     switch (category_id){
@@ -58,7 +62,7 @@ function getRootState(){
 
     const dispatch = useAppDispatch()
     useEffect(() => {
-        const promise = dispatch(getProductsByCategory(category_id))
+        const promise = dispatch(getProductsByCategory({category: category_id, seeMore: page}))
         return () => {
             promise.abort()
         }
@@ -67,7 +71,6 @@ function getRootState(){
 }
 
 function TitlePage(title: TitleCategory) {
-    const products = getRootState()
     return (
         <>
             <Box className={'py-1 d-lg-flex justify-content-between align-items-center'}>
@@ -126,7 +129,17 @@ function SelectSmallFilter() {
 }
 
 function Products() {
-    const data = getRootState()
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const page = parseInt(queryParams.get('page') as string)
+    const [count , setCount]= useState(page)
+    const data = getRootState(count)
+    const handlerClick = () => {
+        useEffect(() => {
+            setCount(count + 1)
+        }, [count]);
+
+    }
     return (
         <>
             <Container>
@@ -142,7 +155,7 @@ function Products() {
                     </Stack>
                     <ProductList products={data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                        <Button className={'focus-ring focus-ring-info'}  variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
+                        <Button className={'focus-ring focus-ring-info'} onClick={() => {handlerClick()}} value={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
                     </Box>
                 </Stack>
 

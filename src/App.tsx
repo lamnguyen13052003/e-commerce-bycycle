@@ -28,7 +28,7 @@ function App() {
                     <Route path={"/change-password"} element={<ChangePassword/>}/>
                     <Route path={"/verify"} element={<Verify/>}/>
                 </Route>
-                <Route path={"/category/:name"} element={<Products />}/>
+                <Route path={"/category/:category/page=:page"} element={<Products />}/>
             </Route>
         </Routes>
     );

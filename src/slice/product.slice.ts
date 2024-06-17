@@ -70,13 +70,13 @@ const initialState: HomeState = {
     },
 }
 
-export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (category: number, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/${category}`, {
+export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (prop:{category: number, page: number | undefined}, thunkAPI) => {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/${prop.category}/page=${prop.page}`, {
         signal: thunkAPI.signal
     })
 
     return {
-        category,
+       category: prop.category,
         data: response.data.data
     }
 })
