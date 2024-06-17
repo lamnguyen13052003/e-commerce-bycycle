@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec",
+      "price": 3000000,
+      "qty":1
+    },
+    {
+      "id": 2,
+      "name": "Bàn Phím Cơ K2",
+      "price": 300000,
+      "qty":1
+    },
+    {
+      "id": 3,
+      "name": "Máy tính HP",
+      "price": 120000000,
+      "qty":1
+    },
+    {
+      "id": 4,
+      "name": "Chuột Logitech",
+      "price": 120000,
+      "qty":1
+    }
+  ]
+}
