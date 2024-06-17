@@ -107,7 +107,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={sportBicycle.products}
-                                       to={"#"}
+                                       to={"/category/xe-dap-the-thao"}
                                        title={"XE ĐẠP THỂ THAO"}
                     />
                 </Container>

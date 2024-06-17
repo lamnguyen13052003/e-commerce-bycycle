@@ -76,7 +76,7 @@ function TitlePage(title: TitleCategory) {
                         <Link color="inherit" to="/">
                             Trang chủ
                         </Link>
-                        <Typography color="text.primary">${title.name}</Typography>
+                        <Typography color="text.primary">{title.name}</Typography>
                     </Breadcrumbs>
                 </Box>
 
