@@ -1,4 +1,3 @@
-import {ProductProps} from "../components/product";
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {Link} from "react-router-dom";
 import Typography from "@mui/material/Typography";
