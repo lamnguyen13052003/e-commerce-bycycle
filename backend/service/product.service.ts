@@ -14,6 +14,7 @@ async function getProductsByCategory(category: number){
         .find<ProductProps>({category: category}).limit(8)
         .toArray()
 }
+
 async function getProductsBestSale(bestSale: boolean){
     if (bestSale){
         return productRepository
@@ -25,4 +26,22 @@ async function getProductsBestSale(bestSale: boolean){
         .find<ProductProps>({new : true}).limit(8)
         .toArray()
 }
-export {getAll, getProductsByCategory, getProductsBestSale};
+
+//  count is the number of click button "Tai them san pham", default is 0
+async function getProductsByLimit(count: number, category: number){
+    const total = await productRepository.countDocuments({category: category})
+    const numOfDoc = 8
+    const x = numOfDoc*count
+    let y = 8+x
+    if(y >= total) y = total - x
+
+    console.log(total)
+    console.log(x)
+    console.log(y)
+
+
+    return productRepository
+        .find<ProductProps>({category: category}).skip(x).limit(y)
+        .toArray()
+}
+export {getAll, getProductsByCategory, getProductsBestSale, getProductsByLimit};
