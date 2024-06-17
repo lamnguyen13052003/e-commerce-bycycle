@@ -33,12 +33,11 @@ async function getProductsByLimit(count: number, category: number){
     const numOfDoc = 8
     const x = numOfDoc*count
     let y = 8+x
-    if(y >= total && x < total) y = total - x
-    if(x>= total) return
+    if(y>= total) y = total
 
 
     return productRepository
-        .find<ProductProps>({category: category}).skip(x).limit(y)
+        .find<ProductProps>({category: category}).limit(y)
         .toArray()
 }
 export {getAll, getProductsByCategory, getProductsBestSale, getProductsByLimit};
