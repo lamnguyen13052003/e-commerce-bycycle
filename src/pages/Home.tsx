@@ -98,7 +98,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"babyBicycle"}
                                        products={babyBicycle.products}
-                                       to={"/category/xe-dap-dua"}
+                                       to={"/category/xe-dap-tre-em"}
                                        title={"XE ĐẠP TRẺ EM"}
                     />
                 </Container>
@@ -116,7 +116,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={topographicBicycle.products}
-                                       to={"#"}
+                                       to={"/category/xe-dap-dia-hinh"}
                                        title={"XE ĐẠP ĐỊA HÌNH"}
                     />
                 </Container>
@@ -125,7 +125,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={racingBicycle.products}
-                                       to={"#"}
+                                       to={"/category/xe-dap-dua"}
                                        title={"XE ĐẠP ĐUA"}
                     />
                 </Container>
@@ -134,7 +134,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={touringBicycle.products}
-                                       to={"#"}
+                                       to={"/category/xe-dap-touring"}
                                        title={"XE ĐẠP TOURING"}
                     />
                 </Container>
@@ -143,7 +143,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={foldBicycle.products}
-                                       to={"#"}
+                                       to={"/category/xe-dap-gap"}
                                        title={"XE ĐẠP GẤP"}
                     />
                 </Container>
@@ -152,7 +152,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={femaleBicycle.products}
-                                       to={"#"}
+                                       to={"/category/xe-dap-nu"}
                                        title={"XE ĐẠP NỮ"}
                     />
                 </Container>

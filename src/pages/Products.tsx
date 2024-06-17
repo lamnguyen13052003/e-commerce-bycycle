@@ -14,6 +14,7 @@ import {RootState, useAppDispatch} from "../configs/store";
 import {getProductsByCategory} from "../slice/product.slice";
 import {TitleCategorySlugToNum} from "../utils/ConverNumToNameCategory";
 import Product from "../components/product";
+import ProductList from "../components/product-list";
 
 /*
 xe dap tre em: 0
@@ -139,7 +140,7 @@ function Products() {
                         <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
                         <Button className={'p-3'}  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
                     </Stack>
-
+                    <ProductList products={data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
                         <Button className={'focus-ring focus-ring-info'}  variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
                     </Box>
