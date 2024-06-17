@@ -1,14 +1,14 @@
 import React from 'react';
 import {Form, InputGroup} from 'react-bootstrap';
 import {Search} from "@mui/icons-material";
-import {Avatar, Badge, Box, Button, Divider} from "@mui/material";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {Avatar, Box, Divider} from "@mui/material";
 import styles from './scss/Header.module.css';
 import {Link} from "react-router-dom";
 import logo from "../../assets/images/logo.jpg";
 import Menu from "../menu";
 import ButtonAuth from "./ButtonAuth";
 import ButtonCart from "./ButtonCart";
+
 
 function Header() {
     return (
@@ -29,7 +29,7 @@ function Header() {
                 <InputGroup style={{
                     width: "30%",
                 }}>
-                    <Form.Control id={"search-bar"} type="text" placeholder={""}
+                    <Form. Control id={"search-bar"} type="text" placeholder={""}
                                   className={`${styles.input_focus} ${styles.input}`}/>
                     <label className={"input-group-text"} htmlFor={"search-bar"} style={{
                         borderRadius: "0 50px 50px 0",
