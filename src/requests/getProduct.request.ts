@@ -1,12 +1,13 @@
 import {ObjectId} from "mongodb";
 
-export interface ProductProps {
-    _id: ObjectId,
+export type GetProductRequest ={
+    id: ObjectId
     sale?: boolean,
     new?: boolean,
     discount?: number,
+    quantity?: number,
     imagePath: string,
     name: string,
     price: number,
-    category: number
+    category: number,
 }
