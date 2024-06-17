@@ -33,11 +33,8 @@ async function getProductsByLimit(count: number, category: number){
     const numOfDoc = 8
     const x = numOfDoc*count
     let y = 8+x
-    if(y >= total) y = total - x
-
-    console.log(total)
-    console.log(x)
-    console.log(y)
+    if(y >= total && x < total) y = total - x
+    if(x>= total) return
 
 
     return productRepository
