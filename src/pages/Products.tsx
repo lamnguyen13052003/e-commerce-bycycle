@@ -1,4 +1,3 @@
-import {ProductProps} from "../components/product";
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {Link} from "react-router-dom";
 import Typography from "@mui/material/Typography";
@@ -8,7 +7,6 @@ import MenuItem from '@mui/material/MenuItem';
 import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/filter/PriceFilter";
-import ProductList from "../components/product-list";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../configs/store";
