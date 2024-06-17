@@ -1,8 +1,7 @@
 import React from 'react';
 import {Form, InputGroup} from 'react-bootstrap';
 import {Search} from "@mui/icons-material";
-import {Avatar, Badge, Box, Button, Divider} from "@mui/material";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {Avatar, Box, Divider} from "@mui/material";
 import styles from './scss/Header.module.css';
 import {Link} from "react-router-dom";
 import logo from "../../assets/images/logo.jpg";
