@@ -11,7 +11,13 @@ function Menu(props: any) {
                     <Nav className="mr-auto bg-primary rounded-2 ">
                         <NavDropdownMenu title="Danh sách sản phẩm" id="collasible-nav-dropdown"
                                          className={`px-2 fw-bold`}>
-                            <MenuItem>Action</MenuItem>
+                            <MenuItem href={'/xe-dap-tre-em/page/0'}>Xe đạp trẻ em </MenuItem>
+                            <MenuItem href={'/xe-dap-the-thao/page/0'}>Xe đạp thẻ thao </MenuItem>
+                            <MenuItem href={'/xe-dap-dia-hinh/page/0'}>Xe đạp địa hình </MenuItem>
+                            <MenuItem href={'/xe-dap-dua/page/0'}>Xe đạp đua </MenuItem>
+                            <MenuItem href={'/xe-dap-touring/page/0'}>Xe đạp touring </MenuItem>
+                            <MenuItem href={'/xe-dap-nu/page/0'}>Xe đạp nữ </MenuItem>
+                            <MenuItem href={'/xe-dap-gap/page/0'}>Xe đạp gấp </MenuItem>
                             <DropdownSubmenu href="#action/3.7" title="Text to show">
                                 <MenuItem>Sub 1</MenuItem>
                                 <DropdownSubmenu href="#action/3.7" title="Text to show">
