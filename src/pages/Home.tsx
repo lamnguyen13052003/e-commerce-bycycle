@@ -175,7 +175,7 @@ const renderCarousel = () => {
 
 const renderBrand = () => {
     return brand_images.map((image, index) => {
-        return <LogoBrand src={image}/>
+        return <LogoBrand key={index} src={image}/>
     });
 }
 
