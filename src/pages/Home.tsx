@@ -162,7 +162,7 @@ function Home() {
 }
 
 const renderCarousel = () => {
-    return <Carousel key={"Carousel_asdfsaf"} className={'w-100'}>
+    return <Carousel key={"Carousel_list"} className={'w-100'}>
         {banner_images.map((image, index) => {
             return (<Carousel.Item key={index} style={{
                 height: "600px"

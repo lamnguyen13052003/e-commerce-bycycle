@@ -65,7 +65,7 @@ function getRootState(count: number){
     return data
 }
 
-function TitlePage(title: TitleCategory) {
+function TitlePage(props: Title) {
     return (
         <>
             <Box className={'py-1 d-lg-flex justify-content-between align-items-center'}>
@@ -74,14 +74,14 @@ function TitlePage(title: TitleCategory) {
                         <Link color="inherit" to="/">
                             Trang chủ
                         </Link>
-                        <Typography color="text.primary">{title.name}</Typography>
+                        <Typography color="text.primary">{props.name}</Typography>
                     </Breadcrumbs>
                 </Box>
 
                 <Box className={'fw-bold'}>
                     <Stack  direction={'row'} alignItems={'center'} alignContent={'center'} gap={1}>
                         <Box>
-                            <span>Hiển thị tất cả x kết quả</span>
+                            <span>Hiển thị tất cả {props.result} kết quả</span>
                         </Box>
                         <SelectSmallFilter/>
                     </Stack>
@@ -136,7 +136,7 @@ function Products() {
     return (
         <>
             <Container>
-                <TitlePage name={data.category} />
+                <TitlePage name={data.category} result={data.products.length}/>
                 <Stack direction={"column"} gap={2}>
                     <Stack direction={'row'} gap={1} alignItems={'start'}>
                         <ProductByCategoryFilter {...brandsFilterProps}/>
@@ -157,8 +157,9 @@ function Products() {
         </>
     )
 }
-interface TitleCategory{
-    name :string
+interface Title{
+    name :string,
+    result: number
 }
 export default Products;
 const brandsFilterProps  = {
