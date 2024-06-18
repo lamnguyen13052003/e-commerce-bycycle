@@ -2,18 +2,20 @@ import {Box, Button, Stack} from "@mui/material";
 import styles from './scss/Product.module.css';
 import React from "react";
 import {Image} from "react-bootstrap";
-import ImageCycleBike from '../../assets/images/xe-dap-dua-calli-r6-4.jpg'
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LabelDiscount from "./LabelDiscount";
 import LabelNew from "./LabelNew";
+import {ObjectId} from "mongodb";
 
 export interface ProductProps {
+    _id: ObjectId,
     sale?: boolean,
     new?: boolean,
     discount?: number,
-    image: object,
+    imagePath: string,
     name: string,
     price: number,
+    category: number
 }
 
 export default function Product(props: ProductProps) {
@@ -36,7 +38,7 @@ export default function Product(props: ProductProps) {
                 </Stack>
                 <Box className={'object-fit-cover position-absolute top-0 start-0 z-0'}
                      sx={{width: '306px', height: '100%'}}>
-                    <Image className={`${styles.image_hover}`} src={ImageCycleBike} alt={props.name}
+                    <Image className={`${styles.image_hover}`} src={props.imagePath} alt={props.name}
                            style={{width: '100%'}}/>
                 </Box>
             </Box>
