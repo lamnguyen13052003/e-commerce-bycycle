@@ -1,6 +1,5 @@
 import {LoginRequest} from "./login.request";
 
-export type ChangePasswordRequest = {
-    password: string,
+export type ChangePasswordRequest = & LoginRequest & {
     confirmPassword: string
 }
