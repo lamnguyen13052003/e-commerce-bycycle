@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import ProductProps from "../type/product.type"
+import ProductProps, {ProductPropsHasTotal} from "../type/product.type"
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
 import {ResponseApi} from "../utils/response.type";
@@ -9,31 +9,38 @@ interface HomeState {
     newProduct: ProductProps[],
     babyBicycle: {
         category: string,
-        products: ProductProps[]
+        products: ProductProps[],
+        total: number
     },
     sportBicycle: {
         category: string,
-        products: ProductProps[]
+        products: ProductProps[],
+        total: number
     },
     topographicBicycle: {
         category: string,
-        products: ProductProps[]
+        products: ProductProps[],
+        total: number
     },
     racingBicycle: {
         category: string,
-        products: ProductProps[]
+        products: ProductProps[],
+        total: number
     },
     touringBicycle: {
         category: string,
-        products: ProductProps[]
+        products: ProductProps[],
+        total: number
     },
     femaleBicycle: {
         category: string,
-        products: ProductProps[]
+        products: ProductProps[],
+        total: number
     },
     foldBicycle: {
         category: string,
-        products: ProductProps[]
+        products: ProductProps[],
+        total: number
     },
 }
 
@@ -42,36 +49,43 @@ const initialState: HomeState = {
     newProduct: [],
     babyBicycle: {
         category: "Xe đạp trẻ em",
-        products: []
+        products: [],
+        total: 0
     },
     sportBicycle: {
         category: "Xe đạp thể thao",
-        products: []
+        products: [],
+        total: 0
     },
     topographicBicycle:{
         category: "Xe đạp địa hình",
-        products: []
+        products: [],
+        total: 0
     },
     racingBicycle:{
         category: "Xe đạp đua",
-        products: []
+        products: [],
+        total: 0
     },
     touringBicycle: {
         category: "Xe đạp touring",
-        products: []
+        products: [],
+        total: 0
     },
     femaleBicycle: {
         category: "Xe đạp nữ",
-        products: []
+        products: [],
+        total: 0
     },
     foldBicycle: {
         category: "Xe đạp gấp",
-        products: []
+        products: [],
+        total: 0
     },
 }
 
 export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (prop:{category: number, page: number | undefined}, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/${prop.category}/page=${prop.page}`, {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductPropsHasTotal>>, any>(`api/products/${prop.category}/page=${prop.page}`, {
         signal: thunkAPI.signal
     })
     return {
@@ -98,25 +112,32 @@ const productSlice = createSlice({
             if (!action.payload.data) return
             switch (action.payload.category) {
                 case 0:
-                    state.babyBicycle.products = action.payload.data
+                    state.babyBicycle.products = action.payload.data.products
+                    state.babyBicycle.total = action.payload.data.total
                     break
                 case 1:
-                    state.sportBicycle.products = action.payload.data
+                    state.sportBicycle.products = action.payload.data.products
+                    state.sportBicycle.total = action.payload.data.total
                     break
                 case 2:
-                    state.topographicBicycle.products = action.payload.data
+                    state.topographicBicycle.products = action.payload.data.products
+                    state.topographicBicycle.total = action.payload.data.total
                     break
                 case 3:
-                    state.racingBicycle.products = action.payload.data
+                    state.racingBicycle.products = action.payload.data.products
+                    state.racingBicycle.total = action.payload.data.total
                     break
                 case 4:
-                    state.touringBicycle.products = action.payload.data
+                    state.touringBicycle.products = action.payload.data.products
+                    state.touringBicycle.total = action.payload.data.total
                     break
                 case 5:
-                    state.femaleBicycle.products = action.payload.data
+                    state.femaleBicycle.products = action.payload.data.products
+                    state.femaleBicycle.total = action.payload.data.total
                     break
                 case 6:
-                    state.foldBicycle.products = action.payload.data
+                    state.foldBicycle.products = action.payload.data.products
+                    state.foldBicycle.total = action.payload.data.total
                     break
                 default:
                     break

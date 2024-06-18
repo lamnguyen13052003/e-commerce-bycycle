@@ -1,6 +1,6 @@
-import ProductProps from "../type/product.type";
+import ProductProps, {ProductPropsHasTotal} from "../type/product.type";
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
-import {Link, useLocation, useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import React, {useEffect, useState} from "react";
 import {Container} from "react-bootstrap";
@@ -13,9 +13,7 @@ import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../configs/store";
 import {getProductsByCategory} from "../slice/product.slice";
 import {TitleCategorySlugToNum} from "../utils/ConverNumToNameCategory";
-import Product from "../components/product";
 import ProductList from "../components/product-list";
-import {c} from "vite/dist/node/types.d-aGj9QkWt";
 
 /*
 xe dap tre em: 0
@@ -27,12 +25,9 @@ xe dap nu: 5
 xe dap gap : 6
  */
 function getRootState(count: number){
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-
     const {category} = useParams()
     const category_id: number = TitleCategorySlugToNum(category)
-    let data : {category: string, products: ProductProps[]}
+    let data : ProductPropsHasTotal
     switch (category_id){
         case 0:
             data =  useSelector((state: RootState) => state.product.babyBicycle)
@@ -135,6 +130,9 @@ function Products() {
     const handlerClick = () => {
         setCount(count + 1)
     }
+    const handlerDisabled = () => {
+        return data.total === data.products.length
+    }
     return (
         <>
             <Container>
@@ -150,7 +148,7 @@ function Products() {
                     </Stack>
                     <ProductList products={data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                        <Button className={'focus-ring focus-ring-info'} onClick={() => {handlerClick()}} defaultValue={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
+                        <Button className={'focus-ring focus-ring-info'} disabled={handlerDisabled()} onClick={() => {handlerClick()}} defaultValue={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
                     </Box>
                 </Stack>
 

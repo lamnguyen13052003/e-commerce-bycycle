@@ -31,3 +31,7 @@ interface Model {
    color: string,
     pathImageColor: string
 }
+export interface ProductPropsHasTotal{
+    total: number,
+    products: ProductProps[]
+}

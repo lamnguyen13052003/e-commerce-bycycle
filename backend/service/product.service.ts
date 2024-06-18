@@ -10,16 +10,17 @@ async function getAll() {
 }
 
 async function getProductsByCategory(category: number, count: number){
-    const total = await productRepository.countDocuments({category: category})
+    const total = await  productRepository.countDocuments({category: category})
     const numOfDoc = 8
     const x = numOfDoc*count
     let y = 8+x
     if(y>= total) y = total
+    const products = await  productRepository.find<ProductProps>({category: category}).limit(y) .toArray()
 
-
-    return productRepository
-        .find<ProductProps>({category: category}).limit(y)
-        .toArray()
+    return  {
+        total: total,
+        products:products
+    }
 }
 
 async function getProductsBestSale(bestSale: boolean){
@@ -34,17 +35,4 @@ async function getProductsBestSale(bestSale: boolean){
         .toArray()
 }
 
-//  count is the number of click button "Tai them san pham", default is 0
-// async function getProductsByLimit(count: number, category: number){
-//     const total = await productRepository.countDocuments({category: category})
-//     const numOfDoc = 8
-//     const x = numOfDoc*count
-//     let y = 8+x
-//     if(y>= total) y = total
-//
-//
-//     return productRepository
-//         .find<ProductProps>({category: category}).limit(y)
-//         .toArray()
-// }
 export {getAll, getProductsByCategory, getProductsBestSale};
