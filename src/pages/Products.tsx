@@ -15,6 +15,7 @@ import {getProductsByCategory} from "../slice/product.slice";
 import {TitleCategorySlugToNum} from "../utils/ConverNumToNameCategory";
 import Product from "../components/product";
 import ProductList from "../components/product-list";
+import {c} from "vite/dist/node/types.d-aGj9QkWt";
 
 /*
 xe dap tre em: 0
@@ -25,13 +26,12 @@ xe dap touring: 4
 xe dap nu: 5
 xe dap gap : 6
  */
-function getRootState(page: number | undefined){
-    // const location = useLocation();
-    // const queryParams = new URLSearchParams(location.search);
+function getRootState(count: number){
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
 
-    const {name} = useParams();
-    // const seeMore = parseInt(queryParams.get('seeMore') as string)
-    const category_id: number = TitleCategorySlugToNum(name)
+    const {category} = useParams()
+    const category_id: number = TitleCategorySlugToNum(category)
     let data : {category: string, products: ProductProps[]}
     switch (category_id){
         case 0:
@@ -62,11 +62,11 @@ function getRootState(page: number | undefined){
 
     const dispatch = useAppDispatch()
     useEffect(() => {
-        const promise = dispatch(getProductsByCategory({category: category_id, seeMore: page}))
+        const promise = dispatch(getProductsByCategory({category: category_id, page: count}))
         return () => {
             promise.abort()
         }
-    }, []);
+    }, [count]);
     return data
 }
 
@@ -129,16 +129,11 @@ function SelectSmallFilter() {
 }
 
 function Products() {
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const page = parseInt(queryParams.get('page') as string)
-    const [count , setCount]= useState(page)
+    const {page} = useParams()
+    const [count , setCount]= useState(parseInt(page as string))
     const data = getRootState(count)
     const handlerClick = () => {
-        useEffect(() => {
-            setCount(count + 1)
-        }, [count]);
-
+        setCount(count + 1)
     }
     return (
         <>
@@ -155,7 +150,7 @@ function Products() {
                     </Stack>
                     <ProductList products={data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                        <Button className={'focus-ring focus-ring-info'} onClick={() => {handlerClick()}} value={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
+                        <Button className={'focus-ring focus-ring-info'} onClick={() => {handlerClick()}} defaultValue={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
                     </Box>
                 </Stack>
 

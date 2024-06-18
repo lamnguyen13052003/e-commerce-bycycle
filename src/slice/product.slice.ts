@@ -74,7 +74,6 @@ export const getProductsByCategory = createAsyncThunk('products/getProducts/cate
     const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/${prop.category}/page=${prop.page}`, {
         signal: thunkAPI.signal
     })
-
     return {
        category: prop.category,
         data: response.data.data

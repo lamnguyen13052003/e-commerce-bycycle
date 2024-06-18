@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './styles/App.css';
 import {Route, Routes} from "react-router";
 import Main from "./layouts/Main";
@@ -28,7 +28,7 @@ function App() {
                     <Route path={"/change-password"} element={<ChangePassword/>}/>
                     <Route path={"/verify"} element={<Verify/>}/>
                 </Route>
-                <Route path={"/category/:category/page=:page"} element={<Products />}/>
+                <Route path={"/:category/page/:page"} element={<Products />}/>
             </Route>
         </Routes>
     );
