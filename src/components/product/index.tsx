@@ -25,7 +25,7 @@ export default function Product(props: ProductProps) {
                     {props.sale && <LabelDiscount discount={props.discount ? props.discount : 0}/>}
                     {props.new && <LabelNew zIndex={2}/>}
                 </Stack>
-                <Box className={'object-fit-cover position-absolute top-0 start-0 z-0'}
+                <Box className={'object-fit-cover overflow-hidden position-absolute top-0 start-0 z-0'}
                      sx={{width: '306px', height: '100%'}}>
                     <Image className={`${styles.image_hover}`} src={props.model[0].pathImageColor} alt={props.name}
                            style={{width: '100%'}}/>
