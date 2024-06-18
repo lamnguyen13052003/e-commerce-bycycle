@@ -18,6 +18,7 @@ interface BaseDescription {
     brand: string,
     made: string,
     size: string,
+    material: string,
 }
 interface DetailDescription {
     title: string,
@@ -25,7 +26,19 @@ interface DetailDescription {
     illustrationPathImage: string,
 }
 interface Specifications {
-
+    frameSize: string,
+    frameMaterial: string,
+    wheelSize: string,
+    drivetrain: string,
+    ForkAndSuspension: string,
+    brakeType: string,
+    saddleMaterial: string,
+    weight: string,
+    includedAccessories: string,
+    handlebarsAndStem: string,
+    warranty: string,
+    brandAndModel: string,
+    targetUsing: string
 }
 interface Model {
     color: string,
