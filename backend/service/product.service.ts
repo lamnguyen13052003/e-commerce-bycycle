@@ -36,20 +36,14 @@ async function getProductsBestSale(bestSale: boolean) {
         .toArray()
 }
 
-async function getAttrForFilter() {
-    // const brands: string[] = await productRepository.distinct('base_description.brand')
-    // const minPrice  = await productRepository.find({}).sort({ price: 1 }).limit(1).toArray()
-    // const maxPrice  = await productRepository.find({}).sort({ price: 1 }).limit(1).toArray()
-    // const wheelSizes: string[] = await productRepository.distinct('specifications.wheelSize')
-    // const materials: string[] = await productRepository.distinct('base_description.material')
-    // const targetUsings: string[] = await productRepository.distinct('specifications.targetUsing')
+async function getAttrForFilter(category: number) {
     const result = Promise.all(
-        [productRepository.distinct('base_description.brand'),
-            productRepository.distinct('specifications.wheelSize'),
-            productRepository.distinct('base_description.material'),
-            productRepository.distinct('specifications.targetUsing'),
-            productRepository.find({}).sort({ price: 1 }).limit(1).toArray(),
-            productRepository.find({}).sort({ price: -1 }).limit(1).toArray()])
+        [productRepository.distinct('base_description.brand', {category: category}),
+            productRepository.distinct('specifications.wheelSize', {category: category}),
+            productRepository.distinct('base_description.material', {category: category}),
+            productRepository.distinct('specifications.targetUsing', {category: category}),
+            productRepository.find({category: category}).sort({ price: 1 }).limit(1).toArray(),
+            productRepository.find({category: category}).sort({ price: -1 }).limit(1).toArray()])
     return result.then((values) => {
         return {
             brands: values[0],
