@@ -7,13 +7,15 @@ import {Container} from "react-bootstrap";
 import MenuItem from '@mui/material/MenuItem';
 import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/filter/PriceFilter";
+import PriceFilter, {MAX_HEIGHT, PriceProps} from "../components/product-by-category/filter/PriceFilter";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../configs/store";
 import {getProductsByCategory} from "../slice/product.slice";
 import {TitleCategorySlugToNum} from "../utils/ConverNumToNameCategory";
 import ProductList from "../components/product-list";
+import FilterAttributeType from "../type/filterAttribute.type.client";
+import {getFilterAttribute} from "../slice/filter.slice";
 
 /*
 xe dap tre em: 0
@@ -28,30 +30,39 @@ function getRootState(count: number){
     const {category} = useParams()
     const category_id: number = TitleCategorySlugToNum(category)
     let data : ProductPropsHasTotal
+    let filter: FilterAttributeType
     switch (category_id){
         case 0:
             data =  useSelector((state: RootState) => state.product.babyBicycle)
+            filter = useSelector((state: RootState) => state.filter)
             break
         case 1:
             data = useSelector((state: RootState) => state.product.sportBicycle)
+            filter = useSelector((state: RootState) => state.filter)
             break
         case 2:
             data = useSelector((state: RootState) => state.product.topographicBicycle)
+            filter = useSelector((state: RootState) => state.filter)
             break
         case 3:
             data = useSelector((state: RootState) => state.product.racingBicycle)
+            filter = useSelector((state: RootState) => state.filter)
             break
         case 4:
             data = useSelector((state: RootState) => state.product.touringBicycle)
+            filter = useSelector((state: RootState) => state.filter)
             break
         case 5:
             data = useSelector((state: RootState) => state.product.femaleBicycle)
+            filter = useSelector((state: RootState) => state.filter)
             break
         case 6:
             data = useSelector((state: RootState) => state.product.foldBicycle)
+            filter = useSelector((state: RootState) => state.filter)
             break
         default:
             data = useSelector((state: RootState) => state.product.babyBicycle)
+            filter = useSelector((state: RootState) => state.filter)
             break
     }
 
@@ -62,7 +73,17 @@ function getRootState(count: number){
             promise.abort()
         }
     }, [count]);
-    return data
+
+    useEffect(() => {
+        const promiseFilter = dispatch(getFilterAttribute(category_id))
+        return () => {
+            promiseFilter.abort()
+        }
+    }, []);
+    return {
+        data: data,
+        filter: filter
+    }
 }
 
 function TitlePage(props: Title) {
@@ -126,27 +147,68 @@ function SelectSmallFilter() {
 function Products() {
     const {page} = useParams()
     const [count , setCount]= useState(parseInt(page as string))
-    const data = getRootState(count)
+    const rootState = getRootState(count)
+    const brandsFilterProps  = {
+        nameLabel: "Thương hiệu",
+        itemSelected : rootState.filter.brands,
+        inputLabelId: "inputLabelId-brand",
+        selectLabelId: "selectLabelId-brand",
+        selectId: "selectId-brand",
+        outlineInputId: "outlineInputId-brand",
+        maxHeight: MAX_HEIGHT,
+        width: 200
+    }
+    const wheelSizeFilterProps  = {
+        nameLabel: "Kích thước bánh xe",
+        itemSelected : rootState.filter.wheelSizes,
+        inputLabelId: "inputLabelId-wheelSize",
+        selectLabelId: "selectLabelId-wheelSize",
+        selectId: "selectId-wheelSize",
+        outlineInputId: "outlineInputId-wheelSize",
+        maxHeight: MAX_HEIGHT,
+        width: 200
+    }
+    const materialsFilterProps  = {
+        nameLabel: "Chất liệu",
+        itemSelected : rootState.filter.materials,
+        inputLabelId: "inputLabelId-material",
+        selectLabelId: "selectLabelId-material",
+        selectId: "selectId-material",
+        outlineInputId: "outlineInputId-material",
+        maxHeight: MAX_HEIGHT,
+        width: 200
+    }
+    const purposeOfUseFilterProps  = {
+        nameLabel: "Mục đích sử dụng",
+        itemSelected : rootState.filter.targetUsings,
+        inputLabelId: "inputLabelId-purposeOfUse",
+        selectLabelId: "selectLabelId-purposeOfUse",
+        selectId: "selectId-purposeOfUse",
+        outlineInputId: "outlineInputId-purposeOfUse",
+        maxHeight: MAX_HEIGHT,
+        width: 200
+    }
+    const values  = {min: rootState.filter.prices.min, max: rootState.filter.prices.max}
     const handlerClick = () => {
         setCount(count + 1)
     }
     const handlerDisabled = () => {
-        return data.total === data.products.length
+        return rootState.data.total === rootState.data.products.length
     }
     return (
         <>
             <Container>
-                <TitlePage name={data.category} result={data.products.length}/>
+                <TitlePage name={rootState.data.category} result={rootState.data.products.length}/>
                 <Stack direction={"column"} gap={2}>
                     <Stack direction={'row'} gap={1} alignItems={'start'}>
                         <ProductByCategoryFilter {...brandsFilterProps}/>
-                        <PriceFilter />
+                        <PriceFilter {...values} />
                         <ProductByCategoryFilter {...wheelSizeFilterProps}/>
                         <ProductByCategoryFilter {...materialsFilterProps}/>
                         <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
                         <Button className={'p-3'}  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
                     </Stack>
-                    <ProductList products={data.products}/>
+                    <ProductList products={rootState.data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
                         <Button className={'focus-ring focus-ring-info'} disabled={handlerDisabled()} onClick={() => {handlerClick()}} defaultValue={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
                     </Box>
@@ -162,64 +224,4 @@ interface Title{
     result: number
 }
 export default Products;
-const brandsFilterProps  = {
-    nameLabel: "Thương hiệu",
-    itemSelected : [
-        'Brave Will',
-        'Fornix',
-        'Life',
-        'Giant',
-        'Calli',
-        'Fasono',
-        'Dtfly',
-        'Thong Nhat',
-        'HTM',
-    ],
-    inputLabelId: "inputLabelId-brand",
-    selectLabelId: "selectLabelId-brand",
-    selectId: "selectId-brand",
-    outlineInputId: "outlineInputId-brand",
-    maxHeight: MAX_HEIGHT,
-    width: 200
-}
-const wheelSizeFilterProps  = {
-    nameLabel: "Kích thước bánh xe",
-    itemSelected : [
-        '24 Inch',
-        '26 Inch',
-    ],
-    inputLabelId: "inputLabelId-wheelSize",
-    selectLabelId: "selectLabelId-wheelSize",
-    selectId: "selectId-wheelSize",
-    outlineInputId: "outlineInputId-wheelSize",
-    maxHeight: MAX_HEIGHT,
-    width: 200
-}
-const materialsFilterProps  = {
-    nameLabel: "Chất liệu",
-    itemSelected : [
-        'Hợp kim nhôm',
-        'Hợp kim thép',
-        'Thép',
-        'Giant',
-    ],
-    inputLabelId: "inputLabelId-material",
-    selectLabelId: "selectLabelId-material",
-    selectId: "selectId-material",
-    outlineInputId: "outlineInputId-material",
-    maxHeight: MAX_HEIGHT,
-    width: 200
-}
-const purposeOfUseFilterProps  = {
-    nameLabel: "Mục đích sử dụng",
-    itemSelected : [
-        'Đi làm, đi học',
-        'Tập thể theo',
-    ],
-    inputLabelId: "inputLabelId-purposeOfUse",
-    selectLabelId: "selectLabelId-purposeOfUse",
-    selectId: "selectId-purposeOfUse",
-    outlineInputId: "outlineInputId-purposeOfUse",
-    maxHeight: MAX_HEIGHT,
-    width: 200
-}
+
