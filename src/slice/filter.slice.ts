@@ -13,7 +13,7 @@ const initialFilterState: FilterAttributeType = {
 }
 
 export const getFilterAttribute = createAsyncThunk('filter/getFilterAttribute', async (category: number, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<FilterAttributeType>>, any>(`/api/products/${category}/filter`, {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<FilterAttributeType>>, any>(`/api/products/${category}/filter-attribute`, {
         signal: thunkAPI.signal
     });
     return response.data.data;

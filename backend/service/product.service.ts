@@ -1,5 +1,6 @@
 import {connection} from "../database.connect";
 import {ProductProps} from "../types/product.type";
+import {Sort} from "mongodb";
 
 const collection = 'xe_dap';
 const productRepository = connection.collection(collection);
@@ -10,20 +11,58 @@ async function getAll() {
         .toArray()
 }
 
-async function getProductsByCategory(category: number, count: number) {
-    const total = await productRepository.countDocuments({category: category})
+async function getProductsByCategory(
+    category: number,
+    count: number,
+    brands?: string[],
+    wheelSizes?: string[],
+    materials?: string[],
+    targetUsings?: string[],
+    price?: string,
+    newProduct?: boolean,
+    bestSale?: boolean,
+    sort?: string,) {
+
+
+    const query = getQuery(category, brands, wheelSizes, materials, targetUsings, price, newProduct, bestSale)
+    const sortQuery: Sort = ((sort===undefined? 'asc': sort) == 'asc'? {"discount": 1} :  {"discount": -1})
+
+    const total = await productRepository.countDocuments(query)
     const numOfDoc = 8
     const x = numOfDoc * count
     let y = 8 + x
     if (y >= total) y = total
-    const products = await productRepository.find<ProductProps>({category: category}).limit(y).toArray()
+    const products = await productRepository.find<ProductProps>(query).sort(sortQuery).limit(y).toArray()
 
     return {
         total: total,
         products: products
     }
 }
+function getQuery(
+    category: number,
+    brands?: string[],
+    wheelSizes?: string[],
+    materials?: string[],
+    targetUsings?: string[],
+    price?: string,
+    newProduct?: boolean,
+    bestSale?: boolean,
+): {}{
 
+    let query: {} = {category: category}
+    let [minPrice, maxPrice] = (price=== undefined? price = '0-0' : price as string).split('-').map(Number)
+
+    if (brands !== undefined) query = {...query, 'base_description.brand': {$in: brands}}
+    if (wheelSizes !== undefined) query = {...query, 'specifications.wheelSize': {$in: wheelSizes}}
+    if (materials !== undefined) query = {...query, 'base_description.material': {$in: materials}}
+    if (targetUsings !== undefined) query = {...query, 'base_description.targetUsing': {$in: targetUsings}}
+    if (maxPrice !== 0) query = {...query, price: {$gte: minPrice, $lte: maxPrice}}
+    if (newProduct !== undefined) query = {...query, new: newProduct}
+    if (bestSale !== undefined) query = {...query, sale: bestSale}
+
+    return query
+}
 async function getProductsBestSale(bestSale: boolean) {
     if (bestSale) {
         return productRepository
@@ -42,8 +81,8 @@ async function getAttrForFilter(category: number) {
             productRepository.distinct('specifications.wheelSize', {category: category}),
             productRepository.distinct('base_description.material', {category: category}),
             productRepository.distinct('specifications.targetUsing', {category: category}),
-            productRepository.find({category: category}).sort({ price: 1 }).limit(1).toArray(),
-            productRepository.find({category: category}).sort({ price: -1 }).limit(1).toArray()])
+            productRepository.find({category: category}).sort({price: 1}).limit(1).toArray(),
+            productRepository.find({category: category}).sort({price: -1}).limit(1).toArray()])
     return result.then((values) => {
         return {
             brands: values[0],
@@ -56,4 +95,33 @@ async function getAttrForFilter(category: number) {
 
 }
 
-export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter};
+async function getProductsByMixFilter(
+    category: number,
+    brands?: string[],
+    wheelSizes?: string[],
+    materials?: string[],
+    targetUsings?: string[],
+    price?: string,
+    newProduct?: boolean,
+    bestSale?: boolean,
+    sort?: string){
+    const [minPrice, maxPrice] = (price as string).split('-').map(Number)
+
+    const query = {
+        'category': category,
+        'base_description.brand': {$in: brands},
+        'specifications.wheelSize': {$in: wheelSizes},
+        'base_description.material': {$in: materials},
+        'specifications.targetUsing': {$in: targetUsings},
+        price: {$gte: minPrice, $lte: maxPrice},
+        new: newProduct,
+        sale: bestSale,
+    }
+    const sortQuery: Sort = (sort == 'asc'? {"discount": 1} :  {"discount": -1})
+    return productRepository
+        .find<ProductProps>(query).sort(sortQuery)
+        .toArray()
+
+}
+
+export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter, getProductsByMixFilter};
