@@ -24,7 +24,7 @@ function ButtonCart() {
                     pb: "10px"
                 }}>
                     <span>Giỏ hàng</span>
-                    <Badge badgeContent={4} color="secondary">
+                    <Badge badgeContent={cartItems.length} color="secondary">
                         <ShoppingCartIcon color="info"/>
                     </Badge>
                 </Button>

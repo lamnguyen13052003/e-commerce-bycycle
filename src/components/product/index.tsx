@@ -5,11 +5,12 @@ import {Image} from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LabelDiscount from "./LabelDiscount";
 import LabelNew from "./LabelNew";
-import {ObjectId} from "mongodb";
 import {CartItemType} from "../../types/cartItem.type";
 import {useDispatch} from "react-redux";
 import {addCartItem} from "../../slice/cart.slice";
 import {ProductType} from "../../types/product.type";
+import {ObjectId} from "mongodb";
+import {toast} from "react-toastify";
 
 
 export default function Product(props: ProductType) {
@@ -57,7 +58,9 @@ export default function Product(props: ProductType) {
 
                     <Button className={'text-uppercase mb-3'} variant={"contained"} color={"info"}
                             startIcon={<ShoppingCartIcon/>}
-                            onClick={() => dispatch(addCartItem(cartItem))}
+                            onClick={() => {
+                                dispatch(addCartItem(cartItem))
+                            }}
                             style={{paddingInline: '15px', paddingBlock: '5px', textWrap: 'nowrap'}}>
                         Thêm vào giỏ hàng
                     </Button>
@@ -68,7 +71,7 @@ export default function Product(props: ProductType) {
 }
 
 const cartItem: CartItemType = {
-    id: ObjectId.createFromTime(1),
+    id: "507f1f77bcf86cd799439011",
     name: "Áo thun",
     price: 100000,
     quantity: 1,

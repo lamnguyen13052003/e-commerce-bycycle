@@ -8,7 +8,7 @@ import {useDispatch} from "react-redux";
 import {decreaseCartItem, increaseQuantityCartItem} from "../../slice/cart.slice";
 
 export interface QuantityCellProps {
-    id: ObjectId,
+    id: string,
     quantity: number;
 }
 
