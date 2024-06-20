@@ -1,5 +1,5 @@
 import {connection} from "../database.connect";
-import {User} from "../types/user.type";
+import {UserType} from "../types/user.type";
 import {CustomError} from "../errors/custom.error.type";
 import {
     accountExist,
@@ -20,19 +20,19 @@ const userRepository = connection.collection(collection);
 async function existUsername(username?: string): Promise<boolean> {
     const query = {username: username}
     return userRepository
-        .findOne<User>(query)
+        .findOne<UserType>(query)
         .then((response): boolean => {
             return response ? true : false;
         });
 }
 
-async function login(loginRequest: LoginRequest): Promise<User> {
+async function login(loginRequest: LoginRequest): Promise<UserType> {
     const exist = await existUsername(loginRequest.username);
     if (!exist)
         throw accountNotExist;
     return userRepository
-        .findOne<User>(loginRequest)
-        .then((response: User | null): User => {
+        .findOne<UserType>(loginRequest)
+        .then((response: UserType | null): UserType => {
             if (!response) throw wrongUsernameOrPassword;
             if (response.verifyCode || response.verifyCode === "") throw accountNotVerify;
             response.password = undefined;
@@ -41,10 +41,10 @@ async function login(loginRequest: LoginRequest): Promise<User> {
         });
 }
 
-async function register(registerRequest: RegisterRequest): Promise<User> {
+async function register(registerRequest: RegisterRequest): Promise<UserType> {
     const exist = await existUsername(registerRequest.username);
     if (registerRequest.password !== registerRequest.confirmPassword) throw passwordNotCompare;
-    const user: User = {
+    const user: UserType = {
         username: registerRequest.username,
         password: registerRequest.password,
         fullName: registerRequest.fullName,
@@ -54,11 +54,11 @@ async function register(registerRequest: RegisterRequest): Promise<User> {
     if (exist) throw accountExist;
     return userRepository
         .insertOne(user)
-        .then((response): User => {
+        .then((response): UserType => {
             if (!response) throw registerFail;
             return {
                 id: response.insertedId,
-            } as User;
+            } as UserType;
         }).catch(() => {
             throw {}
         });
@@ -68,7 +68,7 @@ async function verify(verifyRequest: VerifyRequest): Promise<boolean> {
     const exist = await existUsername(verifyRequest.username);
     if (!exist) throw accountNotExist;
     return userRepository
-        .findOne<User>(verifyRequest)
+        .findOne<UserType>(verifyRequest)
         .then((response): Promise<boolean> => {
             if (!response) throw wrongVerifyCode;
             return verifySuccess(response._id);

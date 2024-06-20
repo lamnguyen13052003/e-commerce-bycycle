@@ -6,24 +6,18 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LabelDiscount from "./LabelDiscount";
 import LabelNew from "./LabelNew";
 import {ObjectId} from "mongodb";
+import {CartItemType} from "../../types/cartItem.type";
+import {useDispatch} from "react-redux";
+import {addCartItem} from "../../slice/cart.slice";
+import {ProductType} from "../../types/product.type";
 
-export interface ProductProps {
-    _id: ObjectId,
-    sale?: boolean,
-    new?: boolean,
-    discount?: number,
-    imagePath: string,
-    name: string,
-    price: number,
-    category: number
-}
 
-export default function Product(props: ProductProps) {
-    // Create our number formatter.
+export default function Product(props: ProductType) {
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     });
+    const dispatch = useDispatch();
 
     const calculateDiscount = () => {
         return Math.floor(props.price * (100 - (props.discount ? props.discount : 0)) / 100);
@@ -63,6 +57,7 @@ export default function Product(props: ProductProps) {
 
                     <Button className={'text-uppercase mb-3'} variant={"contained"} color={"info"}
                             startIcon={<ShoppingCartIcon/>}
+                            onClick={() => dispatch(addCartItem(cartItem))}
                             style={{paddingInline: '15px', paddingBlock: '5px', textWrap: 'nowrap'}}>
                         Thêm vào giỏ hàng
                     </Button>
@@ -70,4 +65,13 @@ export default function Product(props: ProductProps) {
             </Box>
         </Box>
     )
+}
+
+const cartItem: CartItemType = {
+    id: ObjectId.createFromTime(1),
+    name: "Áo thun",
+    price: 100000,
+    quantity: 1,
+    url: "https://via.placeholder.com/150",
+    type: "M"
 }

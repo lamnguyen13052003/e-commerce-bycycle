@@ -2,15 +2,15 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {Badge, Button, Stack} from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import CartDropDown from "../cart-drop-down/CartDropDown";
-import {CartItemDropDownType} from "../../types/cartItemDropDown.type";
+import CartDropDown from "../cart-drop-down";
+import {CartItemType} from "../../types/cartItem.type";
+import {RootState} from "../../configs/store";
+import {useSelector} from "react-redux";
 
-const cartItems: CartItemDropDownType[] = [
-    {id: 1, name: "Áo thun", price: 100000, quantity: 2, url: "https://via.placeholder.com/150", type: "M"},
-];
 
 function ButtonCart() {
     const [show, setShow] = React.useState(false);
+    const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
 
     return (
         <Stack direction={"column"} alignItems={"center"} className={"position-relative"}

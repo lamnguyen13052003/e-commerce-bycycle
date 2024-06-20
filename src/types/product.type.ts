@@ -1,6 +1,6 @@
 import {ObjectId} from "mongodb";
 
-export interface ProductType {
+export type ProductType = {
     _id: ObjectId,
     sale?: boolean,
     new?: boolean,

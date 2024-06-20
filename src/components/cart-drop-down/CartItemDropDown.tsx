@@ -1,8 +1,12 @@
 import React from 'react';
 import {Button, Stack} from "@mui/material";
-import {CartItemDropDownType} from "../../types/cartItemDropDown.type";
+import {CartItemType} from "../../types/cartItem.type";
+import {useDispatch} from "react-redux";
+import {removeCartItem} from "../../slice/cart.slice";
 
-function CartItemDropDown(props: CartItemDropDownType) {
+function CartItemDropDown(props: CartItemType) {
+    const dispatch = useDispatch();
+
     const formatCurrency = (value: number) => {
         return value.toLocaleString('vi', {style: 'currency', currency: 'VND'});
     }
@@ -19,6 +23,7 @@ function CartItemDropDown(props: CartItemDropDownType) {
                     </p>
                 </Stack>
                 <Button style={{minWidth: "25px", height: "25px"}}
+                        onClick={() => dispatch(removeCartItem(props.id))}
                         className={"border p-0 border-1 border-danger text-secondary bg-white d-flex justify-content-center align-items-center rounded-circle"}>
                     x
                 </Button>

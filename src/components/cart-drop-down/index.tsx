@@ -1,12 +1,12 @@
 import React from 'react';
-import {Box, Button, Divider, Stack} from "@mui/material";
+import {Box, Stack} from "@mui/material";
 import CartDropDownEmpty from "./CartDropDownEmpty";
 import CartDropDownNonEmpty from "./CartDropDownNonEmpty";
 import CartItemDropDown from "./CartItemDropDown";
-import {CartItemDropDownType} from "../../types/cartItemDropDown.type";
+import {CartItemType} from "../../types/cartItem.type";
 
 function CartDropDown(props: {
-    cartItems: CartItemDropDownType[],
+    cartItems: CartItemType[],
     className?: string,
     style?: React.CSSProperties
 }) {

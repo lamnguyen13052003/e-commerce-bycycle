@@ -1,6 +1,10 @@
 import {ObjectId} from "mongodb";
 
 export type CartItemType = {
-    productId: ObjectId;
-    quantity: number;
+    id: ObjectId,
+    url: string,
+    name: string,
+    type: string,
+    price: number,
+    quantity: number,
 }
