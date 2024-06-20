@@ -95,33 +95,5 @@ async function getAttrForFilter(category: number) {
 
 }
 
-async function getProductsByMixFilter(
-    category: number,
-    brands?: string[],
-    wheelSizes?: string[],
-    materials?: string[],
-    targetUsings?: string[],
-    price?: string,
-    newProduct?: boolean,
-    bestSale?: boolean,
-    sort?: string){
-    const [minPrice, maxPrice] = (price as string).split('-').map(Number)
 
-    const query = {
-        'category': category,
-        'base_description.brand': {$in: brands},
-        'specifications.wheelSize': {$in: wheelSizes},
-        'base_description.material': {$in: materials},
-        'specifications.targetUsing': {$in: targetUsings},
-        price: {$gte: minPrice, $lte: maxPrice},
-        new: newProduct,
-        sale: bestSale,
-    }
-    const sortQuery: Sort = (sort == 'asc'? {"discount": 1} :  {"discount": -1})
-    return productRepository
-        .find<ProductProps>(query).sort(sortQuery)
-        .toArray()
-
-}
-
-export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter, getProductsByMixFilter};
+export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter};
