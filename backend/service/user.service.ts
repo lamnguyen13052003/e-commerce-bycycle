@@ -1,12 +1,15 @@
 import {connection} from "../database.connect";
 import {UserType} from "../types/user.type";
-import {CustomError} from "../errors/custom.error.type";
 import {
     accountExist,
     accountNotExist,
-    accountNotVerify, changePasswordFail, passwordNotCompare,
-    registerFail, verifyFail,
-    wrongUsernameOrPassword, wrongVerifyCode
+    accountNotVerify,
+    changePasswordFail,
+    passwordNotCompare,
+    registerFail,
+    verifyFail,
+    wrongUsernameOrPassword,
+    wrongVerifyCode
 } from "../errors/error.enum";
 import {VerifyRequest} from "../requests/verify.request";
 import {LoginRequest} from "../requests/login.request";
@@ -22,7 +25,7 @@ async function existUsername(username?: string): Promise<boolean> {
     return userRepository
         .findOne<UserType>(query)
         .then((response): boolean => {
-            return response ? true : false;
+            return !!response;
         });
 }
 

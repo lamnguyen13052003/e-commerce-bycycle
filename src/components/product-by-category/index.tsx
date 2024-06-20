@@ -1,12 +1,12 @@
 import React from 'react';
 import {Box, Button, Stack} from "@mui/material";
-import {ProductProps} from "../product";
 import {Link} from "react-router-dom";
 import ProductList from "../product-list";
+import {ProductType} from "../../types/product.type";
 
 export interface ProductByCategoryProps {
     title: string,
-    products: ProductProps[],
+    products: ProductType[],
     to: string
 }
 

@@ -1,21 +1,21 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {ProductProps} from "../components/product";
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
 import any = jasmine.any;
 import {ResponseApi} from "../utils/response.type";
 import {getProductsBestSale} from "../../backend/service/product.service";
+import {ProductType} from "../types/product.type";
 
 interface HomeState {
-    bestSale: ProductProps[],
-    newProduct: ProductProps[],
-    babyBicycle: ProductProps[],
-    sportBicycle: ProductProps[],
-    topographicBicycle: ProductProps[],
-    racingBicycle: ProductProps[],
-    touringBicycle: ProductProps[],
-    femaleBicycle: ProductProps[],
-    foldBicycle: ProductProps[]
+    bestSale: ProductType[],
+    newProduct: ProductType[],
+    babyBicycle: ProductType[],
+    sportBicycle: ProductType[],
+    topographicBicycle: ProductType[],
+    racingBicycle: ProductType[],
+    touringBicycle: ProductType[],
+    femaleBicycle: ProductType[],
+    foldBicycle: ProductType[]
 }
 
 const initialState: HomeState = {
@@ -31,7 +31,7 @@ const initialState: HomeState = {
 }
 
 export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (category: number, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/${category}`, {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductType[]>>, any>(`api/products/${category}`, {
         signal: thunkAPI.signal
     })
 
@@ -41,7 +41,7 @@ export const getProductsByCategory = createAsyncThunk('products/getProducts/cate
     }
 })
 export const getProductsByBestSale = createAsyncThunk('products/getProducts/hasBestSale', async (bestSale: boolean, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/best-sale/${bestSale}`, {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductType[]>>, any>(`api/products/best-sale/${bestSale}`, {
         signal: thunkAPI.signal
     })
 

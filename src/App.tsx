@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './styles/App.css';
 import {Route, Routes} from "react-router";
 import Main from "./layouts/Main";

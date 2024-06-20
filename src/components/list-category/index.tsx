@@ -1,9 +1,10 @@
 import React from 'react';
 import {Box, Stack} from "@mui/material";
 import {images as menu_item_images} from "../../assets/images/menu-item/images";
-import CategoryItem, {CategoryItemProps} from "./CategoryItem";
+import CategoryItem from "./CategoryItem";
+import {CategoryType} from "../../types/category.type";
 
-const categoryItemProps: CategoryItemProps[] = [
+const categoryItemProps: CategoryType[] = [
     {
         title: "Xe đạp trẻ em",
         url: menu_item_images.xe_dap_tre_em,
