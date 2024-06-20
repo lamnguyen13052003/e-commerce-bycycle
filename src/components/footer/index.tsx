@@ -87,7 +87,7 @@ function Footer() {
                 </div>
                 <div className={`${styles['flex-1']}`}>
                     <Title title={"Hướng dẫn đường tới"}/>
-                    <GoogleMapComponent center={center} marker={[center]}/>
+                    <GoogleMapComponent/>
                 </div>
             </section>
             <hr className={`my-0 bg-dark`}/>

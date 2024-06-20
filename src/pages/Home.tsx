@@ -45,7 +45,6 @@ function Home() {
         const promise_six = dispatch(getProductsByCategory(6))
         const promise_best_sale = dispatch(getProductsByBestSale(true))
         const promise_new = dispatch(getProductsByBestSale(false))
-        console.log(newProduct)
         return () => {
             promise_zero.abort();
             promise_one.abort();
@@ -176,7 +175,7 @@ const renderCarousel = () => {
 
 const renderBrand = () => {
     return brand_images.map((image, index) => {
-        return <LogoBrand src={image}/>
+        return <LogoBrand src={image} key={`brand-${index}`}/>
     });
 }
 

@@ -63,7 +63,8 @@ export default function Product(props: ProductProps) {
 
                     <Button className={'text-uppercase mb-3'} variant={"contained"} color={"info"}
                             startIcon={<ShoppingCartIcon/>}
-                            style={{width: '148px', height: '28px'}}> Mua hàng
+                            style={{paddingInline: '15px', paddingBlock: '5px', textWrap: 'nowrap'}}>
+                        Thêm vào giỏ hàng
                     </Button>
                 </Stack>
             </Box>

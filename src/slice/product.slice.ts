@@ -51,7 +51,7 @@ export const getProductsByBestSale = createAsyncThunk('products/getProducts/hasB
     }
 })
 const productSlice = createSlice({
-    name: 'products',
+    name: 'product slice',
     initialState,
     reducers: {},
     extraReducers(builder) {

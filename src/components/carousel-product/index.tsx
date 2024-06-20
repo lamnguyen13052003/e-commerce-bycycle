@@ -9,7 +9,7 @@ function CarouselProduct(props: { products: ProductProps[] }) {
             {props.products.map((product: ProductProps, index: number) => {
                 if (index % 4 !== 0) return;
                 return (
-                    <Carousel.Item>
+                    <Carousel.Item key={product._id.toString()}>
                         <Stack direction={"row"} justifyContent={'space-between'}>
                             <Product key={`CarouselProduct_${Math.random()}`} {...props.products[index]}/>
                             {props.products[index + 1] ? <Product {...props.products[index + 1]}/> : ''}
