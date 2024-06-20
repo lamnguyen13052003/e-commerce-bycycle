@@ -95,7 +95,7 @@ async function forgetPassword(username: string): Promise<boolean> {
 }
 
 async function changePassword(changePasswordRequest: ChangePasswordRequest): Promise<boolean> {
-    const exist = await existUsername(changePasswordRequest.password);
+    const exist = await existUsername(changePasswordRequest.username);
     if (changePasswordRequest.password !== changePasswordRequest.confirmPassword) throw passwordNotCompare;
     if (!exist) throw accountNotExist;
     return userRepository
