@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
-import * as pdc from "./product-detail-components";
+import * as pdc from "./ProductDetailComponent";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ColorSelector from "./ColorSelector";
 import QuantityCell from "../cart/QuantityCell";
-import {Button, Stack, TextField, Input} from "@mui/material";
-import CarouselProduct from "../carousel-product";
-import {product_best_sales} from "../product/DataProduct";
-import {TechSpec} from "./product-detail-components";
+import {Button, TextField, Input} from "@mui/material";
+import {TechSpec} from "./ProductDetailComponent";
 
 
 
@@ -47,7 +45,7 @@ const ProductDetailCol = () => {
         previousPrice: 3000000,
         description:
             "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem exercitationem voluptate sint eius ea assumenda provident eos repellendus qui neque! Velit ratione illo maiores voluptates commodi eaque illum, laudantium non!",
-        idcolor: ["VC800-DD", "VC800-DX", "VC800-TD", "VC800-TX", "VC800-XV"],
+        idColor: ["VC800-DD", "VC800-DX", "VC800-TD", "VC800-TX", "VC800-XV"],
         color: [
             { color1: "#000000", color2: "#000000", name: "Đen" },
             { color1: "#000000", color2: "#0000FF", name: "Đen Xanh" },
@@ -141,7 +139,7 @@ const ProductDetailCol = () => {
                                                 </li>
                                             </ul>
                                             <div className={"form-product"}>
-                                                <Input placeholder="Số điện thoại" fullWidth="true"/>
+                                                <Input placeholder="Số điện thoại" fullWidth={true}/>
                                                 <Button variant="contained" href="#">Gửi</Button>
                                             </div>
                                         </div>
@@ -269,22 +267,14 @@ const ProductDetailCol = () => {
                                         fullWidth
                                     />
                                     <div style={{display: "flex", gap: "30px", width: "100%", marginTop: "50px"}}>
-                                        <Input placeholder="Tên" fullWidth= "true" variant="filled"
-                                        ></Input>
-                                        <Input placeholder="Email" fullWidth="true" variant="filled"
-                                        ></Input>
+                                        <Input placeholder="Tên" fullWidth={true}  />
+                                        <Input placeholder="Email" fullWidth={true} />
                                     </div>
                                     <Button style={{marginTop: "20px", width: "150px" , height: "45px"}} variant="contained" size="medium">Gửi</Button>
                                 </div>
                             </div>
                         </div>
                     </pdc.Comment>
-                    <pdc.RelatedProduct>
-                        <h3>Sản phẩm liên quan</h3>
-                        <Stack direction={"row"}  gap={3}>
-                            <CarouselProduct products={product_best_sales}/>
-                        </Stack>
-                    </pdc.RelatedProduct>
                 </Col>
             </Row>
         </Container>

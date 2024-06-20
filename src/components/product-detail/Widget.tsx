@@ -1,7 +1,7 @@
 import React from 'react';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import * as pdc from "./product-detail-components";
+import * as pdc from "./ProductDetailComponent";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
 const StickyWidget = () => {

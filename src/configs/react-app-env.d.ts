@@ -6,6 +6,7 @@ declare module '*.woff';
 declare module '*.ttf';
 declare module '*.module.css';
 declare module 'google-map-react';
+declare module 'react-image-gallery';
 
 declare module '*.svg' {
     import React = require('react');
