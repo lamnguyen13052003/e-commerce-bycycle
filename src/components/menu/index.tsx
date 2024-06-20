@@ -8,7 +8,7 @@ function Menu(props: any) {
         <Box>
             <Navbar collapseOnSelect>
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="mr-auto bg-primary rounded-2 ">
+                    <Nav className="mr-auto bg-primary rounded-2">
                         <NavDropdownMenu title="Danh sách sản phẩm" id="collasible-nav-dropdown"
                                          className={`px-2 fw-bold`}>
                             <MenuItem href={'/xe-dap-tre-em/page/0'}>Xe đạp trẻ em </MenuItem>
