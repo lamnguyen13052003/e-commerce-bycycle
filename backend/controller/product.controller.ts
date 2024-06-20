@@ -4,7 +4,7 @@ import {ResponseApi} from "../types/response.type";
 import {
     getAll as getAllProduct, getAttrForFilter,
     getProductsBestSale,
-    getProductsByCategory, getProductsByMixFilter,
+    getProductsByCategory,
 } from "../service/product.service";
 import {ProductProps, ProductPropsHasTotal} from "../types/product.type";
 import FilterAttributeType from "../types/filterAttribute.type";
