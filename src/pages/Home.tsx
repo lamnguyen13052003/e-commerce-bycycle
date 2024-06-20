@@ -1,17 +1,64 @@
-import React from 'react';
-import {ProductProps} from "../components/product";
+import React, {useEffect} from 'react';
 import {Box, Stack} from "@mui/material";
 import {images as banner_images} from "../assets/images/carousels/images";
 import {images as brand_images} from "../assets/images/brands/images";
-import {Carousel, Image, Container} from "react-bootstrap";
+import {Carousel, Container, Image} from "react-bootstrap";
 import LogoBrand from "../components/logo-brand";
 import ListCategory from "../components/list-category";
 import CarouselProduct from "../components/carousel-product";
 import ProductByCategory from "../components/product-by-category";
+import {useSelector} from "react-redux";
+import {RootState, useAppDispatch} from "../configs/store";
+import {getProductsByBestSale, getProductsByCategory} from "../slice/product.slice";
 
-
-
+/*
+xe dap tre em: 0
+xe dap the thao: 1
+xe dap dia hinh: 2
+xe dap dua: 3
+xe dap touring: 4
+xe dap nu: 5
+xe dap gap : 6
+ */
 function Home() {
+    const productsState = useSelector((state: RootState) => state.product)
+    const dispatch = useAppDispatch()
+    const {
+        babyBicycle,
+        touringBicycle,
+        topographicBicycle,
+        sportBicycle,
+        foldBicycle,
+        femaleBicycle,
+        racingBicycle,
+        newProduct,
+        bestSale
+    } = productsState
+
+    useEffect(() => {
+        const promise_zero = dispatch(getProductsByCategory(0))
+        const promise_one = dispatch(getProductsByCategory(1))
+        const promise_two = dispatch(getProductsByCategory(2))
+        const promise_three = dispatch(getProductsByCategory(3))
+        const promise_four = dispatch(getProductsByCategory(4))
+        const promise_five = dispatch(getProductsByCategory(5))
+        const promise_six = dispatch(getProductsByCategory(6))
+        const promise_best_sale = dispatch(getProductsByBestSale(true))
+        const promise_new = dispatch(getProductsByBestSale(false))
+        console.log(newProduct)
+        return () => {
+            promise_zero.abort();
+            promise_one.abort();
+            promise_two.abort();
+            promise_three.abort();
+            promise_four.abort();
+            promise_five.abort();
+            promise_six.abort();
+            promise_best_sale.abort();
+            promise_new.abort();
+        };
+    }, []);
+
     return (
         <>
             <Box>
@@ -35,7 +82,7 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>Sản phẩm bán chạy</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={product_best_sales}/>
+                        <CarouselProduct products={bestSale}/>
                     </Stack>
                 </Container>
             </Box>
@@ -44,14 +91,14 @@ function Home() {
                 <Container>
                     <h2 className={'text-center text-white fw-bold'}>SẢN PHẨM NỔI BẬT</h2>
                     <Stack direction={"row"} flexWrap={"wrap"} gap={4} justifyContent={"center"}>
-                        <CarouselProduct products={product_best_sales}/>
+                        <CarouselProduct products={newProduct}/>
                     </Stack>
                 </Container>
             </Box>
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
-                    <ProductByCategory key={"a"}
-                                       products={products}
+                    <ProductByCategory key={"babyBicycle"}
+                                       products={babyBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP TRẺ EM"}
                     />
@@ -60,7 +107,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={sportBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP THỂ THAO"}
                     />
@@ -69,7 +116,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={topographicBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP ĐỊA HÌNH"}
                     />
@@ -78,7 +125,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={racingBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP ĐUA"}
                     />
@@ -87,7 +134,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={touringBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP TOURING"}
                     />
@@ -96,7 +143,7 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={foldBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP GẤP"}
                     />
@@ -105,7 +152,7 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={products}
+                                       products={femaleBicycle}
                                        to={"#"}
                                        title={"XE ĐẠP NỮ"}
                     />
@@ -118,7 +165,7 @@ function Home() {
 const renderCarousel = () => {
     return <Carousel key={"Carousel_asdfsaf"} className={'w-100'}>
         {banner_images.map((image, index) => {
-            return (<Carousel.Item style={{
+            return (<Carousel.Item key={index} style={{
                 height: "600px"
             }}>
                 <Image src={image} rounded className={'h-100'} width={'100%'}/>
@@ -135,175 +182,4 @@ const renderBrand = () => {
 
 
 export default Home;
-
-const products: ProductProps[] = [
-    {
-        sale: true,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-    , {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }
-]
-
-const product_best_sales: ProductProps[] = [
-    {
-        sale: true,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-    }, {
-        sale: false,
-        new: true,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    }, {
-        sale: false,
-        discount: 3,
-        image: {},
-        name: 'Xe Đạp Đua Twitter Smile – Khung Nhôm | Tay Đề Lắc | Retrospec | hahahahahahaha',
-        price: 3000000,
-
-    },
-]
-
 

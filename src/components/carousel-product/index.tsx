@@ -6,7 +6,7 @@ import {Stack} from "@mui/material";
 function CarouselProduct(props: { products: ProductProps[] }) {
     return (
         <Carousel className={'w-100'} interval={5000} indicators={false}>
-            {props.products.map((product, index) => {
+            {props.products.map((product: ProductProps, index: number) => {
                 if (index % 4 !== 0) return;
                 return (
                     <Carousel.Item>
