@@ -33,6 +33,7 @@ const cartSlice = createSlice({
             }
 
             toast.success("Thêm sản phẩm thành công!")
+            saveLocalStorage(state)
         },
         increaseQuantityCartItem: function (state, payload: PayloadAction<string>) {
             const cartItems = state.cartItems;
@@ -41,10 +42,9 @@ const cartSlice = createSlice({
                 if (item.id === id) {
                     item.quantity++;
                     toast.success("Thêm sản phẩm thành công!")
+                    saveLocalStorage(state)
                 }
             });
-
-            toast.success("Thêm sản phẩm thành công!")
         },
         decreaseCartItem: function (state, payload: PayloadAction<string>) {
             const cartItems = state.cartItems;
@@ -53,6 +53,7 @@ const cartSlice = createSlice({
                 if (item.id === id) {
                     item.quantity--;
                     toast.success("Giảm sản phẩm thành công!")
+                    saveLocalStorage(state)
                 }
             });
 
@@ -61,6 +62,7 @@ const cartSlice = createSlice({
         removeCartItem: function (state, payload: PayloadAction<string>) {
             removeItem(state.cartItems, payload.payload);
             toast.success("Xóa sản phẩm thành công!")
+            saveLocalStorage(state)
         }
     }
 });
@@ -72,6 +74,10 @@ const removeItem = (cartItems: CartItemType[], id: string) => {
             break;
         }
     }
+}
+
+const saveLocalStorage = (cart: CartState) => {
+    localStorage.setItem("cart", JSON.stringify(cart))
 }
 
 export const {addCartItem, removeCartItem, increaseQuantityCartItem, decreaseCartItem} = cartSlice.actions;
