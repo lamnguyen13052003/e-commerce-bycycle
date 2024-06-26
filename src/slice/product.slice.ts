@@ -1,47 +1,101 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {ProductProps} from "../components/product";
+import {ProductType} from "../types/product.type"
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
-import any = jasmine.any;
 import {ResponseApi} from "../utils/response.type";
-import {getProductsBestSale} from "../../backend/service/product.service";
+import {ProductHasTotalType} from "../types/productsHasTotal.type";
 
 interface HomeState {
-    bestSale: ProductProps[],
-    newProduct: ProductProps[],
-    babyBicycle: ProductProps[],
-    sportBicycle: ProductProps[],
-    topographicBicycle: ProductProps[],
-    racingBicycle: ProductProps[],
-    touringBicycle: ProductProps[],
-    femaleBicycle: ProductProps[],
-    foldBicycle: ProductProps[]
+    bestSale: ProductType[],
+    newProduct: ProductType[],
+    babyBicycle: {
+        category: string,
+        products: ProductType[],
+        total: number
+    },
+    sportBicycle: {
+        category: string,
+        products: ProductType[],
+        total: number
+    },
+    topographicBicycle: {
+        category: string,
+        products: ProductType[],
+        total: number
+    },
+    racingBicycle: {
+        category: string,
+        products: ProductType[],
+        total: number
+    },
+    touringBicycle: {
+        category: string,
+        products: ProductType[],
+        total: number
+    },
+    femaleBicycle: {
+        category: string,
+        products: ProductType[],
+        total: number
+    },
+    foldBicycle: {
+        category: string,
+        products: ProductType[],
+        total: number
+    },
 }
 
 const initialState: HomeState = {
     bestSale: [],
     newProduct: [],
-    babyBicycle: [],
-    sportBicycle: [],
-    topographicBicycle: [],
-    racingBicycle: [],
-    touringBicycle: [],
-    femaleBicycle: [],
-    foldBicycle: []
+    babyBicycle: {
+        category: "Xe đạp trẻ em",
+        products: [],
+        total: 0
+    },
+    sportBicycle: {
+        category: "Xe đạp thể thao",
+        products: [],
+        total: 0
+    },
+    topographicBicycle:{
+        category: "Xe đạp địa hình",
+        products: [],
+        total: 0
+    },
+    racingBicycle:{
+        category: "Xe đạp đua",
+        products: [],
+        total: 0
+    },
+    touringBicycle: {
+        category: "Xe đạp touring",
+        products: [],
+        total: 0
+    },
+    femaleBicycle: {
+        category: "Xe đạp nữ",
+        products: [],
+        total: 0
+    },
+    foldBicycle: {
+        category: "Xe đạp gấp",
+        products: [],
+        total: 0
+    },
 }
 
-export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (category: number, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/${category}`, {
+export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (prop:{category: number, page: number | undefined}, thunkAPI) => {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductHasTotalType>>, any>(`api/products/${prop.category}/page=${prop.page}`, {
         signal: thunkAPI.signal
     })
-
     return {
-        category,
+       category: prop.category,
         data: response.data.data
     }
 })
 export const getProductsByBestSale = createAsyncThunk('products/getProducts/hasBestSale', async (bestSale: boolean, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/best-sale/${bestSale}`, {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductType[]>>, any>(`api/products/best-sale/${bestSale}`, {
         signal: thunkAPI.signal
     })
 
@@ -51,7 +105,7 @@ export const getProductsByBestSale = createAsyncThunk('products/getProducts/hasB
     }
 })
 const productSlice = createSlice({
-    name: 'products',
+    name: 'product slice',
     initialState,
     reducers: {},
     extraReducers(builder) {
@@ -59,25 +113,32 @@ const productSlice = createSlice({
             if (!action.payload.data) return
             switch (action.payload.category) {
                 case 0:
-                    state.babyBicycle = action.payload.data
+                    state.babyBicycle.products = action.payload.data.products
+                    state.babyBicycle.total = action.payload.data.total
                     break
                 case 1:
-                    state.sportBicycle = action.payload.data
+                    state.sportBicycle.products = action.payload.data.products
+                    state.sportBicycle.total = action.payload.data.total
                     break
                 case 2:
-                    state.topographicBicycle = action.payload.data
+                    state.topographicBicycle.products = action.payload.data.products
+                    state.topographicBicycle.total = action.payload.data.total
                     break
                 case 3:
-                    state.racingBicycle = action.payload.data
+                    state.racingBicycle.products = action.payload.data.products
+                    state.racingBicycle.total = action.payload.data.total
                     break
                 case 4:
-                    state.touringBicycle = action.payload.data
+                    state.touringBicycle.products = action.payload.data.products
+                    state.touringBicycle.total = action.payload.data.total
                     break
                 case 5:
-                    state.femaleBicycle = action.payload.data
+                    state.femaleBicycle.products = action.payload.data.products
+                    state.femaleBicycle.total = action.payload.data.total
                     break
                 case 6:
-                    state.foldBicycle = action.payload.data
+                    state.foldBicycle.products = action.payload.data.products
+                    state.foldBicycle.total = action.payload.data.total
                     break
                 default:
                     break

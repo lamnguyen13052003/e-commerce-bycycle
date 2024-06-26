@@ -7,7 +7,7 @@ const database = 'Ban_Xe_Dap';
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
-        strict: true,
+        strict: false, // đặt false để cho phép sử dụng các truy vấn không được hỗ trợ, vd: như distinct
         deprecationErrors: true,
     }
 });

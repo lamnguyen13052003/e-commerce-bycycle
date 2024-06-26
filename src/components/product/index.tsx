@@ -5,25 +5,17 @@ import {Image} from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LabelDiscount from "./LabelDiscount";
 import LabelNew from "./LabelNew";
-import {ObjectId} from "mongodb";
+import {ProductType} from "../../types/product.type";
+import {useDispatch} from "react-redux";
+import {addCartItem} from "../../slice/cart.slice";
+import {CartItemType} from "../../types/cartItem.type";
 
-export interface ProductProps {
-    _id: ObjectId,
-    sale?: boolean,
-    new?: boolean,
-    discount?: number,
-    imagePath: string,
-    name: string,
-    price: number,
-    category: number
-}
-
-export default function Product(props: ProductProps) {
-    // Create our number formatter.
+export default function Product(props: ProductType) {
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     });
+    const dispatch = useDispatch();
 
     const calculateDiscount = () => {
         return Math.floor(props.price * (100 - (props.discount ? props.discount : 0)) / 100);
@@ -36,9 +28,9 @@ export default function Product(props: ProductProps) {
                     {props.sale && <LabelDiscount discount={props.discount ? props.discount : 0}/>}
                     {props.new && <LabelNew zIndex={2}/>}
                 </Stack>
-                <Box className={'object-fit-cover position-absolute top-0 start-0 z-0'}
+                <Box className={'object-fit-cover overflow-hidden position-absolute top-0 start-0 z-0'}
                      sx={{width: '306px', height: '100%'}}>
-                    <Image className={`${styles.image_hover}`} src={props.imagePath} alt={props.name}
+                    <Image className={`${styles.image_hover}`} src={props.model[0].pathImageColor} alt={props.name}
                            style={{width: '100%'}}/>
                 </Box>
             </Box>
@@ -63,10 +55,23 @@ export default function Product(props: ProductProps) {
 
                     <Button className={'text-uppercase mb-3'} variant={"contained"} color={"info"}
                             startIcon={<ShoppingCartIcon/>}
-                            style={{width: '148px', height: '28px'}}> Mua hàng
+                            onClick={() => {
+                                dispatch(addCartItem(cartItem))
+                            }}
+                            style={{paddingInline: '15px', paddingBlock: '5px', textWrap: 'nowrap'}}>
+                        Thêm vào giỏ hàng
                     </Button>
                 </Stack>
             </Box>
         </Box>
     )
+}
+
+const cartItem: CartItemType = {
+    id: "507f1f77bcf86cd799439011",
+    name: "Áo thun",
+    price: 100000,
+    quantity: 1,
+    url: "https://via.placeholder.com/150",
+    type: "M"
 }

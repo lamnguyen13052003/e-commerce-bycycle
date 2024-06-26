@@ -4,10 +4,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {setTitle} from "../../slice/signTitle.slice";
 import {useForm} from "react-hook-form";
 import {VerifyRequest} from "../../requests/verify.request";
-import {LoginRequest} from "../../requests/login.request";
 import axios from "axios";
 import {toast} from "react-toastify";
-import {login, verify} from "../../slice/auth.slice";
+import {verify} from "../../slice/auth.slice";
 import {useNavigate} from "react-router-dom";
 
 interface inputCode {

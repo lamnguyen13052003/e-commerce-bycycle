@@ -2,7 +2,7 @@ import {changePassword, forgetPassword, login, register, verify} from "../servic
 import {Express} from "express";
 import {Builder} from "builder-pattern";
 import {ResponseApi} from "../types/response.type";
-import {User} from "../types/user.type";
+import {UserType} from "../types/user.type";
 import {log} from "../server";
 
 const TAG = "Athentication Controller"
@@ -11,7 +11,7 @@ export const runAuthController = (app: Express) => {
     app.post("/api/login", (req, res) => {
         log(TAG, "Login", req.body)
         login(req.body).then((data) => {
-            res.send(Builder<ResponseApi<User>>()
+            res.send(Builder<ResponseApi<UserType>>()
                 .code(202)
                 .message("Success")
                 .data(data)
@@ -24,7 +24,7 @@ export const runAuthController = (app: Express) => {
     app.post("/api/register", (req, res) => {
         log(TAG, "Register", req.body)
         register(req.body).then((data) => {
-            res.send(Builder<ResponseApi<User>>()
+            res.send(Builder<ResponseApi<UserType>>()
                 .code(202)
                 .message("Success")
                 .data(data)

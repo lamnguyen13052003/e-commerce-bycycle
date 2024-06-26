@@ -6,7 +6,7 @@ const initial: SignTitleState = {
 }
 
 const signTitleSlice = createSlice({
-    name: 'signTitle',
+    name: 'sign title slice',
     initialState: initial,
     reducers: {
         setTitle: (state, action: PayloadAction<SignTitleState>) => {
