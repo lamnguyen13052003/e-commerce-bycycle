@@ -1,37 +1,20 @@
 import {ObjectId} from "mongodb";
+import {BaseDescriptionProductType} from "./baseDescriptionProduct.type";
+import {DetailDescriptionProductType} from "./detailDescriptionProduct.type";
+import {SpecificationsType} from "./specifications.type";
+import {ModelType} from "./modelProduct.type";
 
-export interface ProductType {
+export type ProductType = {
     _id: ObjectId,
     sale?: boolean,
     new?: boolean,
     discount?: number,
+    imagePath: string,
     name: string,
     price: number,
     category: number,
-    base_description: BaseDescription,
-    detail_description: DetailDescription[],
-    specifications: Specifications[],
-    model: Model[],
-}
-interface BaseDescription {
-    product_id: string,
-    brand: string,
-    made: string,
-    size: string,
-}
-interface DetailDescription {
-    title: string,
-    content: string,
-    illustrationPathImage: string,
-}
-interface Specifications {
-
-}
-interface Model {
-   color: string,
-    pathImageColor: string
-}
-export interface ProductPropsHasTotal{
-    total: number,
-    products: ProductProps[]
+    base_description: BaseDescriptionProductType,
+    detail_description: DetailDescriptionProductType[],
+    specifications: SpecificationsType[],
+    model: ModelType[],
 }

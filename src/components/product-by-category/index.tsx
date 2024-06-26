@@ -2,15 +2,10 @@ import React from 'react';
 import {Box, Button, Stack} from "@mui/material";
 import {Link} from "react-router-dom";
 import ProductList from "../product-list";
-import {ProductType} from "../../types/product.type";
+import {ProductByCategoryType} from "../../types/productByCategory.type";
 
-export interface ProductByCategoryProps {
-    title: string,
-    products: ProductType[],
-    to: string
-}
 
-function ProductByCategory(props: ProductByCategoryProps) {
+function ProductByCategory(props: ProductByCategoryType) {
     return (
         <Box>
             <Stack direction={"row"} alignItems={"center"} pb={"5x"}>

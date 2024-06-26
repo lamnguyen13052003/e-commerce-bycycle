@@ -5,7 +5,10 @@ import {Image} from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LabelDiscount from "./LabelDiscount";
 import LabelNew from "./LabelNew";
-import ProductProps from "../../type/product.type";
+import {ProductType} from "../../types/product.type";
+import {useDispatch} from "react-redux";
+import {addCartItem} from "../../slice/cart.slice";
+import {CartItemType} from "../../types/cartItem.type";
 
 export default function Product(props: ProductType) {
     const formatter = new Intl.NumberFormat('vi-VN', {
