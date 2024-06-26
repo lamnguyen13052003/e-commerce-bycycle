@@ -28,7 +28,7 @@ function App() {
                     <Route path={"/change-password"} element={<ChangePassword/>}/>
                     <Route path={"/verify"} element={<Verify/>}/>
                 </Route>
-                <Route path={"/xe-dap-dua"} element={<Products/>}/>
+                <Route path={"/:category/page/:page"} element={<Products />}/>
             </Route>
         </Routes>
     );

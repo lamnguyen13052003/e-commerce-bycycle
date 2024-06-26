@@ -8,7 +8,7 @@ export default function ProductList(props: {
 }) {
 
     return (
-        <Stack direction={'row'} width={"100%"} justifyContent={"space-between"} flexWrap={"wrap"}>
+        <Stack direction={'row'}  flexWrap={"wrap"}>
             {
                 props.products.map((product, index) => {
                     return <Product key={index} {...product}/>

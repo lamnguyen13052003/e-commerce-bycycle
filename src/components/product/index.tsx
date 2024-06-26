@@ -5,13 +5,7 @@ import {Image} from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LabelDiscount from "./LabelDiscount";
 import LabelNew from "./LabelNew";
-import {CartItemType} from "../../types/cartItem.type";
-import {useDispatch} from "react-redux";
-import {addCartItem} from "../../slice/cart.slice";
-import {ProductType} from "../../types/product.type";
-import {ObjectId} from "mongodb";
-import {toast} from "react-toastify";
-
+import ProductProps from "../../type/product.type";
 
 export default function Product(props: ProductType) {
     const formatter = new Intl.NumberFormat('vi-VN', {
@@ -31,9 +25,9 @@ export default function Product(props: ProductType) {
                     {props.sale && <LabelDiscount discount={props.discount ? props.discount : 0}/>}
                     {props.new && <LabelNew zIndex={2}/>}
                 </Stack>
-                <Box className={'object-fit-cover position-absolute top-0 start-0 z-0'}
+                <Box className={'object-fit-cover overflow-hidden position-absolute top-0 start-0 z-0'}
                      sx={{width: '306px', height: '100%'}}>
-                    <Image className={`${styles.image_hover}`} src={props.imagePath} alt={props.name}
+                    <Image className={`${styles.image_hover}`} src={props.model[0].pathImageColor} alt={props.name}
                            style={{width: '100%'}}/>
                 </Box>
             </Box>

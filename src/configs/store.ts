@@ -3,6 +3,7 @@ import {signTitleReducer} from "../slice/signTitle.slice";
 import {authReducer} from "../slice/auth.slice";
 import productsReducer from "../slice/product.slice";
 import {useDispatch} from "react-redux";
+import filterReducer from "../slice/filter.slice";
 import {cartReducer} from "../slice/cart.slice";
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
         signTitle: signTitleReducer,
         auth: authReducer,
         product: productsReducer,
+        filter: filterReducer,
         cart: cartReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()

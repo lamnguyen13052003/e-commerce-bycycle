@@ -36,13 +36,13 @@ function Home() {
     } = productsState
 
     useEffect(() => {
-        const promise_zero = dispatch(getProductsByCategory(0))
-        const promise_one = dispatch(getProductsByCategory(1))
-        const promise_two = dispatch(getProductsByCategory(2))
-        const promise_three = dispatch(getProductsByCategory(3))
-        const promise_four = dispatch(getProductsByCategory(4))
-        const promise_five = dispatch(getProductsByCategory(5))
-        const promise_six = dispatch(getProductsByCategory(6))
+        const promise_zero = dispatch(getProductsByCategory({category: 0, page: 0}))
+        const promise_one = dispatch(getProductsByCategory({category: 1, page: 0}))
+        const promise_two = dispatch(getProductsByCategory({category: 2, page: 0}))
+        const promise_three = dispatch(getProductsByCategory({category: 3, page: 0}))
+        const promise_four = dispatch(getProductsByCategory({category: 4, page: 0}))
+        const promise_five = dispatch(getProductsByCategory({category: 5, page: 0}))
+        const promise_six = dispatch(getProductsByCategory({category: 6, page: 0}))
         const promise_best_sale = dispatch(getProductsByBestSale(true))
         const promise_new = dispatch(getProductsByBestSale(false))
         return () => {
@@ -97,8 +97,8 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"babyBicycle"}
-                                       products={babyBicycle}
-                                       to={"#"}
+                                       products={babyBicycle.products}
+                                       to={"/xe-dap-tre-em/page/0"}
                                        title={"XE ĐẠP TRẺ EM"}
                     />
                 </Container>
@@ -106,8 +106,8 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={sportBicycle}
-                                       to={"#"}
+                                       products={sportBicycle.products}
+                                       to={"/xe-dap-the-thao/page/0"}
                                        title={"XE ĐẠP THỂ THAO"}
                     />
                 </Container>
@@ -115,8 +115,8 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={topographicBicycle}
-                                       to={"#"}
+                                       products={topographicBicycle.products}
+                                       to={"/xe-dap-dia-hinh/page/0"}
                                        title={"XE ĐẠP ĐỊA HÌNH"}
                     />
                 </Container>
@@ -124,8 +124,8 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={racingBicycle}
-                                       to={"#"}
+                                       products={racingBicycle.products}
+                                       to={"/xe-dap-dua/page/0"}
                                        title={"XE ĐẠP ĐUA"}
                     />
                 </Container>
@@ -133,8 +133,8 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={touringBicycle}
-                                       to={"#"}
+                                       products={touringBicycle.products}
+                                       to={"/xe-dap-touring/page/0"}
                                        title={"XE ĐẠP TOURING"}
                     />
                 </Container>
@@ -142,8 +142,8 @@ function Home() {
             <Box className={'pt-5 pb-5'}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={foldBicycle}
-                                       to={"#"}
+                                       products={foldBicycle.products}
+                                       to={"/xe-dap-gap/page/0"}
                                        title={"XE ĐẠP GẤP"}
                     />
                 </Container>
@@ -151,8 +151,8 @@ function Home() {
             <Box className={'pt-5 pb-5'} style={{background: "rgba(199, 228, 255, 0.208)"}}>
                 <Container>
                     <ProductByCategory key={"a"}
-                                       products={femaleBicycle}
-                                       to={"#"}
+                                       products={femaleBicycle.products}
+                                       to={"/xe-dap-nu/page/0"}
                                        title={"XE ĐẠP NỮ"}
                     />
                 </Container>
@@ -162,7 +162,7 @@ function Home() {
 }
 
 const renderCarousel = () => {
-    return <Carousel key={"Carousel_asdfsaf"} className={'w-100'}>
+    return <Carousel key={"Carousel_list"} className={'w-100'}>
         {banner_images.map((image, index) => {
             return (<Carousel.Item key={index} style={{
                 height: "600px"
@@ -175,7 +175,7 @@ const renderCarousel = () => {
 
 const renderBrand = () => {
     return brand_images.map((image, index) => {
-        return <LogoBrand src={image} key={`brand-${index}`}/>
+        return <LogoBrand key={index} src={image}/>
     });
 }
 
