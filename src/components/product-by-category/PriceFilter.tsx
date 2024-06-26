@@ -1,39 +1,33 @@
 import {Accordion, AccordionDetails, AccordionSummary, Box, Slider, Stack, TextField, Typography} from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import React, {ChangeEvent, useState} from "react";
-import Filter from './Filter'
+import React, {useState} from "react";
+import Filter from './MultipleSelectChip'
+import {PriceType} from "../../types/price.type";
 
-export interface PriceProps {
-    min: number,
-    max: number
-}
-
-function AccordionPrice(prop: PriceProps ) {
+function AccordionPrice(prop: PriceType ) {
     return (
-        <div>
-            <Accordion className={'border border-1 shadow-none py-1 border-secondary-subtle'}>
-                <AccordionSummary
-                    expandIcon={<ArrowDropDownIcon/>}
-                    aria-controls="panel2-content"
-                    id="panel2-header"
-                >
-                    <Typography>Lọc theo giá</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Stack direction={"column"} gap={1}>
-                        <Box>
-                            <Filter{...priceFilterProps} />
-                        </Box>
-                        <CustomPrice {...prop}/>
-                    </Stack>
+        <Accordion className={'border border-1 shadow-none py-1 border-secondary-subtle'}>
+            <AccordionSummary
+                expandIcon={<ArrowDropDownIcon/>}
+                aria-controls="panel2-content"
+                id="panel2-header"
+            >
+                <Typography>Lọc theo giá</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <Stack direction={"column"} gap={1}>
+                    <Box>
+                        <Filter{...priceFilterProps} />
+                    </Box>
+                    <CustomPrice {...prop}/>
+                </Stack>
 
-                </AccordionDetails>
-            </Accordion>
-        </div>
+            </AccordionDetails>
+        </Accordion>
     );
 }
 
-function CustomPrice(props: PriceProps) {
+function CustomPrice(props: PriceType) {
     // console.log('max '+maxV)
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',

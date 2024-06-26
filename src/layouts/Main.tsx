@@ -7,7 +7,7 @@ import {ToastContainer} from "react-toastify";
 function Main() {
     return (
         <>
-            <ToastContainer/>
+            <ToastContainer autoClose={1000}/>
             <Header/>
             <Outlet/>
             <Footer/>

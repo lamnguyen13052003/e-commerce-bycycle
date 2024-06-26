@@ -1,5 +1,5 @@
 import {connection} from "../database.connect";
-import {ProductProps} from "../types/product.type";
+import {ProductType} from "../types/product.type";
 import {Sort} from "mongodb";
 
 const collection = 'xe_dap';
@@ -7,7 +7,7 @@ const productRepository = connection.collection(collection);
 
 async function getAll() {
     return productRepository
-        .find<ProductProps>({})
+        .find<ProductType>({})
         .toArray()
 }
 
@@ -32,7 +32,7 @@ async function getProductsByCategory(
     const x = numOfDoc * count
     let y = 8 + x
     if (y >= total) y = total
-    const products = await productRepository.find<ProductProps>(query).sort(sortQuery).limit(y).toArray()
+    const products = await productRepository.find<ProductType>(query).sort(sortQuery).limit(y).toArray()
 
     return {
         total: total,
@@ -66,12 +66,12 @@ function getQuery(
 async function getProductsBestSale(bestSale: boolean) {
     if (bestSale) {
         return productRepository
-            .find<ProductProps>({sale: true}).sort({"discount": -1}).limit(8)
+            .find<ProductType>({sale: true}).sort({"discount": -1}).limit(8)
             .toArray()
 
     }
     return productRepository
-        .find<ProductProps>({new: true}).limit(8)
+        .find<ProductType>({new: true}).limit(8)
         .toArray()
 }
 

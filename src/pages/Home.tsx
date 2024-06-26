@@ -45,6 +45,7 @@ function Home() {
         const promise_six = dispatch(getProductsByCategory({category: 6, page: 0}))
         const promise_best_sale = dispatch(getProductsByBestSale(true))
         const promise_new = dispatch(getProductsByBestSale(false))
+
         return () => {
             promise_zero.abort();
             promise_one.abort();

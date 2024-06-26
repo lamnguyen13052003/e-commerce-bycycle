@@ -2,14 +2,10 @@ import {Link} from "react-router-dom";
 import {Box} from "@mui/material";
 import {Image} from "react-bootstrap";
 import React from "react";
+import {CategoryType} from "../../types/category.type";
 
-export interface CategoryItemProps {
-    title: string,
-    url: string,
-    to: string
-}
 
-function CategoryItem(props: CategoryItemProps) {
+function CategoryItem(props: CategoryType) {
     return (
         <Link to={props.to} className={'text-decoration-none'}>
             <Box width={"150px"} height={"150px"} className={'p-2 pt-3 rounded-4'} style={{

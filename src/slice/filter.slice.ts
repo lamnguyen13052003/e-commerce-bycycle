@@ -1,4 +1,4 @@
-import FilterAttributeType from "../type/filterAttribute.type.client";
+import FilterAttributeType from "../types/filterAttribute.type";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
