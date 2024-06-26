@@ -26,7 +26,7 @@ function CartItem(props: CartItemType) {
             <TableCell>{name}</TableCell>
             <TableCell align="left">{formatCurrency(price)}</TableCell>
             <TableCell>
-                <QuantityCell id={id} quantity={quantity}/>
+                <QuantityCell id={id} hasDispatch={true} quantity={quantity}/>
             </TableCell>
             <TableCell align="center">{formatCurrency(quantity * price)}</TableCell>
             <TableCell>
