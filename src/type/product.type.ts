@@ -12,6 +12,7 @@ export default interface ProductProps {
     detail_description: DetailDescription[],
     specifications: Specifications[],
     model: Model[],
+    review: ReviewProduct[]
 }
 interface BaseDescription {
     product_id: string,
@@ -48,4 +49,12 @@ export interface ProductPropsHasTotal{
     category: string
     products: ProductProps[]
     total: number
+}
+interface ReviewProduct{
+    _id: ObjectId,
+    product_id: string,
+    user_id: string,
+    rating: number,
+    comment: string,
+    date: Date
 }
