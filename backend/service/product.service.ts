@@ -53,13 +53,31 @@ function getQuery(
     let query: {} = {category: category}
     let [minPrice, maxPrice] = (price=== undefined? price = '0-0' : price as string).split('-').map(Number)
 
-    if (brands !== undefined) query = {...query, 'base_description.brand': {$in: brands}}
-    if (wheelSizes !== undefined) query = {...query, 'specifications.wheelSize': {$in: wheelSizes}}
-    if (materials !== undefined) query = {...query, 'base_description.material': {$in: materials}}
-    if (targetUsings !== undefined) query = {...query, 'base_description.targetUsing': {$in: targetUsings}}
-    if (maxPrice !== 0) query = {...query, price: {$gte: minPrice, $lte: maxPrice}}
-    if (newProduct !== undefined) query = {...query, new: newProduct}
-    if (bestSale !== undefined) query = {...query, sale: bestSale}
+    if (brands !== undefined){
+        const brandsArr = customQuery(brands)
+        query = {...query, 'base_description.brand': {$in: brandsArr}}
+    }
+    if (wheelSizes !== undefined) {
+        const wheelSizesArr = customQuery(wheelSizes)
+        query = {...query, 'specifications.wheelSize': {$in: wheelSizesArr}}
+    }
+    if (materials !== undefined) {
+        const materialsArr = customQuery(materials)
+        query = {...query, 'base_description.material': {$in: materialsArr}}
+    }
+    if (targetUsings !== undefined) {
+        const targetUsingsArr = customQuery(targetUsings)
+        query = {...query, 'base_description.targetUsing': {$in: targetUsingsArr}}
+    }
+    if (maxPrice !== 0) {
+        query = {...query, price: {$gte: minPrice, $lte: maxPrice}}
+    }
+    if (newProduct !== undefined) {
+        query = {...query, new: newProduct}
+    }
+    if (bestSale !== undefined) {
+        query = {...query, sale: bestSale}
+    }
 
     return query
 }
@@ -95,5 +113,12 @@ async function getAttrForFilter(category: number) {
 
 }
 
+function customQuery(arr: string[])  {
+    if (arr.length === 0) return []
+
+    return arr.map((item) => {
+       return  item.replace('-', ' ')
+    })
+}
 
 export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter};

@@ -52,7 +52,6 @@ export interface ProductPropsHasTotal{
 }
 interface ReviewProduct{
     _id: ObjectId,
-    product_id: string,
     user_id: string,
     rating: number,
     comment: string,

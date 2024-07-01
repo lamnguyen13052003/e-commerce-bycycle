@@ -74,6 +74,15 @@ export const runProductController = (app: Express) => {
         const newProduct : boolean = query.newProduct as string == "true";
         const bestSale : boolean = query.bestSale as string == "true";
         const sort : string = query.sort as string;
+        console.log(brands)
+        console.log(wheelSizes)
+        console.log(materials)
+        console.log(targetUsings)
+        console.log(prices)
+        console.log(newProduct)
+        console.log(bestSale)
+        console.log(sort)
+
         getProductsByCategory(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
             res.send(Builder<ResponseApi<ProductPropsHasTotal>>()
                 .code(202)
