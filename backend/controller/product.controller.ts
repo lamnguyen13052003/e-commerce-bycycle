@@ -4,7 +4,7 @@ import {ResponseApi} from "../types/response.type";
 import {
     getAll as getAllProduct, getAttrForFilter,
     getProductsBestSale,
-    getProductsByCategory,
+    getProductsByCategory, getProductsByFilter,
 } from "../service/product.service";
 import {ProductProps, ProductPropsHasTotal} from "../types/product.type";
 import FilterAttributeType from "../types/filterAttribute.type";
@@ -26,6 +26,7 @@ export const runProductController = (app: Express) => {
     app.get("/api/products/:category/page=:page", (req, res) => {
         const category = parseInt(req.params.category as string);
         const seeMore = parseInt(req.params.page as string);
+        console.log('non-filter')
         getProductsByCategory(category, seeMore).then((response) => {
             res.send(Builder<ResponseApi<ProductPropsHasTotal>>()
                 .code(202)
@@ -63,7 +64,6 @@ export const runProductController = (app: Express) => {
 
     app.get("/api/products/:category/page=:page/filter", (req, res) => {
         const query = qs.parse(req.query);
-
         const category: number = parseInt(req.params.category as string);
         const seeMore: number = parseInt(req.params.page as string);
         const brands : string[] = query.brands as string[];
@@ -74,16 +74,8 @@ export const runProductController = (app: Express) => {
         const newProduct : boolean = query.newProduct as string == "true";
         const bestSale : boolean = query.bestSale as string == "true";
         const sort : string = query.sort as string;
-        console.log(brands)
-        console.log(wheelSizes)
-        console.log(materials)
-        console.log(targetUsings)
-        console.log(prices)
-        console.log(newProduct)
-        console.log(bestSale)
-        console.log(sort)
-
-        getProductsByCategory(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
+        console.log('filter')
+        getProductsByFilter(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
             res.send(Builder<ResponseApi<ProductPropsHasTotal>>()
                 .code(202)
                 .message("Success")

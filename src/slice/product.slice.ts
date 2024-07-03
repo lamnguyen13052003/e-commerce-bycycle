@@ -3,6 +3,7 @@ import ProductProps, {ProductPropsHasTotal} from "../type/product.type"
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
 import {ResponseApi} from "../utils/response.type";
+import FilterAttributeType from "../type/filterAttribute.type.client";
 
 interface HomeState {
     bestSale: ProductProps[],
@@ -57,12 +58,12 @@ const initialState: HomeState = {
         products: [],
         total: 0
     },
-    topographicBicycle:{
+    topographicBicycle: {
         category: "Xe đạp địa hình",
         products: [],
         total: 0
     },
-    racingBicycle:{
+    racingBicycle: {
         category: "Xe đạp đua",
         products: [],
         total: 0
@@ -84,12 +85,15 @@ const initialState: HomeState = {
     },
 }
 
-export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (prop:{category: number, page: number | undefined}, thunkAPI) => {
+export const getProductsByCategory = createAsyncThunk('products/getProducts/category', async (prop: {
+    category: number,
+    page: number | undefined
+}, thunkAPI) => {
     const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductPropsHasTotal>>, any>(`api/products/${prop.category}/page=${prop.page}`, {
         signal: thunkAPI.signal
     })
     return {
-       category: prop.category,
+        category: prop.category,
         data: response.data.data
     }
 })
@@ -103,6 +107,22 @@ export const getProductsByBestSale = createAsyncThunk('products/getProducts/hasB
         data: response.data.data
     }
 })
+
+export const getProductsByFilter = createAsyncThunk('products/getProducts/filter', async (prop: {
+    category: number,
+    page: number | undefined
+    queryParams?: string
+}, thunkAPI) => {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductPropsHasTotal>>, any>(`api/products/${prop.category}/page=${prop.page}/filter`, {
+        params: prop.queryParams,
+        signal: thunkAPI.signal
+    })
+    return {
+        category: prop.category,
+        data: response.data.data
+    }
+})
+
 const productSlice = createSlice({
     name: 'products',
     initialState,
@@ -142,14 +162,50 @@ const productSlice = createSlice({
                 default:
                     break
             }
-        }).addCase(getProductsByBestSale.fulfilled, (state, action) => {
-            if (!action.payload.data) return
-            if(action.payload.bestSale){
-                state.bestSale = action.payload.data
-            }else{
-                state.newProduct = action.payload.data
-            }
         })
+            .addCase(getProductsByBestSale.fulfilled, (state, action) => {
+                if (!action.payload.data) return
+                if (action.payload.bestSale) {
+                    state.bestSale = action.payload.data
+                } else {
+                    state.newProduct = action.payload.data
+                }
+            })
+            .addCase(getProductsByFilter.fulfilled, (state, action) => {
+                if (!action.payload.data) return
+                switch (action.payload.category) {
+                    case 0:
+                        state.babyBicycle.products = action.payload.data.products
+                        state.babyBicycle.total = action.payload.data.total
+                        break
+                    case 1:
+                        state.sportBicycle.products = action.payload.data.products
+                        state.sportBicycle.total = action.payload.data.total
+                        break
+                    case 2:
+                        state.topographicBicycle.products = action.payload.data.products
+                        state.topographicBicycle.total = action.payload.data.total
+                        break
+                    case 3:
+                        state.racingBicycle.products = action.payload.data.products
+                        state.racingBicycle.total = action.payload.data.total
+                        break
+                    case 4:
+                        state.touringBicycle.products = action.payload.data.products
+                        state.touringBicycle.total = action.payload.data.total
+                        break
+                    case 5:
+                        state.femaleBicycle.products = action.payload.data.products
+                        state.femaleBicycle.total = action.payload.data.total
+                        break
+                    case 6:
+                        state.foldBicycle.products = action.payload.data.products
+                        state.foldBicycle.total = action.payload.data.total
+                        break
+                    default:
+                        break
+                }
+            })
     }
 })
 const productsReducer = productSlice.reducer

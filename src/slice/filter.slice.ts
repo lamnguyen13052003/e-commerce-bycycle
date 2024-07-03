@@ -19,6 +19,7 @@ export const getFilterAttribute = createAsyncThunk('filter/getFilterAttribute', 
     return response.data.data;
 })
 
+
 const filterSlice = createSlice({
     name: 'filter',
     initialState: initialFilterState,

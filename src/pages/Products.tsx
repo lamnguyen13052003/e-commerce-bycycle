@@ -1,6 +1,6 @@
 import ProductProps, {ProductPropsHasTotal} from "../type/product.type";
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, useSearchParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import React, {useEffect, useState} from "react";
 import {Container} from "react-bootstrap";
@@ -11,8 +11,8 @@ import PriceFilter, {MAX_HEIGHT, PriceProps} from "../components/product-by-cate
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../configs/store";
-import {getProductsByCategory} from "../slice/product.slice";
-import {TitleCategorySlugToNum} from "../utils/ConverNumToNameCategory";
+import { getProductsByCategory} from "../slice/product.slice";
+import {TitleCategorySlugToNum} from "../utils/convertNumToNameCategory";
 import ProductList from "../components/product-list";
 import FilterAttributeType from "../type/filterAttribute.type.client";
 import {getFilterAttribute} from "../slice/filter.slice";
@@ -26,7 +26,7 @@ xe dap touring: 4
 xe dap nu: 5
 xe dap gap : 6
  */
-function getRootState(count: number){
+function getRootState(count: number, btnFilterClick: boolean){
     const {category} = useParams()
     const category_id: number = TitleCategorySlugToNum(category)
     let data : ProductPropsHasTotal
@@ -67,12 +67,15 @@ function getRootState(count: number){
     }
 
     const dispatch = useAppDispatch()
+
+    const query = createQueryFilter()
     useEffect(() => {
-        const promise = dispatch(getProductsByCategory({category: category_id, page: count}))
+        const promise = dispatch(getProductsByCategory({category: category_id, page: count, queryParams: query}))
         return () => {
             promise.abort()
         }
-    }, [count]);
+    }, [count, btnFilterClick]);
+
 
     useEffect(() => {
         const promiseFilter = dispatch(getFilterAttribute(category_id))
@@ -84,6 +87,26 @@ function getRootState(count: number){
         data: data,
         filter: filter
     }
+}
+
+const createQueryFilter = () => {
+    const selectFilter : FilterAttributeType = useSelector((state: RootState) => state.selectFilter)
+    let query = '?'
+    selectFilter.brands.map((brand) => {
+        query += `brands[]=` + brand.replace(' ', '-') + '&'
+    })
+    // selectFilter.wheelSizes.map((wheelSize) => {
+    //     query += `wheelSizes[]=` + wheelSize.replace(' ', '-') + '&'
+    // })
+    // selectFilter.materials.map((material) => {
+    //     query += `materials[]=` + material.replace(' ', '-') + '&'
+    // })
+    // selectFilter.targetUsings.map((targetUsing) => {
+    //     query += `targetUsings[]=` + targetUsing.replace(' ', '-') + '&'
+    // })
+    // query += `minPrice=${selectFilter.prices.min}&maxPrice=${selectFilter.prices.max}`
+    return query
+
 }
 
 function TitlePage(props: Title) {
@@ -136,7 +159,6 @@ function SelectSmallFilter() {
                     <MenuItem value={1}>Theo giá: Tăng dần</MenuItem>
                     <MenuItem value={2}>Theo giá: Giảm dần</MenuItem>
                     <MenuItem value={3}>Theo mức độ phổ biến</MenuItem>
-                    <MenuItem value={4}>Theo điểm đánh giá</MenuItem>
                 </Select>
             </FormControl>
         </Box>
@@ -145,9 +167,15 @@ function SelectSmallFilter() {
 }
 
 function Products() {
-    const {page} = useParams()
+    const { category, page} = useParams()
+    // const [page] = useSearchParams()
+    // const numPage: string | null = page.get('page')
+    const query : string =`/${category}/page/${page}/filter`+ createQueryFilter()
+
     const [count , setCount]= useState(parseInt(page as string))
-    const rootState = getRootState(count)
+    const [btnFilterClick, setBtnFilterClick] = useState(false)
+    const rootState = getRootState(count, btnFilterClick)
+
     const brandsFilterProps  = {
         nameLabel: "Thương hiệu",
         itemSelected : rootState.filter.brands,
@@ -189,12 +217,18 @@ function Products() {
         width: 200
     }
     const values  = {min: rootState.filter.prices.min, max: rootState.filter.prices.max}
-    const handlerClick = () => {
+
+    const handlerClickSeeMore = () => {
         setCount(count + 1)
     }
     const handlerDisabled = () => {
         return rootState.data.total === rootState.data.products.length
     }
+
+    const handlerClickFilter = () => {
+        setBtnFilterClick(!btnFilterClick)
+    }
+    //onClick={() => {handlerClickFilter()}}
     return (
         <>
             <Container>
@@ -206,11 +240,12 @@ function Products() {
                         <ProductByCategoryFilter {...wheelSizeFilterProps}/>
                         <ProductByCategoryFilter {...materialsFilterProps}/>
                         <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
-                        <Button className={'p-3'}  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
+
+                        <Button className={'p-3'} href={`${query}`} variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
                     </Stack>
                     <ProductList products={rootState.data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                        <Button className={'focus-ring focus-ring-info'} disabled={handlerDisabled()} onClick={() => {handlerClick()}} defaultValue={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
+                        <Button className={'focus-ring focus-ring-info'} href={`/${category}/page/${count}`} disabled={handlerDisabled()} onClick={() => {handlerClickSeeMore()}} defaultValue={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
                     </Box>
                 </Stack>
 

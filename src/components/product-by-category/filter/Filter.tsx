@@ -9,6 +9,10 @@ import {
     MenuItem,
     FormControl,
 } from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState, useAppDispatch} from "../../../configs/store";
+import FilterAttributeType from "../../../type/filterAttribute.type.client";
+import {setDataBrandFilter} from "../../../slice/selectFilter.slice";
 
 
 export interface FilterProps {
@@ -32,16 +36,21 @@ function getStyles(item: string, items: readonly string[], theme: Theme) {
 }
 
 export default function MultipleSelectChip(props: FilterProps) {
+    const selectFilter : FilterAttributeType = useSelector((state: RootState) => state.selectFilter)
     const theme = useTheme();
     const [items, setItems] = useState<string[]>([]);
+    const dispatch = useDispatch()
+    const handleChangeSelect = (event: SelectChangeEvent<typeof items>) => {
 
-    const handleChange = (event: SelectChangeEvent<typeof items>) => {
         const {
-            target: { value },
+            target: { value }
         } = event;
+
         setItems(
-            typeof value === 'string' ? value.split(',') : value,
+            typeof value === 'string' ? value.split(',') : value
         );
+
+        dispatch(setDataBrandFilter(value as string[]))
     };
 
     return (
@@ -54,7 +63,7 @@ export default function MultipleSelectChip(props: FilterProps) {
                     id={props.selectId}
                     multiple
                     value={items}
-                    onChange={handleChange}
+                    onChange={handleChangeSelect}
                     input={<OutlinedInput id={props.outlineInputId} label={props.nameLabel} />}
                     renderValue={(selected) => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5}}>

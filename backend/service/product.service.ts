@@ -11,7 +11,22 @@ async function getAll() {
         .toArray()
 }
 
-async function getProductsByCategory(
+async function getProductsByCategory(category: number, count: number) {
+    const total = await productRepository.countDocuments({category: category})
+    const numOfDoc = 8
+    const x = numOfDoc * count
+    let y = 8 + x
+    if (y >= total) y = total
+
+    const products = await productRepository.find<ProductProps>({category: category}).limit(y).toArray()
+
+    return {
+        total: total,
+        products: products
+    }
+}
+
+async function getProductsByFilter(
     category: number,
     count: number,
     brands?: string[],
@@ -72,10 +87,10 @@ function getQuery(
     if (maxPrice !== 0) {
         query = {...query, price: {$gte: minPrice, $lte: maxPrice}}
     }
-    if (newProduct !== undefined) {
+    if (newProduct) {
         query = {...query, new: newProduct}
     }
-    if (bestSale !== undefined) {
+    if (bestSale) {
         query = {...query, sale: bestSale}
     }
 
@@ -121,4 +136,4 @@ function customQuery(arr: string[])  {
     })
 }
 
-export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter};
+export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter, getProductsByFilter};

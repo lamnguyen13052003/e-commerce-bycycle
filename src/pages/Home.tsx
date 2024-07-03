@@ -36,23 +36,23 @@ function Home() {
     } = productsState
 
     useEffect(() => {
-        const promise_zero = dispatch(getProductsByCategory({category: 0, page: 0}))
-        const promise_one = dispatch(getProductsByCategory({category: 1, page: 0}))
-        const promise_two = dispatch(getProductsByCategory({category: 2, page: 0}))
-        const promise_three = dispatch(getProductsByCategory({category: 3, page: 0}))
-        const promise_four = dispatch(getProductsByCategory({category: 4, page: 0}))
-        const promise_five = dispatch(getProductsByCategory({category: 5, page: 0}))
-        const promise_six = dispatch(getProductsByCategory({category: 6, page: 0}))
+        const promiseBabyBicycle = dispatch(getProductsByCategory({category: 0, page: 0}))
+        const promiseTouringBicycle = dispatch(getProductsByCategory({category: 1, page: 0}))
+        const promiseTopographicBicycle = dispatch(getProductsByCategory({category: 2, page: 0}))
+        const promiseSportBicycle = dispatch(getProductsByCategory({category: 3, page: 0}))
+        const promiseFoldBicycle = dispatch(getProductsByCategory({category: 4, page: 0}))
+        const promiseFemaleBicycle = dispatch(getProductsByCategory({category: 5, page: 0}))
+        const promiseRacingBicycle = dispatch(getProductsByCategory({category: 6, page: 0}))
         const promise_best_sale = dispatch(getProductsByBestSale(true))
         const promise_new = dispatch(getProductsByBestSale(false))
         return () => {
-            promise_zero.abort();
-            promise_one.abort();
-            promise_two.abort();
-            promise_three.abort();
-            promise_four.abort();
-            promise_five.abort();
-            promise_six.abort();
+            promiseBabyBicycle.abort();
+            promiseTouringBicycle.abort();
+            promiseTopographicBicycle.abort();
+            promiseSportBicycle.abort();
+            promiseFoldBicycle.abort();
+            promiseFemaleBicycle.abort();
+            promiseRacingBicycle.abort();
             promise_best_sale.abort();
             promise_new.abort();
         };
