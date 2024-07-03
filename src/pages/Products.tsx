@@ -27,14 +27,14 @@ xe dap touring: 4
 xe dap nu: 5
 xe dap gap : 6
  */
-function getRootState(count: number){
+function getRootState(count: number) {
     const {category} = useParams()
     const category_id: number = TitleCategorySlugToNum(category)
-    let data : ProductHasTotalType
+    let data: ProductHasTotalType
     let filter: FilterAttributeType
-    switch (category_id){
+    switch (category_id) {
         case 0:
-            data =  useSelector((state: RootState) => state.product.babyBicycle)
+            data = useSelector((state: RootState) => state.product.babyBicycle)
             filter = useSelector((state: RootState) => state.filter)
             break
         case 1:
@@ -101,7 +101,7 @@ function TitlePage(props: Title) {
                 </Box>
 
                 <Box className={'fw-bold'}>
-                    <Stack  direction={'row'} alignItems={'center'} alignContent={'center'} gap={1}>
+                    <Stack direction={'row'} alignItems={'center'} alignContent={'center'} gap={1}>
                         <Box>
                             <span>Hiển thị tất cả {props.result} kết quả</span>
                         </Box>
@@ -123,7 +123,7 @@ function SelectSmallFilter() {
     };
 
     return (
-        <Box sx={{ minWidth: 120 }}>
+        <Box sx={{minWidth: 120}}>
             <FormControl sx={{m: 1, minWidth: 220}} fullWidth>
                 <InputLabel id="select-small-label">Lọc</InputLabel>
                 <Select
@@ -147,11 +147,11 @@ function SelectSmallFilter() {
 
 function Products() {
     const {page} = useParams()
-    const [count , setCount]= useState(parseInt(page as string))
+    const [count, setCount] = useState(parseInt(page as string))
     const rootState = getRootState(count)
-    const brandsFilterProps: FilterType  = {
+    const brandsFilterProps: FilterType = {
         nameLabel: "Thương hiệu",
-        itemSelected : rootState.filter.brands,
+        itemSelected: rootState.filter.brands,
         inputLabelId: "inputLabelId-brand",
         selectLabelId: "selectLabelId-brand",
         selectId: "selectId-brand",
@@ -159,9 +159,9 @@ function Products() {
         maxHeight: MAX_HEIGHT,
         width: 200
     }
-    const wheelSizeFilterProps:FilterType  = {
+    const wheelSizeFilterProps: FilterType = {
         nameLabel: "Kích thước bánh xe",
-        itemSelected : rootState.filter.wheelSizes,
+        itemSelected: rootState.filter.wheelSizes,
         inputLabelId: "inputLabelId-wheelSize",
         selectLabelId: "selectLabelId-wheelSize",
         selectId: "selectId-wheelSize",
@@ -169,9 +169,9 @@ function Products() {
         maxHeight: MAX_HEIGHT,
         width: 200
     }
-    const materialsFilterProps:FilterType  = {
+    const materialsFilterProps: FilterType = {
         nameLabel: "Chất liệu",
-        itemSelected : rootState.filter.materials,
+        itemSelected: rootState.filter.materials,
         inputLabelId: "inputLabelId-material",
         selectLabelId: "selectLabelId-material",
         selectId: "selectId-material",
@@ -179,9 +179,9 @@ function Products() {
         maxHeight: MAX_HEIGHT,
         width: 200
     }
-    const purposeOfUseFilterProps:FilterType  = {
+    const purposeOfUseFilterProps: FilterType = {
         nameLabel: "Mục đích sử dụng",
-        itemSelected : rootState.filter.targetUsings,
+        itemSelected: rootState.filter.targetUsings,
         inputLabelId: "inputLabelId-purposeOfUse",
         selectLabelId: "selectLabelId-purposeOfUse",
         selectId: "selectId-purposeOfUse",
@@ -189,7 +189,7 @@ function Products() {
         maxHeight: MAX_HEIGHT,
         width: 200
     }
-    const values  = {min: rootState.filter.prices.min, max: rootState.filter.prices.max}
+    const values = {min: rootState.filter.prices.min, max: rootState.filter.prices.max}
     const handlerClick = () => {
         setCount(count + 1)
     }
@@ -207,11 +207,14 @@ function Products() {
                         <MultipleSelectChip {...wheelSizeFilterProps}/>
                         <MultipleSelectChip {...materialsFilterProps}/>
                         <MultipleSelectChip {...purposeOfUseFilterProps}/>
-                        <Button className={'p-3'}  variant="contained" endIcon={<FilterAltIcon />}>Lọc</Button>
+                        <Button className={'p-3'} variant="contained" endIcon={<FilterAltIcon/>}>Lọc</Button>
                     </Stack>
                     <ProductList products={rootState.data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                        <Button className={'focus-ring focus-ring-info'} disabled={handlerDisabled()} onClick={() => {handlerClick()}} defaultValue={count} variant="outlined" endIcon={<ArrowDropDownIcon />}>Tải thêm sản phẩm</Button>
+                        <Button className={'focus-ring focus-ring-info'} disabled={handlerDisabled()} onClick={() => {
+                            handlerClick()
+                        }} defaultValue={count} variant="outlined" endIcon={<ArrowDropDownIcon/>}>Tải thêm sản
+                            phẩm</Button>
                     </Box>
                 </Stack>
 
@@ -220,9 +223,11 @@ function Products() {
         </>
     )
 }
-interface Title{
-    name :string,
-        result: number
+
+interface Title {
+    name: string,
+    result: number
 }
+
 export default Products;
 

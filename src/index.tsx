@@ -8,6 +8,10 @@ import {ComponentPreviews, useInitial} from "./dev";
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./configs/store";
+import '@splidejs/react-splide/css';
+import '@splidejs/react-splide/css/skyblue';
+import '@splidejs/react-splide/css/sea-green';
+import '@splidejs/react-splide/css/core';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
