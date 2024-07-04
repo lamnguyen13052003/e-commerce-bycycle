@@ -14,7 +14,7 @@ import {RootState, useAppDispatch} from "../../../configs/store";
 import FilterAttributeType from "../../../type/filterAttribute.type.client";
 import {
     setDataBrandFilter,
-    setDataMaterialFilter,
+    setDataMaterialFilter, setDataPriceFilter,
     setDataTargetUsingFilter,
     setDataWheelSizeFilter
 } from "../../../slice/selectFilter.slice";
@@ -66,7 +66,6 @@ export default function MultipleSelectChip(props: FilterProps) {
             case 'selectId-targetUsing':
                 dispatch(setDataTargetUsingFilter(value as string[]))
                 break;
-
         }
     };
 

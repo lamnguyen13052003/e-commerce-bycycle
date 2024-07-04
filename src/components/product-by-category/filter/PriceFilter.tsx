@@ -2,6 +2,8 @@ import {Accordion, AccordionDetails, AccordionSummary, Box, Slider, Stack, TextF
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import React, {ChangeEvent, useState} from "react";
 import Filter from './Filter'
+import {useAppDispatch} from "../../../configs/store";
+import {setDataPriceFilter} from "../../../slice/selectFilter.slice";
 
 export interface PriceProps {
     min: number,
@@ -19,14 +21,14 @@ function AccordionPrice(prop: PriceProps ) {
                 >
                     <Typography>Lọc theo giá</Typography>
                 </AccordionSummary>
+
                 <AccordionDetails>
                     <Stack direction={"column"} gap={1}>
                         <Box>
-                            <Filter{...priceFilterProps} />
+                            {/*<Filter{...priceFilterProps} />*/}
                         </Box>
                         <CustomPrice {...prop}/>
                     </Stack>
-
                 </AccordionDetails>
             </Accordion>
         </div>
@@ -34,25 +36,27 @@ function AccordionPrice(prop: PriceProps ) {
 }
 
 function CustomPrice(props: PriceProps) {
-    // console.log('max '+maxV)
+    const dispatch = useAppDispatch()
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     });
     const [valueTextFieldFrom, setValueTextFieldFrom] = useState<number>(props.min);
     const [valueTextFieldTo, setValueTextFieldTo] = useState<number>(props.max);
-
     const [rangeValue, setRangeValue] = useState([props.min, props.max]);
+
     const handleChangeFrom = (event: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value;
         setValueTextFieldFrom(Number(inputValue));
         handleSetThumbOneValue(valueTextFieldFrom)
+        dispatch(setDataPriceFilter({min: rangeValue[0], max: rangeValue[1]}))
     };
 
     const handleChangeTo = (event: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value;
         setValueTextFieldTo(Number(inputValue));
         handleSetThumbTwoValue(valueTextFieldTo)
+        dispatch(setDataPriceFilter({min: rangeValue[0], max: rangeValue[1]}))
     };
 
     // Hàm đặt giá trị của thumb thứ nhat
@@ -66,6 +70,7 @@ function CustomPrice(props: PriceProps) {
 
     const handleRangeChange = (event: Event, newValue: number | number[], activeThumb: number) => {
         setRangeValue(newValue as number[]);
+        dispatch(setDataPriceFilter({min: rangeValue[0], max: rangeValue[1]}))
     }
         return (
             <Box>
