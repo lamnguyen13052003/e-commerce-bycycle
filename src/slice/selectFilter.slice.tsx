@@ -16,12 +16,20 @@ const selectFilterSlice = createSlice({
         setDataBrandFilter: (state, action : PayloadAction<string[]>  ) => {
             state.brands = action.payload
         },
-        // setDataPriceFilter: (state, action : {payload: {min: number, max: number}}) => state.prices = action.payload,
-        // setDataWheelSizeFilter: (state, action : {payload: string[]}) => state.wheelSizes =action.payload,
-        // setDataMetarialFilter: (state, action : {payload: string[]}) => state.materials =action.payload,
-        // setDataTargetUsingFilter: (state, action : {payload: string[]}) => state.targetUsings =action.payload
+        setDataWheelSizeFilter: (state, action : PayloadAction<string[]>) => {
+            state.wheelSizes = action.payload
+        },
+        setDataMaterialFilter: (state, action : PayloadAction<string[]>) => {
+            state.materials = action.payload
+        },
+        setDataTargetUsingFilter: (state, action : PayloadAction<string[]>) => {
+            state.targetUsings = action.payload
+        },
+        setDataPriceFilter: (state, action : {payload: {min: number, max: number}}) => {
+            state.prices = action.payload
+        },
     }
 })
-export const {setDataBrandFilter} = selectFilterSlice.actions
+export const {setDataBrandFilter, setDataTargetUsingFilter, setDataMaterialFilter, setDataWheelSizeFilter, setDataPriceFilter} = selectFilterSlice.actions
 const selectFilterReducer = selectFilterSlice.reducer;
 export default selectFilterReducer;

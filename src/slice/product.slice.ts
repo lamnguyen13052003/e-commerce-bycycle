@@ -109,18 +109,24 @@ export const getProductsByBestSale = createAsyncThunk('products/getProducts/hasB
 })
 
 export const getProductsByFilter = createAsyncThunk('products/getProducts/filter', async (prop: {
-    category: number,
+    category: number
     page: number | undefined
-    queryParams?: string
+    queryParams: string
+
 }, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductPropsHasTotal>>, any>(`api/products/${prop.category}/page=${prop.page}/filter`, {
-        params: prop.queryParams,
-        signal: thunkAPI.signal
-    })
-    return {
-        category: prop.category,
-        data: response.data.data
+    try{
+        const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductPropsHasTotal>>, any>(`api/products/${prop.category}/page=${prop.page}/filter?${prop.queryParams}`, {
+            signal: thunkAPI.signal
+        })
+
+        return {
+            category: prop.category,
+            data: response.data.data
+        }
+    }catch (e : any ) {
+       return thunkAPI.rejectWithValue(e.response?.data || e.message)
     }
+
 })
 
 const productSlice = createSlice({

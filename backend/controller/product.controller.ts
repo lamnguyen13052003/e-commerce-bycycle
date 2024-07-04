@@ -26,7 +26,6 @@ export const runProductController = (app: Express) => {
     app.get("/api/products/:category/page=:page", (req, res) => {
         const category = parseInt(req.params.category as string);
         const seeMore = parseInt(req.params.page as string);
-        console.log('non-filter')
         getProductsByCategory(category, seeMore).then((response) => {
             res.send(Builder<ResponseApi<ProductPropsHasTotal>>()
                 .code(202)
@@ -74,7 +73,6 @@ export const runProductController = (app: Express) => {
         const newProduct : boolean = query.newProduct as string == "true";
         const bestSale : boolean = query.bestSale as string == "true";
         const sort : string = query.sort as string;
-        console.log('filter')
         getProductsByFilter(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
             res.send(Builder<ResponseApi<ProductPropsHasTotal>>()
                 .code(202)

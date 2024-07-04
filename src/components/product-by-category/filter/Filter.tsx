@@ -12,7 +12,12 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../../../configs/store";
 import FilterAttributeType from "../../../type/filterAttribute.type.client";
-import {setDataBrandFilter} from "../../../slice/selectFilter.slice";
+import {
+    setDataBrandFilter,
+    setDataMaterialFilter,
+    setDataTargetUsingFilter,
+    setDataWheelSizeFilter
+} from "../../../slice/selectFilter.slice";
 
 
 export interface FilterProps {
@@ -36,7 +41,6 @@ function getStyles(item: string, items: readonly string[], theme: Theme) {
 }
 
 export default function MultipleSelectChip(props: FilterProps) {
-    const selectFilter : FilterAttributeType = useSelector((state: RootState) => state.selectFilter)
     const theme = useTheme();
     const [items, setItems] = useState<string[]>([]);
     const dispatch = useDispatch()
@@ -49,8 +53,21 @@ export default function MultipleSelectChip(props: FilterProps) {
         setItems(
             typeof value === 'string' ? value.split(',') : value
         );
+        switch (props.selectId){
+            case 'selectId-brand':
+                dispatch(setDataBrandFilter(value as string[]))
+                break;
+            case 'selectId-wheelSize':
+                dispatch(setDataWheelSizeFilter(value as string[]))
+                break;
+            case 'selectId-material':
+                dispatch(setDataMaterialFilter(value as string[]))
+                break;
+            case 'selectId-targetUsing':
+                dispatch(setDataTargetUsingFilter(value as string[]))
+                break;
 
-        dispatch(setDataBrandFilter(value as string[]))
+        }
     };
 
     return (
