@@ -236,10 +236,10 @@ function Products() {
                     </Stack>
                     <ProductList products={rootState.data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                        <Link to={`/${category}/page/${count}`}>
+                        <Link to={`/${category}/page/${count + 1}`}>
                             <Button className={'focus-ring focus-ring-info'}
                                     disabled={handlerDisabled()} onClick={() => { handlerClickSeeMore()} }
-                                    value={`${count}`} variant="outlined" endIcon={<ArrowDropDownIcon/>}>
+                                     variant="outlined" endIcon={<ArrowDropDownIcon/>}>
                                     Tải thêm sản phẩm
                             </Button>
                         </Link>
