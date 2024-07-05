@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -7,31 +7,12 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import CartItem from "./index";
+import {CartItemType} from "../../types/cartItem.type";
+import {useSelector} from "react-redux";
+import {RootState} from "../../configs/store";
 
 export function CartItemTable() {
-    const [cartItems, setCartItems] = useState([
-        {id: 1, title: "Xe Đạp Trẻ Em 12 Inch GH Bike [GIÁ RẺ] - Xanh lá", qty: 1, price: 890000},
-    ]);
-
-    const handleAdd = (id: number) => {
-        setCartItems((items) =>
-            items.map((item) =>
-                item.id === id ? {...item, qty: item.qty + 1} : item
-            )
-        );
-    };
-
-    const handleSubtract = (id: number) => {
-        setCartItems((items) =>
-            items.map((item) =>
-                item.id === id && item.qty > 1 ? {...item, qty: item.qty - 1} : item
-            )
-        );
-    };
-
-    const handleRemove = (id: number) => {
-        setCartItems((items) => items.filter((item) => item.id !== id));
-    };
+    const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
 
     return (
         <TableContainer component={Paper}>
@@ -49,13 +30,10 @@ export function CartItemTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {cartItems.map((item) => (
+                    {cartItems.map((item: CartItemType) => (
                         <CartItem
-                            key={item.id}
+                            key={item.id.toString()}
                             {...item}
-                            onAdd={handleAdd}
-                            onSubtract={handleSubtract}
-                            onRemove={handleRemove}
                         />
                     ))}
                 </TableBody>

@@ -2,18 +2,20 @@ import {Express} from "express";
 import {Builder} from "builder-pattern";
 import {ResponseApi} from "../types/response.type";
 import {
-    getAll as getAllProduct, getAttrForFilter,
+    getAll as getAllProduct,
+    getAttrForFilter,
     getProductsBestSale,
-    getProductsByCategory, getProductsByFilter,
+    getProductsByCategory,
 } from "../service/product.service";
-import {ProductProps, ProductPropsHasTotal} from "../types/product.type";
+import {ProductHasTotalType} from "../types/productsHasTotal.type";
 import FilterAttributeType from "../types/filterAttribute.type";
+import {ProductType} from "../types/product.type";
 
 export const runProductController = (app: Express) => {
     const qs = require('qs')
     app.get("/api/products/all", (req, res) => {
         getAllProduct().then((response) => {
-            res.send(Builder<ResponseApi<ProductProps[]>>()
+            res.send(Builder<ResponseApi<ProductType[]>>()
                 .code(202)
                 .message("Success")
                 .data(response)
@@ -27,7 +29,7 @@ export const runProductController = (app: Express) => {
         const category = parseInt(req.params.category as string);
         const seeMore = parseInt(req.params.page as string);
         getProductsByCategory(category, seeMore).then((response) => {
-            res.send(Builder<ResponseApi<ProductPropsHasTotal>>()
+            res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)
                 .message("Success")
                 .data(response)
@@ -39,7 +41,7 @@ export const runProductController = (app: Express) => {
     app.get("/api/products/best-sale/:bestSale", (req, res) => {
         const bestSale: boolean = req.params.bestSale as string == "true";
         getProductsBestSale(bestSale).then((response) => {
-            res.send(Builder<ResponseApi<ProductProps[]>>()
+            res.send(Builder<ResponseApi<ProductType[]>>()
                 .code(202)
                 .message("Success")
                 .data(response)
@@ -63,6 +65,7 @@ export const runProductController = (app: Express) => {
 
     app.get("/api/products/:category/page=:page/filter", (req, res) => {
         const query = qs.parse(req.query);
+
         const category: number = parseInt(req.params.category as string);
         const seeMore: number = parseInt(req.params.page as string);
         const brands : string[] = query.brands as string[];

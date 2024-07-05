@@ -13,6 +13,7 @@ import Register from "./components/register-form";
 import ForgetPassword from "./components/forget-password-form";
 import ChangePassword from "./components/reset-password-form";
 import Verify from "./components/verify-form";
+import {ProductDetail} from "./components/product-detail";
 
 
 function App() {
@@ -28,8 +29,9 @@ function App() {
                     <Route path={"/change-password"} element={<ChangePassword/>}/>
                     <Route path={"/verify"} element={<Verify/>}/>
                 </Route>
-                <Route path="/:category/page/:page" element={<Products />} />
+                <Route path={"/:category/page/:page"} element={<Products />}/>
                 <Route path="/:category/page/:page/filter" element={<Products />} />
+                <Route path={"/product-detail"} element={<ProductDetail />} />
 
             </Route>
         </Routes>

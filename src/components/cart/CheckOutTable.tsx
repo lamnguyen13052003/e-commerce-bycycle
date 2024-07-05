@@ -9,13 +9,14 @@ import SellIcon from "@mui/icons-material/Sell";
 import {Button, Input, Typography} from "@mui/material";
 import styles from "./scss/Cart.module.css";
 import React from "react";
+import {CartItemType} from "../../types/cartItem.type";
 
-export function CheckOutTable({cartItems}: { cartItems: { id: number, title: string, qty: number, price: number }[] }) {
+export function CheckOutTable({cartItems}: { cartItems: CartItemType[] }) {
     const formatCurrency = (amount: number): string => {
         return Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(amount);
     };
 
-    const total = cartItems.reduce((sum, item) => sum + item.qty * item.price, 0);
+    const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
     return (
         <>

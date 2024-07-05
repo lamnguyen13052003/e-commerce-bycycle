@@ -9,6 +9,7 @@ import Menu from "../menu";
 import ButtonAuth from "./ButtonAuth";
 import ButtonCart from "./ButtonCart";
 
+
 function Header() {
     return (
         <>
@@ -28,7 +29,7 @@ function Header() {
                 <InputGroup style={{
                     width: "30%",
                 }}>
-                    <Form.Control id={"search-bar"} type="text" placeholder={""}
+                    <Form. Control id={"search-bar"} type="text" placeholder={""}
                                   className={`${styles.input_focus} ${styles.input}`}/>
                     <label className={"input-group-text"} htmlFor={"search-bar"} style={{
                         borderRadius: "0 50px 50px 0",

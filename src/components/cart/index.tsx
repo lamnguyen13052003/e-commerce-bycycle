@@ -6,18 +6,14 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import {IconButton} from "@mui/material";
 import QuantityCell from "./QuantityCell";
+import {CartItemType} from "../../types/cartItem.type";
+import {useDispatch} from "react-redux";
+import {removeCartItem} from "../../slice/cart.slice";
 
-export interface CartItemProps {
-    id: number;
-    title: string;
-    qty: number;
-    price: number;
-    onAdd: (id: number) => void;
-    onSubtract: (id: number) => void;
-    onRemove: (id: number) => void;
-}
+function CartItem(props: CartItemType) {
+    const {id, name, quantity, price, url, type} = props;
+    const dispatch = useDispatch();
 
-function CartItem({id, title, qty, price, onAdd, onSubtract, onRemove}: CartItemProps) {
     const formatCurrency = (amount: number): string => {
         return Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(amount);
     };
@@ -25,16 +21,18 @@ function CartItem({id, title, qty, price, onAdd, onSubtract, onRemove}: CartItem
     return (
         <TableRow>
             <TableCell>
-                <Image className={"rounded-3"} src={ImageCycleBike} alt={title} style={{width: "100px"}}/>
+                <Image className={"rounded-3"} src={ImageCycleBike} alt={name} style={{width: "100px"}}/>
             </TableCell>
-            <TableCell>{title}</TableCell>
+            <TableCell>{name}</TableCell>
             <TableCell align="left">{formatCurrency(price)}</TableCell>
             <TableCell>
-                <QuantityCell id={id} quantity={qty} onAdd={onAdd} onSubtract={onSubtract}/>
+                <QuantityCell id={id} hasDispatch={true} quantity={quantity}/>
             </TableCell>
-            <TableCell align="center">{formatCurrency(qty * price)}</TableCell>
+            <TableCell align="center">{formatCurrency(quantity * price)}</TableCell>
             <TableCell>
-                <IconButton onClick={() => onRemove(id)}>
+                <IconButton onClick={() => {
+                    dispatch(removeCartItem(id))
+                }}>
                     <CloseIcon/>
                 </IconButton>
             </TableCell>

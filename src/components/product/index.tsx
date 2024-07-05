@@ -5,14 +5,17 @@ import {Image} from "react-bootstrap";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LabelDiscount from "./LabelDiscount";
 import LabelNew from "./LabelNew";
-import ProductProps from "../../type/product.type";
+import {ProductType} from "../../types/product.type";
+import {useDispatch} from "react-redux";
+import {addCartItem} from "../../slice/cart.slice";
+import {CartItemType} from "../../types/cartItem.type";
 
-export default function Product(props: ProductProps) {
-    // Create our number formatter.
+export default function Product(props: ProductType) {
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     });
+    const dispatch = useDispatch();
 
     const calculateDiscount = () => {
         return Math.floor(props.price * (100 - (props.discount ? props.discount : 0)) / 100);
@@ -52,10 +55,23 @@ export default function Product(props: ProductProps) {
 
                     <Button className={'text-uppercase mb-3'} variant={"contained"} color={"info"}
                             startIcon={<ShoppingCartIcon/>}
-                            style={{width: '148px', height: '28px'}}> Mua hàng
+                            onClick={() => {
+                                dispatch(addCartItem(cartItem))
+                            }}
+                            style={{paddingInline: '15px', paddingBlock: '5px', textWrap: 'nowrap'}}>
+                        Thêm vào giỏ hàng
                     </Button>
                 </Stack>
             </Box>
         </Box>
     )
+}
+
+const cartItem: CartItemType = {
+    id: "507f1f77bcf86cd799439011",
+    name: "Áo thun",
+    price: 100000,
+    quantity: 1,
+    url: "https://via.placeholder.com/150",
+    type: "M"
 }

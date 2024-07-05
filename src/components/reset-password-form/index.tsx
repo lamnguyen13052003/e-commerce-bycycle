@@ -6,7 +6,6 @@ import {useForm} from "react-hook-form";
 import {ChangePasswordRequest} from "../../requests/changePassword.request";
 import axios from "axios";
 import {toast} from "react-toastify";
-import {verify} from "../../slice/auth.slice";
 import {useNavigate} from "react-router-dom";
 
 function ChangePassword() {

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {Theme, useTheme} from '@mui/material/styles';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import {
     Box,
@@ -30,6 +30,8 @@ export interface FilterProps {
     maxHeight?: number,
     width?: number
 }
+import {Box, FormControl, InputLabel, MenuItem, OutlinedInput,} from "@mui/material";
+import {FilterType} from "../../types/filter.type";
 
 function getStyles(item: string, items: readonly string[], theme: Theme) {
     return {
@@ -40,7 +42,7 @@ function getStyles(item: string, items: readonly string[], theme: Theme) {
     };
 }
 
-export default function MultipleSelectChip(props: FilterProps) {
+export default function MultipleSelectChip(props: FilterType) {
     const theme = useTheme();
     const [items, setItems] = useState<string[]>([]);
     const dispatch = useDispatch()

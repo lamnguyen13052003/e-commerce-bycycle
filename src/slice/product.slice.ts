@@ -1,46 +1,47 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import ProductProps, {ProductPropsHasTotal} from "../type/product.type"
+import {ProductType} from "../types/product.type"
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
 import {ResponseApi} from "../utils/response.type";
 import FilterAttributeType from "../type/filterAttribute.type.client";
+import {ProductHasTotalType} from "../types/productsHasTotal.type";
 
 interface HomeState {
-    bestSale: ProductProps[],
-    newProduct: ProductProps[],
+    bestSale: ProductType[],
+    newProduct: ProductType[],
     babyBicycle: {
         category: string,
-        products: ProductProps[],
+        products: ProductType[],
         total: number
     },
     sportBicycle: {
         category: string,
-        products: ProductProps[],
+        products: ProductType[],
         total: number
     },
     topographicBicycle: {
         category: string,
-        products: ProductProps[],
+        products: ProductType[],
         total: number
     },
     racingBicycle: {
         category: string,
-        products: ProductProps[],
+        products: ProductType[],
         total: number
     },
     touringBicycle: {
         category: string,
-        products: ProductProps[],
+        products: ProductType[],
         total: number
     },
     femaleBicycle: {
         category: string,
-        products: ProductProps[],
+        products: ProductType[],
         total: number
     },
     foldBicycle: {
         category: string,
-        products: ProductProps[],
+        products: ProductType[],
         total: number
     },
 }
@@ -89,7 +90,7 @@ export const getProductsByCategory = createAsyncThunk('products/getProducts/cate
     category: number,
     page: number | undefined
 }, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductPropsHasTotal>>, any>(`api/products/${prop.category}/page=${prop.page}`, {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductHasTotalType>>, any>(`api/products/${prop.category}/page=${prop.page}`, {
         signal: thunkAPI.signal
     })
     return {
@@ -98,7 +99,7 @@ export const getProductsByCategory = createAsyncThunk('products/getProducts/cate
     }
 })
 export const getProductsByBestSale = createAsyncThunk('products/getProducts/hasBestSale', async (bestSale: boolean, thunkAPI) => {
-    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductProps[]>>, any>(`api/products/best-sale/${bestSale}`, {
+    const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductType[]>>, any>(`api/products/best-sale/${bestSale}`, {
         signal: thunkAPI.signal
     })
 
@@ -130,7 +131,7 @@ export const getProductsByFilter = createAsyncThunk('products/getProducts/filter
 })
 
 const productSlice = createSlice({
-    name: 'products',
+    name: 'product slice',
     initialState,
     reducers: {},
     extraReducers(builder) {

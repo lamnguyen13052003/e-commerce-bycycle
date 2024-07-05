@@ -1,4 +1,3 @@
-import ProductProps, {ProductPropsHasTotal} from "../type/product.type";
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {Link, useParams, useSearchParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
@@ -7,17 +6,20 @@ import {Container} from "react-bootstrap";
 import MenuItem from '@mui/material/MenuItem';
 import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import PriceFilter, {MAX_HEIGHT, PriceProps} from "../components/product-by-category/filter/PriceFilter";
+import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/PriceFilter";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../configs/store";
 import {getProductsByCategory, getProductsByFilter} from "../slice/product.slice";
 import {TitleCategorySlugToNum} from "../utils/convertNumToNameCategory";
 import ProductList from "../components/product-list";
-import FilterAttributeType from "../type/filterAttribute.type.client";
+import FilterAttributeType from "../types/filterAttribute.type";
 import {getFilterAttribute} from "../slice/filter.slice";
 import {createQueryFilter, getQueryOnURL} from "../utils/getQueryOnURL";
 import {setDataAdditionalFilter} from "../slice/selectFilter.slice";
+import {ProductHasTotalType} from "../types/productsHasTotal.type";
+import {FilterType} from "../types/filter.type";
+import MultipleSelectChip from "../components/product-by-category/MultipleSelectChip";
 
 /*
 xe dap tre em: 0
@@ -31,7 +33,7 @@ xe dap gap : 6
 function getRootState(count: number, filterClick: number, isHasFilter: boolean) {
     const {category} = useParams()
     const category_id: number = TitleCategorySlugToNum(category)
-    let data: ProductPropsHasTotal
+    let data: ProductHasTotalType
     let filter: FilterAttributeType
     switch (category_id) {
         case 0:
@@ -170,7 +172,7 @@ function Products() {
     const [isHasFilter, setIsHasFilter] = useState(false)
     const rootState = getRootState(count, btnFilterClick, isHasFilter)
 
-    const brandsFilterProps = {
+    const brandsFilterProps: FilterType = {
         nameLabel: "Thương hiệu",
         itemSelected: rootState.filter.brands,
         inputLabelId: "inputLabelId-brand",
@@ -180,7 +182,7 @@ function Products() {
         maxHeight: MAX_HEIGHT,
         width: 200
     }
-    const wheelSizeFilterProps = {
+    const wheelSizeFilterProps: FilterType = {
         nameLabel: "Kích thước bánh xe",
         itemSelected: rootState.filter.wheelSizes,
         inputLabelId: "inputLabelId-wheelSize",
@@ -190,7 +192,7 @@ function Products() {
         maxHeight: MAX_HEIGHT,
         width: 200
     }
-    const materialsFilterProps = {
+    const materialsFilterProps: FilterType = {
         nameLabel: "Chất liệu",
         itemSelected: rootState.filter.materials,
         inputLabelId: "inputLabelId-material",
@@ -200,7 +202,7 @@ function Products() {
         maxHeight: MAX_HEIGHT,
         width: 200
     }
-    const purposeOfUseFilterProps = {
+    const purposeOfUseFilterProps: FilterType = {
         nameLabel: "Mục đích sử dụng",
         itemSelected: rootState.filter.targetUsings,
         inputLabelId: "inputLabelId-purposeOfUse",
@@ -229,11 +231,11 @@ function Products() {
                 <TitlePage name={rootState.data.category} result={rootState.data.products.length}/>
                 <Stack direction={"column"} gap={2}>
                     <Stack direction={'row'} gap={1} alignItems={'start'}>
-                        <ProductByCategoryFilter {...brandsFilterProps}/>
+                        <MultipleSelectChip {...brandsFilterProps}/>
                         <PriceFilter {...values} />
-                        <ProductByCategoryFilter {...wheelSizeFilterProps}/>
-                        <ProductByCategoryFilter {...materialsFilterProps}/>
-                        <ProductByCategoryFilter {...purposeOfUseFilterProps}/>
+                        <MultipleSelectChip {...wheelSizeFilterProps}/>
+                        <MultipleSelectChip {...materialsFilterProps}/>
+                        <MultipleSelectChip {...purposeOfUseFilterProps}/>
 
                         <Link
                             to={`/${category}/page/${count}/filter?${rootState.query}`}>

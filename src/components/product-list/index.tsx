@@ -1,10 +1,10 @@
 import {Stack} from "@mui/material";
 import React from "react";
-import  ProductProps from "../../type/product.type";
+import {ProductType} from "../../types/product.type";
 import Product from "../product";
 
 export default function ProductList(props: {
-    products: ProductProps[]
+    products: ProductType[]
 }) {
 
     return (

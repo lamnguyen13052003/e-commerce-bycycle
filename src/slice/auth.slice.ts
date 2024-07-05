@@ -15,7 +15,7 @@ const loadAuthState = () => {
 const initial: AuthState = loadAuthState();
 
 const authSlice = createSlice({
-    name: 'signTitle',
+    name: 'auth slice',
     initialState: initial,
     reducers: {
         login: (state, action: PayloadAction<User>) => {
