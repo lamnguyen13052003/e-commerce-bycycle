@@ -13,8 +13,7 @@ export const store = configureStore({
         auth: authReducer,
         product: productsReducer,
         filter: filterReducer,
-        selectFilter: selectFilterReducer
-        filter: filterReducer,
+        selectFilter: selectFilterReducer,
         cart: cartReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()

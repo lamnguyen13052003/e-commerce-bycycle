@@ -1,5 +1,5 @@
-import FilterAttributeType from "../type/filterAttribute.type.client";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import FilterAttributeType from "../types/filterAttribute.type";
 
 const initialFilterState: FilterAttributeType = {
     brands: [],

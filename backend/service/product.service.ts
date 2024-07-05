@@ -18,7 +18,7 @@ async function getProductsByCategory(category: number, count: number) {
     let y = 8 + x
     if (y >= total) y = total
 
-    const products = await productRepository.find<ProductProps>({category: category}).limit(y).toArray()
+    const products = await productRepository.find<ProductType>({category: category}).limit(y).toArray()
 
     return {
         total: total,

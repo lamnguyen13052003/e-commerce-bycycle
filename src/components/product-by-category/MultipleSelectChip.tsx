@@ -2,22 +2,15 @@ import React, {useState} from 'react';
 import {Theme, useTheme} from '@mui/material/styles';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
-import {
-    Box,
-    OutlinedInput,
-    InputLabel,
-    MenuItem,
-    FormControl,
-} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState, useAppDispatch} from "../../../configs/store";
-import FilterAttributeType from "../../../type/filterAttribute.type.client";
+import {Box, FormControl, InputLabel, MenuItem, OutlinedInput,} from "@mui/material";
+import {useDispatch} from "react-redux";
+import {FilterType} from "../../types/filter.type";
 import {
     setDataBrandFilter,
-    setDataMaterialFilter, setDataPriceFilter,
+    setDataMaterialFilter,
     setDataTargetUsingFilter,
     setDataWheelSizeFilter
-} from "../../../slice/selectFilter.slice";
+} from "../../slice/selectFilter.slice";
 
 
 export interface FilterProps {
@@ -30,8 +23,6 @@ export interface FilterProps {
     maxHeight?: number,
     width?: number
 }
-import {Box, FormControl, InputLabel, MenuItem, OutlinedInput,} from "@mui/material";
-import {FilterType} from "../../types/filter.type";
 
 function getStyles(item: string, items: readonly string[], theme: Theme) {
     return {

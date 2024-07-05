@@ -1,10 +1,9 @@
 import {Box, Breadcrumbs, Button, FormControl, InputLabel, Select, SelectChangeEvent, Stack} from "@mui/material";
-import {Link, useParams, useSearchParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import React, {useEffect, useState} from "react";
 import {Container} from "react-bootstrap";
 import MenuItem from '@mui/material/MenuItem';
-import ProductByCategoryFilter from '../components/product-by-category/filter/Filter'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PriceFilter, {MAX_HEIGHT} from "../components/product-by-category/PriceFilter";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";

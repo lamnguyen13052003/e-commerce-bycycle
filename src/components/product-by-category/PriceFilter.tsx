@@ -1,12 +1,9 @@
 import {Accordion, AccordionDetails, AccordionSummary, Box, Slider, Stack, TextField, Typography} from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import React, {ChangeEvent, useState} from "react";
-import Filter from './Filter'
-import {useAppDispatch} from "../../../configs/store";
-import {setDataPriceFilter} from "../../../slice/selectFilter.slice";
 import React, {useState} from "react";
-import Filter from './MultipleSelectChip'
 import {PriceType} from "../../types/price.type";
+import {useAppDispatch} from "../../configs/store";
+import {setDataPriceFilter} from "../../slice/selectFilter.slice";
 
 function AccordionPrice(prop: PriceType ) {
     return (
@@ -93,19 +90,3 @@ export default AccordionPrice
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 export const MAX_HEIGHT = ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP
-const priceFilterProps = {
-    nameLabel: "Lọc theo giá",
-    itemSelected: [
-        'Dưới 5 triệu',
-        'Từ 5 - 10 triệu',
-        'Từ 10 - 15 triệu',
-        'Từ 15 - 25 triệu',
-        'Trên 25 triệu'
-    ],
-    inputLabelId: "inputLabelId-price",
-    selectLabelId: "selectLabelId-price",
-    selectId: "selectId-price",
-    outlineInputId: "outlineInputId-price",
-    maxHeight: MAX_HEIGHT,
-    width: 350
-}

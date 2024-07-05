@@ -5,7 +5,7 @@ import {
     getAll as getAllProduct,
     getAttrForFilter,
     getProductsBestSale,
-    getProductsByCategory,
+    getProductsByCategory, getProductsByFilter,
 } from "../service/product.service";
 import {ProductHasTotalType} from "../types/productsHasTotal.type";
 import FilterAttributeType from "../types/filterAttribute.type";
@@ -77,7 +77,7 @@ export const runProductController = (app: Express) => {
         const bestSale : boolean = query.bestSale as string == "true";
         const sort : string = query.sort as string;
         getProductsByFilter(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
-            res.send(Builder<ResponseApi<ProductPropsHasTotal>>()
+            res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)
                 .message("Success")
                 .data(response)
