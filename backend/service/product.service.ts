@@ -81,7 +81,7 @@ function getQuery(
     }
     if (targetUsings !== undefined) {
         const targetUsingsArr = customQuery(targetUsings)
-        query = {...query, 'base_description.targetUsing': {$in: targetUsingsArr}}
+        query = {...query, 'specifications.targetUsing': {$in: targetUsingsArr}}
     }
     if (maxPrice !== 0) {
         query = {...query, price: {$gte: minPrice, $lte: maxPrice}}
