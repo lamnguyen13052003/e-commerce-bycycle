@@ -4,4 +4,5 @@ export default interface FilterAttributeType{
     wheelSizes: string[],
     materials: string[],
     targetUsings: string[],
+    additional: string
 }

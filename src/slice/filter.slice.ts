@@ -10,6 +10,7 @@ const initialFilterState: FilterAttributeType = {
     wheelSizes: [],
     materials: [],
     targetUsings: [],
+    additional: ''
 }
 
 export const getFilterAttribute = createAsyncThunk('filter/getFilterAttribute', async (category: number, thunkAPI) => {

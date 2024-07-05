@@ -17,6 +17,7 @@ import ProductList from "../components/product-list";
 import FilterAttributeType from "../type/filterAttribute.type.client";
 import {getFilterAttribute} from "../slice/filter.slice";
 import {createQueryFilter, getQueryOnURL} from "../utils/getQueryOnURL";
+import {setDataAdditionalFilter} from "../slice/selectFilter.slice";
 
 /*
 xe dap tre em: 0
@@ -68,9 +69,9 @@ function getRootState(count: number, filterClick: number) {
     }
     getQueryOnURL(category_id, count)
     const selectFilter: FilterAttributeType = useSelector((state: RootState) => state.selectFilter)
-    const {brands, prices , wheelSizes, materials, targetUsings} = selectFilter
+    const {brands, prices , wheelSizes, materials, targetUsings, additional} = selectFilter
     const dispatch = useAppDispatch()
-    const query = createQueryFilter(brands, wheelSizes, materials, targetUsings, `${prices.min}-${prices.max}`)
+    const query = createQueryFilter(brands, wheelSizes, materials, targetUsings, `${prices.min}-${prices.max}`, additional)
     useEffect(() => {
         const promise = dispatch(getProductsByCategory({category: category_id, page: count}))
         return () => {
@@ -128,10 +129,11 @@ function TitlePage(props: Title) {
 }
 
 function SelectSmallFilter() {
-    const [filter, setFilter] = React.useState('');
-
+    const dispatch = useAppDispatch()
+    const [filter, setFilter] = React.useState('0');
     const handleChange = (event: SelectChangeEvent) => {
         setFilter(event.target.value as string);
+        dispatch(setDataAdditionalFilter(event.target.value))
     };
 
     return (
@@ -236,14 +238,13 @@ function Products() {
                     </Stack>
                     <ProductList products={rootState.data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                        <Link to={`/${category}/page/${count + 1}`}>
+                        <Link to={`/${category}/page/${count + 1}`} >
                             <Button className={'focus-ring focus-ring-info'}
                                     disabled={handlerDisabled()} onClick={() => { handlerClickSeeMore()} }
                                      variant="outlined" endIcon={<ArrowDropDownIcon/>}>
                                     Tải thêm sản phẩm
                             </Button>
                         </Link>
-
                     </Box>
                 </Stack>
 

@@ -40,8 +40,7 @@ async function getProductsByFilter(
 
 
     const query = getQuery(category, brands, wheelSizes, materials, targetUsings, price, newProduct, bestSale)
-    const sortQuery: Sort = ((sort===undefined? 'asc': sort) == 'asc'? {"discount": 1} :  {"discount": -1})
-
+    const sortQuery: Sort = ((sort===undefined? 'asc': sort) === 'asc'? {"price": 1} :  {"price": -1})
     const total = await productRepository.countDocuments(query)
     const numOfDoc = 8
     const x = numOfDoc * count
