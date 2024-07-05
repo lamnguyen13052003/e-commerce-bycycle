@@ -6,10 +6,13 @@ import Col from "react-bootstrap/Col";
 import StickyWidget from "./Widget";
 import { ProductDetailBreadcrumbs } from "./ProductDetailBreadcrumbs";
 
+
 const ProductDetailColItem = {
     category: "Xe Đạp Địa Hình",
     name: "Xe Đạp Địa Hình MTB Vicky Crazy VC800 26 Inch",
 };
+
+
 
 export function ProductDetail() {
     const BreadcrumbAtt = {

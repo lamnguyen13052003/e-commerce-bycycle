@@ -12,6 +12,7 @@ import { TechSpec } from './ProductDetailComponent';
 import { useDispatch } from 'react-redux';
 import { addCartItem } from '../../slice/cart.slice';
 import { CartItemType } from '../../types/cartItem.type';
+import ProductSlider from './RelatedProductSlider';
 
 
 
@@ -23,6 +24,20 @@ const addToCartDetail: CartItemType = {
     url: 'https://via.placeholder.com/150',
     type: 'M',
 };
+
+
+
+const products = [
+    { id: 1, name: 'Xe 1', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_do.jpg', price: 8000000, salePrice: 7500000, sale: "17%" },
+    { id: 2, name: 'Xe 2', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_lam.jpg', price: 7500000, salePrice: 6000000, sale: "18%" },
+    { id: 3, name: 'Xe 3', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_lam_luc.jpg', price: 9000000, salePrice: 800000, sale: "10%"},
+    { id: 4, name: 'Xe 4', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_trang_do.jpg', price: 10000000, salePrice: 8700000, sale: "50%"},
+    { id: 5, name: 'Xe 5', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_do.jpg', price: 3600000, salePrice: 2100000, sale: "75%"},
+    { id: 6, name: 'Xe 6', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_trang_do.jpg', price: 9000000, salePrice: 8500000, sale: "20%"},
+    { id: 7, name: 'Xe 7', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_lam_luc.jpg', price: 9780000, salePrice: 8000000, sale: "8%" },
+    { id: 8, name: 'Xe 8', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_do.jpg', price: 8700000, salePrice: 7500000, sale: "14%" },
+];
+
 
 const ProductDetailCol = () => {
     const formatCurrency = (amount: number): string => {
@@ -289,6 +304,10 @@ const ProductDetailCol = () => {
                             </div>
                         </div>
                     </pdc.Comment>
+                </Col>
+                <Col sm={12} style={{margin : '40px 0' }}>
+                    <h2>Sản Phẩm Liên Quan</h2>
+                    <ProductSlider products={products} />
                 </Col>
             </Row>
         </Container>
