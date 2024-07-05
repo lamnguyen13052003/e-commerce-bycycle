@@ -45,27 +45,15 @@ function CustomPrice(props: PriceProps) {
     const [valueTextFieldTo, setValueTextFieldTo] = useState<number>(props.max);
     const [rangeValue, setRangeValue] = useState([props.min, props.max]);
 
-    const handleChangeFrom = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = event.target.value;
-        setValueTextFieldFrom(Number(inputValue));
-        handleSetThumbOneValue(valueTextFieldFrom)
-        dispatch(setDataPriceFilter({min: rangeValue[0], max: rangeValue[1]}))
-    };
+    const handleTextFieldChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = [...rangeValue];
+        const newNumber = Number(event.target.value);
 
-    const handleChangeTo = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = event.target.value;
-        setValueTextFieldTo(Number(inputValue));
-        handleSetThumbTwoValue(valueTextFieldTo)
+        if (!isNaN(newNumber)) {
+            newValue[index] = newNumber;
+            setRangeValue(newValue);
+        }
         dispatch(setDataPriceFilter({min: rangeValue[0], max: rangeValue[1]}))
-    };
-
-    // Hàm đặt giá trị của thumb thứ nhat
-    const handleSetThumbOneValue = (newThumbOneValue: number) => {
-        setRangeValue([newThumbOneValue, rangeValue[1]]);
-    };
-    // Hàm đặt giá trị của thumb thứ hai
-    const handleSetThumbTwoValue = (newThumbTwoValue: number) => {
-        setRangeValue([rangeValue[0], newThumbTwoValue]);
     };
 
     const handleRangeChange = (event: Event, newValue: number | number[], activeThumb: number) => {
@@ -75,9 +63,17 @@ function CustomPrice(props: PriceProps) {
         return (
             <Box>
                 <Box className={'d-flex justify-content-between align-items-center'}>
-                    <TextField  id="outlined-from" type={"number"} onChange={handleChangeFrom}  defaultValue={rangeValue[0]}  variant="outlined"/> <sup className={'px-1'}>đ</sup>
+                    <TextField  id="outlined-from" type={"number"}
+                                onChange={handleTextFieldChange(0)}
+                                value={rangeValue[0]}
+                                inputProps={{min: props.min, max: props.max}}
+                                variant="outlined"/> <sup className={'px-1'}>đ</sup>
                     <Box className={'ms-1 me-2'} style={{width: '10%', height: '4px', backgroundColor: '#000'}}/>
-                    <TextField  id="outlined-to" type={"number"} onChange={handleChangeTo} defaultValue={rangeValue[1]} variant="outlined"/><sup className={'px-1'}>đ</sup>
+                    <TextField  id="outlined-to" type={"number"}
+                                onChange={handleTextFieldChange(1)}
+                                value={rangeValue[1]}
+                                inputProps={{min: props.min, max: props.max}}
+                                variant="outlined"/><sup className={'px-1'}>đ</sup>
                 </Box>
                 <Box>
                     <Box sx={{width: 300}}>

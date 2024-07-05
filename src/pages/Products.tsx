@@ -28,7 +28,7 @@ xe dap touring: 4
 xe dap nu: 5
 xe dap gap : 6
  */
-function getRootState(count: number, filterClick: number) {
+function getRootState(count: number, filterClick: number, isHasFilter: boolean) {
     const {category} = useParams()
     const category_id: number = TitleCategorySlugToNum(category)
     let data: ProductPropsHasTotal
@@ -67,17 +67,21 @@ function getRootState(count: number, filterClick: number) {
             filter = useSelector((state: RootState) => state.filter)
             break
     }
-    getQueryOnURL(category_id, count)
+
+    isHasFilter = getQueryOnURL(category_id, count)
+
     const selectFilter: FilterAttributeType = useSelector((state: RootState) => state.selectFilter)
-    const {brands, prices , wheelSizes, materials, targetUsings, additional} = selectFilter
+    const {brands, prices, wheelSizes, materials, targetUsings, additional} = selectFilter
     const dispatch = useAppDispatch()
     const query = createQueryFilter(brands, wheelSizes, materials, targetUsings, `${prices.min}-${prices.max}`, additional)
-    useEffect(() => {
-        const promise = dispatch(getProductsByCategory({category: category_id, page: count}))
-        return () => {
-            promise.abort()
-        }
-    }, [count]);
+
+        useEffect(() => {
+            if (isHasFilter) return
+            const promise = dispatch(getProductsByCategory({category: category_id, page: count}))
+            return () => {
+                promise.abort()
+            }
+        }, [count]);
 
     useEffect(() => {
         const promiseFilter = dispatch(getProductsByFilter({category: category_id, page: count, queryParams: query}))
@@ -163,7 +167,9 @@ function Products() {
     const {category, page} = useParams()
     const [count, setCount] = useState(parseInt(page as string))
     const [btnFilterClick, setBtnFilterClick] = useState(0)
-    const rootState = getRootState(count, btnFilterClick)
+    const [isHasFilter, setIsHasFilter] = useState(false)
+    const rootState = getRootState(count, btnFilterClick, isHasFilter)
+
     const brandsFilterProps = {
         nameLabel: "Thương hiệu",
         itemSelected: rootState.filter.brands,
@@ -215,6 +221,7 @@ function Products() {
 
     const handlerClickFilter = () => {
         setBtnFilterClick(btnFilterClick + 1)
+        setIsHasFilter(true)
     }
     return (
         <>
@@ -238,11 +245,13 @@ function Products() {
                     </Stack>
                     <ProductList products={rootState.data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                        <Link to={`/${category}/page/${count + 1}`} >
+                        <Link to={`/${category}/page/${count + 1}`}>
                             <Button className={'focus-ring focus-ring-info'}
-                                    disabled={handlerDisabled()} onClick={() => { handlerClickSeeMore()} }
-                                     variant="outlined" endIcon={<ArrowDropDownIcon/>}>
-                                    Tải thêm sản phẩm
+                                    disabled={handlerDisabled()} onClick={() => {
+                                handlerClickSeeMore()
+                            }}
+                                    variant="outlined" endIcon={<ArrowDropDownIcon/>}>
+                                Tải thêm sản phẩm
                             </Button>
                         </Link>
                     </Box>

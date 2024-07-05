@@ -4,6 +4,7 @@ import {getProductsByFilter} from "../slice/product.slice";
 import {useAppDispatch} from "../configs/store";
 
 function getQueryOnURL(category_id: number, page: number) {
+    let isHasFilter = false
     const dispatch = useAppDispatch()
     const [searchParams] = useSearchParams()
     const brands: string[] = searchParams.getAll('brands[]') as string[]
@@ -15,6 +16,11 @@ function getQueryOnURL(category_id: number, page: number) {
     const sort: string | null= searchParams.get('sort') as string
     const bestSale: string | null = searchParams.get('bestSale')
     const additional: number | null = getValueAdditional(newProduct, sort, bestSale)
+
+    if (brands.length > 0 || wheelSizes.length > 0 || materials.length > 0 || targetUsings.length > 0 || prices !== null || additional !== null) {
+        isHasFilter = true
+    }
+
     const query = createQueryFilter(brands, wheelSizes, materials, targetUsings, prices, additional)
 
     useEffect(() => {
@@ -23,6 +29,8 @@ function getQueryOnURL(category_id: number, page: number) {
             promiseFilter.abort()
         }
     }, []);
+
+    return isHasFilter
 }
 
 const getValueAdditional = (newProduct: string | null, sort: string | null, bestSale: string | null) => {
@@ -66,8 +74,8 @@ const createQueryFilter = (brands: string[], wheelSizes: string[], materials: st
                 break
         }
     }
-    if (prices !== null && prices.split('-')[1] == '0') return query
+    if (prices !== null && prices.split('-')[1] == '0') return query.substring(0, query.length - 1)
     query += `prices=` + prices + '&'
-    return query
+    return query.substring(0, query.length - 1)
 }
 export {getQueryOnURL, createQueryFilter}
