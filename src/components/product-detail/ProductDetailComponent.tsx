@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+
+
 export const ShortDes = styled.div`
     h3 {
         border-radius: 5px !important;
@@ -11,10 +13,10 @@ export const ShortDes = styled.div`
         text-align: center;
     }
 
-    .short-des h4{
+    .short-des h4 {
         font-size: 20px;
     }
-    
+
     .price span:first-child {
         color: #353535 !important;
         font-weight: 400;
@@ -26,36 +28,85 @@ export const ShortDes = styled.div`
         display: flex;
         flex-direction: column;
         gap: 20px;
-        
-        div {
+
+        .qty-cell {
             display: flex;
-            gap: 20px;
-            justify-content: space-evenly;
+            width: 50%;
+            margin: 0;
+            padding: 0;
+
+            p {
+                margin: 0;
+            }
+
+            button {
+                background-color: #f1f1f1;
+                color: #000;
+                padding: 0;
+                min-width: 30px !important;
+                border: 1px solid #ddd;
+                border-radius: unset;
+            
+                svg {
+                    height: 15px !important;;
+                    width: 15px !important;
+                }
+                
+              
+            }
+
+            p {
+                background-color: white;
+                color: #000;
+                padding: 0;
+                border: 1px solid #ddd;
+                border-radius: unset;
+            }
+        }
+
+        > div {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+
+        }
+
+        button.add-cart {
+            height: 100%;
+            width: 100%;
+            font-size: 18px;
+            font-weight: 700;
         }
     }
-    
+
+
     .buy-now {
         background: rgb(255, 141, 0);
         color: white;;
     }
-    
+
     .form-product {
         display: flex;
         gap: 35px;
-        
+
         input {
-            background-color: rgba(0, 0, 0, .03);
+            background-color: white;
             border-color: rgba(0, 0, 0, .09);
             border-radius: 99px;
             box-shadow: none;
             color: currentColor !important;
-            padding:10px 15px;
-            
-            ::before, ::after {
-                border-color: unset;
-            }
+            padding: 10px 15px;
+
         }
-        
+
+        .MuiInput-root::before, .MuiInput-root::after {
+            border-bottom: 0px !important;
+        }
+
+        .MuiInput-root:hover::before, .MuiInput-root:hover::after {
+            border-bottom: 0px !important;
+        }
+
         button {
             border-radius: 8px;
             background-color: #439eef;
@@ -64,10 +115,10 @@ export const ShortDes = styled.div`
             outline: none;
         }
     }
-    
+
     ul {
         padding: 0;
-        
+
         li {
             list-style: none !important;
             background-image: url('/src/assets/images/product-detail/icon-tich.png');
@@ -77,11 +128,12 @@ export const ShortDes = styled.div`
             padding-left: 25px;
         }
     }
+
     .product-detail-offer {
         padding: 2px 20px !important;
         border: 1px solid #439eef;
-        
-        h3 {   
+
+        h3 {
             background: #439eef;
             color: #e9ecef;
             padding: 2px 20px;
@@ -91,14 +143,75 @@ export const ShortDes = styled.div`
             font-weight: 600;
         }
     }
+    
+    
+    .color-wrapper  {
+        padding: 3px;
+        border: 3px solid grey;
+        border-radius: 5px;
+        
+        &:hover, &:active {
+            border: 3px solid black;
+        }
+    }
 `
 
 export const Toc = styled.div `
+    margin-top: 40px;
+    width: 60%;
+    padding: 10px;
+    border: 2px solid grey;
+    border-radius: 5px;
+    background-color: #f9f9f9;
     
+    
+    p {
+        font-size: 20px;
+        font-weight: 500;
+        text-align: left;
+        margin-bottom: 10px;
+    }
+    
+    ul {
+        list-style: decimal;
+        li {
+            font-size: 18px;
+            a {
+                color: #444;
+                box-shadow: none;
+                text-decoration: none;
+                text-shadow: none;
+                display: inline-flex;
+                align-items: stretch;
+                flex-wrap: nowrap;
+                
+                &:hover {
+                    text-decoration: underline ;
+                }
+            }
+        }    
+    }
 `
 
 export const Des = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 40px; 
     
+    h2 {
+         font-weight: 700;
+         font-size: 30px;
+    }
+    
+    #basic-des ul {
+        line-height: 40px;
+        li {
+            font-size: 18px;
+            span {
+                font-weight: 700;
+            }
+        }
+    }
 `
 
 export const Widget = styled.div`
@@ -206,7 +319,9 @@ export const Widget = styled.div`
 `
 
 export const Comment = styled.div`
-        
+    .MuiInputBase-root {
+        background-color: unset !important;   
+    }
 `
 
 export const RelatedProduct = styled.div`

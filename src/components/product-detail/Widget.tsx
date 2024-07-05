@@ -1,13 +1,13 @@
 import React from 'react';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import * as pdc from "./ProductDetailComponent";
+import {Widget} from "./ProductDetailComponent";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
 const StickyWidget = () => {
     return(
         <>
-            <pdc.Widget>
+            <Widget>
                 <Row>
                     <Col className={"trust"} sm={12}>
                         <h4>LÝ DO NÊN MUA HÀNG TẠI XEDAPGIAKHO:</h4>
@@ -83,7 +83,7 @@ const StickyWidget = () => {
                         </div>
                     </Col>
                 </Row>
-            </pdc.Widget>
+            </Widget>
         </>
     );
 }
