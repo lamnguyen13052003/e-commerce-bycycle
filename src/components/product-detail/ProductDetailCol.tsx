@@ -9,6 +9,8 @@ import ColorSelector from "./ColorSelector";
 import QuantityCell from "../cart/QuantityCell";
 import {Button, TextField, Input} from "@mui/material";
 import {TechSpec} from "./ProductDetailComponent";
+import HoverRating from "../hover-rating";
+import DisplayUserReview from "./DisplayUserReview";
 
 
 const ProductDetailCol = () => {
@@ -271,6 +273,8 @@ const ProductDetailCol = () => {
                                 }}>
                                     <h3>Hãy là người đầu tiên đánh giá “Xe Đạp Địa Hình MTB Vicky Crazy VC800 26 Inch –
                                         Khung Thép | Phanh Đĩa Giá Rẻ | Khuyến mãi Hot” </h3>
+                                    <DisplayUserReview/>
+                                    <HoverRating/>
                                     <TextField
                                         id="filled-multiline-static"
                                         label="Đánh giá của bạn"

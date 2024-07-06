@@ -3,6 +3,7 @@ import {BaseDescriptionProductType} from "./baseDescriptionProduct.type";
 import {DetailDescriptionProductType} from "./detailDescriptionProduct.type";
 import {SpecificationsType} from "./specifications.type";
 import {ModelType} from "./modelProduct.type";
+import {ReviewProduct} from "./reviewProduct.type";
 
 export type ProductType = {
     _id: ObjectId,
@@ -17,4 +18,5 @@ export type ProductType = {
     detail_description: DetailDescriptionProductType[],
     specifications: SpecificationsType[],
     model: ModelType[],
+    review: ReviewProduct[]
 }
