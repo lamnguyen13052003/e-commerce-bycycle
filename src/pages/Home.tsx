@@ -36,13 +36,13 @@ function Home() {
     } = productsState
 
     useEffect(() => {
-        const promiseBabyBicycle = dispatch(getProductsByCategory({category: 0, page: 0}))
-        const promiseTouringBicycle = dispatch(getProductsByCategory({category: 1, page: 0}))
-        const promiseTopographicBicycle = dispatch(getProductsByCategory({category: 2, page: 0}))
-        const promiseSportBicycle = dispatch(getProductsByCategory({category: 3, page: 0}))
-        const promiseFoldBicycle = dispatch(getProductsByCategory({category: 4, page: 0}))
-        const promiseFemaleBicycle = dispatch(getProductsByCategory({category: 5, page: 0}))
-        const promiseRacingBicycle = dispatch(getProductsByCategory({category: 6, page: 0}))
+        const promiseBabyBicycle = dispatch(getProductsByCategory({category: 0, page: 1}))
+        const promiseTouringBicycle = dispatch(getProductsByCategory({category: 1, page: 1}))
+        const promiseTopographicBicycle = dispatch(getProductsByCategory({category: 2, page: 1}))
+        const promiseSportBicycle = dispatch(getProductsByCategory({category: 3, page: 1}))
+        const promiseFoldBicycle = dispatch(getProductsByCategory({category: 4, page: 1}))
+        const promiseFemaleBicycle = dispatch(getProductsByCategory({category: 5, page: 1}))
+        const promiseRacingBicycle = dispatch(getProductsByCategory({category: 6, page: 1}))
         const promise_best_sale = dispatch(getProductsByBestSale(true))
         const promise_new = dispatch(getProductsByBestSale(false))
 
@@ -99,7 +99,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"babyBicycle"}
                                        products={babyBicycle.products}
-                                       to={"/xe-dap-tre-em/page/0"}
+                                       to={"/xe-dap-tre-em/page/1"}
                                        title={"XE ĐẠP TRẺ EM"}
                     />
                 </Container>
@@ -108,7 +108,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={sportBicycle.products}
-                                       to={"/xe-dap-the-thao/page/0"}
+                                       to={"/xe-dap-the-thao/page/1"}
                                        title={"XE ĐẠP THỂ THAO"}
                     />
                 </Container>
@@ -117,7 +117,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={topographicBicycle.products}
-                                       to={"/xe-dap-dia-hinh/page/0"}
+                                       to={"/xe-dap-dia-hinh/page/1"}
                                        title={"XE ĐẠP ĐỊA HÌNH"}
                     />
                 </Container>
@@ -135,7 +135,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={touringBicycle.products}
-                                       to={"/xe-dap-touring/page/0"}
+                                       to={"/xe-dap-touring/page/1"}
                                        title={"XE ĐẠP TOURING"}
                     />
                 </Container>
@@ -144,7 +144,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={foldBicycle.products}
-                                       to={"/xe-dap-gap/page/0"}
+                                       to={"/xe-dap-gap/page/1"}
                                        title={"XE ĐẠP GẤP"}
                     />
                 </Container>
@@ -153,7 +153,7 @@ function Home() {
                 <Container>
                     <ProductByCategory key={"a"}
                                        products={femaleBicycle.products}
-                                       to={"/xe-dap-nu/page/0"}
+                                       to={"/xe-dap-nu/page/1"}
                                        title={"XE ĐẠP NỮ"}
                     />
                 </Container>

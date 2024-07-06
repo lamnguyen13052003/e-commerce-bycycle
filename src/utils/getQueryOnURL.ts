@@ -29,16 +29,15 @@ function getQueryOnURL(category_id: number, page: number) {
             promiseFilter.abort()
         }
     }, []);
-
     return isHasFilter
 }
 
 const getValueAdditional = (newProduct: string | null, sort: string | null, bestSale: string | null) => {
-    if (newProduct !== null) return 0
+    if (newProduct !== null) return 1
     if (bestSale !== null) return 3
     if (sort !== null) {
-        if (sort === 'asc') return 1
-        if (sort === 'desc') return 2
+        if (sort === 'asc') return 2
+        if (sort === 'desc') return 3
     }
     return null
 }
@@ -60,17 +59,19 @@ const createQueryFilter = (brands: string[], wheelSizes: string[], materials: st
 
     if (additional !== null) {
         switch (Number(additional)) {
-            case 0:
+            case 1:
                 query += `newProduct=true&`
                 break
-            case 1:
+            case 2:
                 query += `sort=asc&`
                 break
-            case 2:
+            case 3:
                 query += `sort=desc&`
                 break
-            case 3:
+            case 4:
                 query += `bestSale=true&`
+                break
+            default:
                 break
         }
     }
@@ -78,4 +79,5 @@ const createQueryFilter = (brands: string[], wheelSizes: string[], materials: st
     query += `prices=` + prices + '&'
     return query.substring(0, query.length - 1)
 }
+
 export {getQueryOnURL, createQueryFilter}

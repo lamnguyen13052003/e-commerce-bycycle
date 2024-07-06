@@ -3,7 +3,6 @@ import {ProductType} from "../types/product.type"
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
 import {ResponseApi} from "../utils/response.type";
-import FilterAttributeType from "../type/filterAttribute.type.client";
 import {ProductHasTotalType} from "../types/productsHasTotal.type";
 
 interface HomeState {
@@ -116,7 +115,7 @@ export const getProductsByFilter = createAsyncThunk('products/getProducts/filter
 
 }, thunkAPI) => {
     try{
-        const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductPropsHasTotal>>, any>(`api/products/${prop.category}/page=${prop.page}/filter?${prop.queryParams}`, {
+        const response = await axiosHttp.get<any, AxiosResponse<ResponseApi<ProductHasTotalType>>, any>(`api/products/${prop.category}/page=${prop.page}/filter?${prop.queryParams}`, {
             signal: thunkAPI.signal
         })
 

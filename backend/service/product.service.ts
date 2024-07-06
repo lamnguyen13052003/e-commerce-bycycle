@@ -13,11 +13,8 @@ async function getAll() {
 
 async function getProductsByCategory(category: number, count: number) {
     const total = await productRepository.countDocuments({category: category})
-    const numOfDoc = 8
-    const x = numOfDoc * count
-    let y = 8 + x
+    let y = 8 * count
     if (y >= total) y = total
-
     const products = await productRepository.find<ProductType>({category: category}).limit(y).toArray()
 
     return {
@@ -42,9 +39,7 @@ async function getProductsByFilter(
     const query = getQuery(category, brands, wheelSizes, materials, targetUsings, price, newProduct, bestSale)
     const sortQuery: Sort = ((sort===undefined? 'asc': sort) === 'asc'? {"price": 1} :  {"price": -1})
     const total = await productRepository.countDocuments(query)
-    const numOfDoc = 8
-    const x = numOfDoc * count
-    let y = 8 + x
+    let y = 8 * count
     if (y >= total) y = total
     const products = await productRepository.find<ProductType>(query).sort(sortQuery).limit(y).toArray()
 
