@@ -1,4 +1,4 @@
-export type LocaltionEsgoo = {
+export type LocaltionEsgooType = {
     id: number,
     name: string,
     name_en: string,

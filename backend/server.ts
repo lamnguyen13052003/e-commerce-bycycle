@@ -5,10 +5,10 @@ import {runAuthController} from "./controller/auth.controller";
 import {runProductController} from "./controller/product.controller";
 import bodyParser = require("body-parser");
 
-export const log = (tag: string, title: string, data: object) => {
+export const log = (tag: string, title: string, body: object) => {
     console.log(`=================================${tag}==================================`)
-    console.log(title)
-    console.log(data)
+    console.log("title: ", title)
+    console.log("body: ", body)
 }
 
 
@@ -19,7 +19,7 @@ run().catch(() => {
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 
 app.get("/", (req, res) => {

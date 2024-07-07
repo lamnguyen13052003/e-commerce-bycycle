@@ -4,8 +4,8 @@ import Col from "react-bootstrap/Col";
 import {Widget} from "./ProductDetailComponent";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
-const StickyWidget = () => {
-    return(
+const StickyWidget = (props: { warranty: string }) => {
+    return (
         <>
             <Widget>
                 <Row>
@@ -51,7 +51,7 @@ const StickyWidget = () => {
                                     Cam kết chính hãng
                                 </h4>
                                 <p>
-                                    Bảo dưỡng 01 năm
+                                    Bảo dưỡng {props.warranty}
                                 </p>
                                 <span>Lưu ý: Thông số kỹ thuật có thể được thay đổi từ nhà sản xuất nhằm nâng cao chất lượng sản phẩm</span>
                             </div>
@@ -60,7 +60,7 @@ const StickyWidget = () => {
                     <Col className={"contact"} sm={12}>
                         <div className={"contact-content"}>
                             <LocalPhoneIcon fontSize="large"/>
-                            <div >
+                            <div>
                                 <h5>
                                     Hỗ Trợ Mua Hàng
                                 </h5>

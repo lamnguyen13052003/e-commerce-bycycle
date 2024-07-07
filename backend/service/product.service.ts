@@ -1,6 +1,7 @@
 import {connection} from "../database.connect";
 import {ProductType} from "../types/product.type";
-import {Sort} from "mongodb";
+import {ObjectId, Sort} from "mongodb";
+import {productNotFound} from "../errors/error.enum";
 
 const collection = 'xe_dap';
 const productRepository = connection.collection(collection);
@@ -25,7 +26,7 @@ async function getProductsByCategory(
 
 
     const query = getQuery(category, brands, wheelSizes, materials, targetUsings, price, newProduct, bestSale)
-    const sortQuery: Sort = ((sort===undefined? 'asc': sort) == 'asc'? {"discount": 1} :  {"discount": -1})
+    const sortQuery: Sort = ((sort === undefined ? 'asc' : sort) == 'asc' ? {"discount": 1} : {"discount": -1})
 
     const total = await productRepository.countDocuments(query)
     const numOfDoc = 8
@@ -39,6 +40,7 @@ async function getProductsByCategory(
         products: products
     }
 }
+
 function getQuery(
     category: number,
     brands?: string[],
@@ -48,10 +50,9 @@ function getQuery(
     price?: string,
     newProduct?: boolean,
     bestSale?: boolean,
-): {}{
-
+): {} {
     let query: {} = {category: category}
-    let [minPrice, maxPrice] = (price=== undefined? price = '0-0' : price as string).split('-').map(Number)
+    let [minPrice, maxPrice] = (price === undefined ? price = '0-0' : price as string).split('-').map(Number)
 
     if (brands !== undefined) query = {...query, 'base_description.brand': {$in: brands}}
     if (wheelSizes !== undefined) query = {...query, 'specifications.wheelSize': {$in: wheelSizes}}
@@ -63,6 +64,7 @@ function getQuery(
 
     return query
 }
+
 async function getProductsBestSale(bestSale: boolean) {
     if (bestSale) {
         return productRepository
@@ -92,8 +94,15 @@ async function getAttrForFilter(category: number) {
             prices: {min: values[4][0].price, max: values[5][0].price}
         }
     })
+}
 
+async function getProductById(id: string) {
+    const result: Promise<ProductType | null> = productRepository.findOne<ProductType>({_id: ObjectId.createFromHexString(id)});
+    return result.then((product): ProductType => {
+        if (!product) throw productNotFound;
+        return product;
+    })
 }
 
 
-export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter};
+export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter, getProductById};

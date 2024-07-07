@@ -6,7 +6,7 @@ import {useForm} from "react-hook-form";
 import {CheckoutType, PayMethodEnum} from "../types/checkout.type";
 import axios, {AxiosResponse} from "axios";
 import {ResponseApiEsgoo} from "../types/responeApiEsgoo.type";
-import {LocaltionEsgoo} from "../types/LocaltionEsgoo";
+import {LocaltionEsgooType} from "../types/localtionEsgoo.type";
 import {CartItemType} from "../types/cartItem.type";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../configs/store";
@@ -19,9 +19,9 @@ export default function Checkout() {
     const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
     const nav = useNavigate();
     const {register, handleSubmit, formState: {errors}} = useForm<CheckoutType>();
-    const [provinces, setProvinces] = React.useState<LocaltionEsgoo[]>([])
-    const [districts, setDistricts] = React.useState<LocaltionEsgoo[]>([])
-    const [wards, setWards] = React.useState<LocaltionEsgoo[]>([])
+    const [provinces, setProvinces] = React.useState<LocaltionEsgooType[]>([])
+    const [districts, setDistricts] = React.useState<LocaltionEsgooType[]>([])
+    const [wards, setWards] = React.useState<LocaltionEsgooType[]>([])
     const [fullAddress, setFullAddress] = React.useState<string>()
     const [payMethodSelect, setPayMethodSelect] = React.useState<PayMethodEnum>(PayMethodEnum.CASH)
     const dispatch = useDispatch();
@@ -38,8 +38,8 @@ export default function Checkout() {
     if (!cartItems.length) nav("/");
 
     useEffect(() => {
-        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgoo[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
-            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgoo[]>>) => {
+        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
+            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
                 setProvinces(response.data.data)
             }).catch((error) => {
             console.log(error)
@@ -48,8 +48,8 @@ export default function Checkout() {
 
     const selectProvinceHandle = (id: number) => {
         setWards([])
-        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgoo[]>>, any>(`https://esgoo.net/api-tinhthanh/2/${id}.htm`)
-            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgoo[]>>) => {
+        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>(`https://esgoo.net/api-tinhthanh/2/${id}.htm`)
+            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
                 setDistricts(response.data.data)
             }).catch((error) => {
             console.log(error)
@@ -64,8 +64,8 @@ export default function Checkout() {
     }
 
     const selectDistrictHandle = (id: number) => {
-        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgoo[]>>, any>(`https://esgoo.net/api-tinhthanh/3/${id}.htm`)
-            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgoo[]>>) => {
+        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>(`https://esgoo.net/api-tinhthanh/3/${id}.htm`)
+            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
                 setWards(response.data.data)
             }).catch((error) => {
             console.log(error)

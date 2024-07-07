@@ -9,14 +9,11 @@ import QuantityCell from "./QuantityCell";
 import {CartItemType} from "../../types/cartItem.type";
 import {useDispatch} from "react-redux";
 import {removeCartItem} from "../../slice/cart.slice";
+import {formatCurrency} from "../../utils/Formatter";
 
 function CartItem(props: CartItemType) {
     const {id, name, quantity, price, url, type} = props;
     const dispatch = useDispatch();
-
-    const formatCurrency = (amount: number): string => {
-        return Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(amount);
-    };
 
     return (
         <TableRow>
@@ -26,7 +23,8 @@ function CartItem(props: CartItemType) {
             <TableCell>{name}</TableCell>
             <TableCell align="left">{formatCurrency(price)}</TableCell>
             <TableCell>
-                <QuantityCell id={id} hasDispatch={true} quantity={quantity}/>
+                <QuantityCell id={id} type={props.type} hasDispatch={true} onChange={(number) => {
+                }} quantity={quantity}/>
             </TableCell>
             <TableCell align="center">{formatCurrency(quantity * price)}</TableCell>
             <TableCell>

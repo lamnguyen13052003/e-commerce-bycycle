@@ -27,7 +27,7 @@ xe dap touring: 4
 xe dap nu: 5
 xe dap gap : 6
  */
-function getRootState(count: number) {
+export function getRootState(count: number) {
     const {category} = useParams()
     const category_id: number = TitleCategorySlugToNum(category)
     let data: ProductHasTotalType

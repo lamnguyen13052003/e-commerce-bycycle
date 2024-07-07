@@ -23,15 +23,14 @@ export default function Cart() {
                 <CartTable>
                     <CartItemTable/>
                     <ContinueShopping>
-
-                            <Button className={`${styles.update_cart}`}
-                                    sx={{padding: " 5px 16px", border: "2px solid #439eef", fontWeight: "700"}}
-                                    onClick={() => {
-                                        history.back();
-                                    }}>
-                                <WestIcon fontSize="small"/>
-                                <Typography> TIẾP TỤC XEM SẢN PHẨM</Typography>
-                            </Button>
+                        <Button className={`${styles.update_cart}`}
+                                sx={{padding: " 5px 16px", border: "2px solid #439eef", fontWeight: "700"}}
+                                onClick={() => {
+                                    history.back();
+                                }}>
+                            <WestIcon fontSize="small"/>
+                            <Typography>TIẾP TỤC XEM SẢN PHẨM</Typography>
+                        </Button>
                     </ContinueShopping>
                 </CartTable>
                 <CheckOut>

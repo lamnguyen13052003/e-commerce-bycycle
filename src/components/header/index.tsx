@@ -1,14 +1,13 @@
 import React from 'react';
-import {Search, LocalPhone} from "@mui/icons-material";
-import {Avatar, Badge, Box, Divider, Button, Stack} from "@mui/material";
+import {Search} from "@mui/icons-material";
+import {Avatar, Box, Divider, Stack} from "@mui/material";
 import styles from './scss/Header.module.css';
 import {Link} from "react-router-dom";
 import logo from "../../assets/images/logo.jpg";
 import Menu from "../menu";
 import ButtonAuth from "./ButtonAuth";
 import ButtonCart from "./ButtonCart";
-import {Row, Col, Container, Form, InputGroup} from "react-bootstrap";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import {Col, Container, Form, InputGroup, Row} from "react-bootstrap";
 import ContactButton from "./ContactButton";
 
 

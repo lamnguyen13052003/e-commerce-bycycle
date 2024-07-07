@@ -8,7 +8,6 @@ import LabelNew from "./LabelNew";
 import {ProductType} from "../../types/product.type";
 import {useDispatch} from "react-redux";
 import {addCartItem} from "../../slice/cart.slice";
-import {CartItemType} from "../../types/cartItem.type";
 import {Link} from "react-router-dom";
 import {formatCurrency} from "../../utils/Formatter";
 
@@ -36,7 +35,7 @@ export default function Product(props: ProductType) {
     }
 
     return (
-        <Link to={""} className={"text-decoration-none"} onClick={onClickSeeDetailHandle}>
+        <Link to={`/product/${props.name.replaceAll(" ", "-")}--${props._id.toString()}`} className={"text-decoration-none"} onClick={onClickSeeDetailHandle}>
             <Box className={'m-2 shadow-lg  rounded-4 overflow-hidden bg-white'} sx={{width: '305px', height: 'auto'}}>
                 <Box className={'position-relative'} sx={{height: '218px'}}>
                     <Stack direction={'column'} className={'position-absolute'} sx={{
@@ -77,7 +76,14 @@ export default function Product(props: ProductType) {
                         <Button className={'text-uppercase mb-3'} variant={"contained"} color={"info"}
                                 startIcon={<ShoppingCartIcon/>}
                                 onClick={() => {
-                                    dispatch(addCartItem(cartItem))
+                                    dispatch(addCartItem({
+                                        id: props._id,
+                                        price: props.price,
+                                        quantity: 1,
+                                        name: props.name,
+                                        url: props.model[0].pathImageColor,
+                                        type: props.model[0].color
+                                    }))
                                 }}
                                 style={{paddingInline: '15px', paddingBlock: '5px', textWrap: 'nowrap'}}>
                             Thêm vào giỏ hàng
@@ -87,13 +93,4 @@ export default function Product(props: ProductType) {
             </Box>
         </Link>
     )
-}
-
-const cartItem: CartItemType = {
-    id: "507f1f77bcf86cd799439011",
-    name: "Áo thun",
-    price: 100000,
-    quantity: 1,
-    url: "https://via.placeholder.com/150",
-    type: "M"
 }

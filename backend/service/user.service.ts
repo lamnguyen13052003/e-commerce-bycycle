@@ -62,9 +62,7 @@ async function register(registerRequest: RegisterRequest): Promise<UserType> {
             return {
                 id: response.insertedId,
             } as UserType;
-        }).catch(() => {
-            throw {}
-        });
+        })
 }
 
 async function verify(verifyRequest: VerifyRequest): Promise<boolean> {
@@ -86,7 +84,7 @@ async function verifySuccess(id?: ObjectId): Promise<boolean> {
             }).then((response): boolean => {
             return true;
         })
-        .catch((error) => {
+        .catch(() => {
             throw verifyFail;
         });
 }
@@ -109,7 +107,7 @@ async function changePassword(changePasswordRequest: ChangePasswordRequest): Pro
         }).then((response): boolean => {
             return true;
         })
-        .catch((error) => {
+        .catch(() => {
             throw changePasswordFail;
         });
 }

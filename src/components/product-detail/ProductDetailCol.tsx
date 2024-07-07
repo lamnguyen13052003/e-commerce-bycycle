@@ -1,105 +1,39 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import * as pdc from './ProductDetailComponent';
+import {TechSpec} from './ProductDetailComponent';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ColorSelector from './ColorSelector';
 import QuantityCell from '../cart/QuantityCell';
-import {Button, TextField, Input} from '@mui/material';
-import { TechSpec } from './ProductDetailComponent';
-import { useDispatch } from 'react-redux';
-import { addCartItem } from '../../slice/cart.slice';
-import { CartItemType } from '../../types/cartItem.type';
-import ProductSlider from './RelatedProductSlider';
+import {Button, Input, TextField} from '@mui/material';
+import {formatCurrency} from "../../utils/Formatter";
+import {ProductType} from "../../types/product.type";
+import {useDispatch} from "react-redux";
+import {addCartItem} from "../../slice/cart.slice";
 
 
-
-const addToCartDetail: CartItemType = {
-    id: '2210',
-    name: 'Xe Đạp Địa Hình',
-    price: 30000000,
-    quantity: 1,
-    url: 'https://via.placeholder.com/150',
-    type: 'M',
-};
-
-
-
-const products = [
-    { id: 1, name: 'Xe 1', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_do.jpg', price: 8000000, salePrice: 7500000, sale: "17%" },
-    { id: 2, name: 'Xe 2', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_lam.jpg', price: 7500000, salePrice: 6000000, sale: "18%" },
-    { id: 3, name: 'Xe 3', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_lam_luc.jpg', price: 9000000, salePrice: 800000, sale: "10%"},
-    { id: 4, name: 'Xe 4', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_trang_do.jpg', price: 10000000, salePrice: 8700000, sale: "50%"},
-    { id: 5, name: 'Xe 5', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_do.jpg', price: 3600000, salePrice: 2100000, sale: "75%"},
-    { id: 6, name: 'Xe 6', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_trang_do.jpg', price: 9000000, salePrice: 8500000, sale: "20%"},
-    { id: 7, name: 'Xe 7', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_lam_luc.jpg', price: 9780000, salePrice: 8000000, sale: "8%" },
-    { id: 8, name: 'Xe 8', imageUrl: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_do.jpg', price: 8700000, salePrice: 7500000, sale: "14%" },
-];
-
-
-const ProductDetailCol = () => {
-    const formatCurrency = (amount: number): string => {
-        return Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    };
-    const productDetailColItem = {
-        images: [
-            {
-                original: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_do.jpg',
-                thumbnail: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_do.jpg',
-            },
-            {
-                original: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_lam.jpg',
-                thumbnail: 'src/assets/images/product-detail/xe_dap_dia_hinh_den_lam.jpg',
-            },
-            {
-                original: 'src/assets/images/product-detail/xe_dap_dia_hinh_lam_luc.jpg',
-                thumbnail: 'src/assets/images/product-detail/xe_dap_dia_hinh_lam_luc.jpg',
-            },
-            {
-                original: 'src/assets/images/product-detail/xe_dap_dia_hinh_trang_do.jpg',
-                thumbnail: 'src/assets/images/product-detail/xe_dap_dia_hinh_trang_do.jpg',
-            },
-            {
-                original: 'src/assets/images/product-detail/xe_dap_dia_hinh_trang_lam.jpg',
-                thumbnail: 'src/assets/images/product-detail/xe_dap_dia_hinh_trang_lam.jpg',
-            },
-        ],
-        id: 1,
-        title: 'Xe Đạp Địa Hình MTB Vicky Crazy VC800 26 Inch – Khung Thép | Phanh Đĩa Giá Rẻ | Khuyến mãi Hot',
-        brand: 'Vicky',
-        category: 'Xe Đạp Địa Hình',
-        sku: 'Vc800',
-        price: 2530000,
-        previousPrice: 3000000,
-        description:
-            'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem exercitationem voluptate sint eius ea assumenda provident eos repellendus qui neque! Velit ratione illo maiores voluptates commodi eaque illum, laudantium non!',
-        idColor: ['VC800-DD', 'VC800-DX', 'VC800-TD', 'VC800-TX', 'VC800-XV'],
-        color: [
-            { color1: '#000000', color2: '#000000', name: 'Đen' },
-            { color1: '#000000', color2: '#0000FF', name: 'Đen Xanh' },
-            { color1: '#FFFFFF', color2: '#FF0000', name: 'Trắng Đỏ' },
-            { color1: '#FFFFFF', color2: '#0000FF', name: 'Trắng Xanh' },
-            { color1: '#0000FF', color2: '#FFFF00', name: 'Xanh Vàng' },
-        ],
-        videoTitle: 'Video Review Xe Đạp Địa Hình MTB Vicky Crazy VC800 26 Inch',
-        techSpec: [{}],
-        contentProduct: '', /* import in html */
-    };
-
-    const [selectedColor, setSelectedColor] = useState<string>(`${productDetailColItem.color[0].color1},${productDetailColItem.color[0].color2}`);
+const ProductDetailCol = (product: ProductType) => {
     const dispatch = useDispatch();
+    const [selectedColor, setSelectedColor] = useState<string>(`${product.model[0].color},${product.model[0].color}`);
+    const [quantity, setQuantity] = useState<number>(1);
 
     const handleSelectColor = (color1: string, color2: string) => {
         setSelectedColor(`${color1},${color2}`);
     };
 
 
+    const getType = () => {
+        const colors = selectedColor.split(",");
+        return colors[0] === colors[1] ? colors[0] : colors.join("/");
+    }
+
     return (
         <Container>
             <Row>
-                <Col sm={12} style={{ borderBottom: '2px solid #efefef' }}>
+                <Col sm={12} style={{borderBottom: '2px solid #efefef'}}>
                     <div>
                         <pdc.ShortDes>
                             <Row>
@@ -109,47 +43,98 @@ const ProductDetailCol = () => {
                                             showBullets={false}
                                             showFullscreenButton={false}
                                             showPlayButton={false}
-                                            items={productDetailColItem.images}
+                                            items={product.model.map((model) => ({
+                                                original: model.pathImageColor,
+                                                thumbnail: model.pathImageColor,
+                                            }))}
                                         />
                                     </div>
                                 </Col>
-                                <Col className="short-des" sm={6} style={{ background: '#cfcfcf2b', borderRadius: '5px', padding: '10px 15px 15px 30px' }}>
-                                    <div style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
-                                        <h4 style={{ fontWeight: 'bold' }}>{productDetailColItem.title}</h4>
-                                        <div style={{ background: '#4d90fe21', borderRadius: '5px', padding: '10px 14px 1px 10px' }}>
+                                <Col className="short-des" sm={6} style={{
+                                    background: '#cfcfcf2b',
+                                    borderRadius: '5px',
+                                    padding: '10px 15px 15px 30px'
+                                }}>
+                                    <div style={{display: 'flex', gap: '20px', flexDirection: 'column'}}>
+                                        <h4 style={{fontWeight: 'bold'}}>{product.name}</h4>
+                                        <div style={{
+                                            background: '#4d90fe21',
+                                            borderRadius: '5px',
+                                            padding: '10px 14px 1px 10px'
+                                        }}>
                                             <ul>
                                                 <li>Xe Nhập Khẩu Chính Hãng</li>
-                                                <li>Bảo Hành 12 Tháng</li>
+                                                <li>Bảo Hành {product.specifications.warranty}</li>
                                             </ul>
                                         </div>
-                                        <p className="price" style={{ fontWeight: 'bold', fontSize: '24px', display: 'flex', gap: '20px' }}>
-                                            <span style={{ textDecoration: 'line-through' }}>{formatCurrency(productDetailColItem.previousPrice)}</span>
-                                            <span style={{ color: 'red' }}>{formatCurrency(productDetailColItem.price)}</span>
+                                        <p className="price"
+                                           style={{fontWeight: 'bold', fontSize: '24px', display: 'flex', gap: '20px'}}>
+                                            {product.discount ? (
+                                                <>
+                                                    <span style={{textDecoration: 'line-through'}}>
+                                                        {formatCurrency(product.price)}
+                                                     </span>
+                                                    <span style={{color: 'red'}}>
+                                                        {formatCurrency((100 - product.discount) * product.price / 100)}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <span style={{color: 'red'}}>
+                                                    {formatCurrency(product.price)}
+                                                 </span>
+                                            )}
+
                                         </p>
-                                        <img src="/src/assets/images/product-detail/ship.jpg" alt="Shipping" />
+                                        <img src="/src/assets/images/product-detail/ship.jpg" alt="Shipping"/>
                                         <div className="product-detail-offer">
                                             <h3>ƯU ĐÃI ĐẶC BIỆT</h3>
                                             <ul>
                                                 <li>Khuyến mãi xe đạp trong tháng (<a href="#">Xem chi tiết</a>)</li>
-                                                <li>Quà tặng đến <span style={{ color: 'red' }}>450.000 đồng</span></li>
-                                                <li>Phiếu mua hàng trị giá đến <span style={{ color: 'red' }}>2 triệu đồng</span></li>
-                                                <li>Đạp xe về nhà tăng thêm <span style={{ color: 'red' }}>50.000 đồng</span></li>
+                                                <li>Quà tặng đến <span style={{color: 'red'}}>450.000 đồng</span></li>
+                                                <li>Phiếu mua hàng trị giá đến <span
+                                                    style={{color: 'red'}}>2 triệu đồng</span></li>
+                                                <li>Đạp xe về nhà tăng thêm <span
+                                                    style={{color: 'red'}}>50.000 đồng</span></li>
                                             </ul>
                                         </div>
-                                        <span>Mã: {productDetailColItem.sku}</span>
+                                        <span>Mã: {product.base_description.product_id}</span>
                                         <div>
                                             <h4>Chọn màu sắc:</h4>
                                             <ColorSelector
-                                                colors={productDetailColItem.color}
+                                                colors={product.model.map(model => {
+                                                    return {
+                                                        color1: model.color,
+                                                        color2: model.color,
+                                                        name: model.color
+                                                    };
+                                                })}
                                                 selectedColor={selectedColor}
                                                 onSelectColor={handleSelectColor}
                                             />
                                         </div>
-                                        <hr />
+                                        <hr/>
                                         <div className="add_to_cart">
                                             <div>
-                                                <QuantityCell id={productDetailColItem.id.toString()} hasDispatch={false} quantity={1} />
-                                                <Button className="text-uppercase mb-3 add-cart" variant="contained" color="info" onClick={() => dispatch(addCartItem(addToCartDetail))}>
+                                                <QuantityCell id={product._id}
+                                                              hasDispatch={false}
+                                                              type={selectedColor}
+                                                              quantity={quantity}
+                                                              onChange={(quantity) => {
+                                                                  setQuantity(quantity);
+                                                              }}
+                                                />
+                                                <Button className="text-uppercase mb-3 add-cart" variant="contained"
+                                                        color="info" onClick={() => {
+                                                    dispatch(addCartItem({
+                                                        id: product._id,
+                                                        name: product.name,
+                                                        url: product.model[0].pathImageColor,
+                                                        price: product.discount ? (100 - product.discount) * product.price / 100 : product.price,
+                                                        quantity: quantity,
+                                                        type: selectedColor,
+                                                    }))
+                                                    setQuantity(1)
+                                                }}>
                                                     Thêm vào giỏ hàng
                                                 </Button>
                                             </div>
@@ -159,11 +144,13 @@ const ProductDetailCol = () => {
                                         </div>
                                         <div>
                                             <ul>
-                                                <li>Gọi đặt mua: 0999 999 999 | Chat với chúng em!</li>
-                                                <li>Hãy nhập số điện thoại của anh chị vào đây ạ, chúng em sẽ gọi lại tư vấn ngay cho anh chị về sản phẩm này ạ!</li>
+                                                <li>Gọi đặt mua: 0855354919 | Chat với chúng em!</li>
+                                                <li>Hãy nhập số điện thoại của anh chị vào đây ạ, chúng em sẽ gọi lại tư
+                                                    vấn ngay cho anh chị về sản phẩm này ạ!
+                                                </li>
                                             </ul>
                                             <div className="form-product">
-                                                <Input placeholder="Số điện thoại" fullWidth={true} />
+                                                <Input placeholder="Số điện thoại" fullWidth={true}/>
                                                 <Button variant="contained" href="#">
                                                     Gửi
                                                 </Button>
@@ -175,14 +162,14 @@ const ProductDetailCol = () => {
                         </pdc.ShortDes>
                     </div>
                 </Col>
-                <Col sm={12} style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
+                <Col sm={12} style={{display: 'flex', flexDirection: 'column', gap: '50px'}}>
                     <pdc.Toc>
                         <div>
                             <p>Nội Dung Mục Lục</p>
                             <ul>
                                 <li><a href="#basic-des">Mô Tả Cơ Bản</a></li>
                                 <li><a href="#tech-spec">Bảng Thông Số Kỹ Thuật</a></li>
-                                <li><a href="#product-content">Đặc Điểm Nổi Bật {productDetailColItem.title}</a></li>
+                                <li><a href="#product-content">Đặc Điểm Nổi Bật {product.name}</a></li>
                             </ul>
                         </div>
                     </pdc.Toc>
@@ -190,10 +177,11 @@ const ProductDetailCol = () => {
                         <div id="basic-des">
                             <h2>Mô Tả Cơ Bản</h2>
                             <ul>
-                                <li><span>Mã sản phẩm:</span> {productDetailColItem.sku}</li>
-                                <li><span>Thương hiệu:</span> {productDetailColItem.brand}</li>
-                                <li><span>Màu sắc:</span> {productDetailColItem.color.map(c => c.name).join(', ')}</li>
-                                <li><span>Phân loại:</span> {productDetailColItem.category}</li>
+                                <li><span>Mã sản phẩm:</span> {product.base_description.product_id}</li>
+                                <li><span>Thương hiệu:</span> {product.base_description.brand}</li>
+                                <li><span>Màu sắc:</span> {product.model.map(model => model.color).join(', ')}</li>
+                                <li><span>Kich cở:</span> {product.base_description.size}</li>
+                                <li><span>Chất liệu:</span> {product.base_description.material}</li>
                             </ul>
                         </div>
                         <div id="tech-spec">
@@ -202,76 +190,56 @@ const ProductDetailCol = () => {
                                 <table>
                                     <tbody>
                                     <tr>
-                                        <td>Khung</td>
-                                        <td>Hợp kim thép</td>
+                                        <td>Tên</td>
+                                        <td>Giá trị</td>
                                     </tr>
                                     <tr>
-                                        <td>Càng/phuộc xe</td>
-                                        <td>Hợp kim thép, giảm xóc lò xo</td>
+                                        <td>Kích thước khung</td>
+                                        <td>{product.specifications.frameSize}</td>
                                     </tr>
                                     <tr>
-                                        <td>Ghi đông</td>
-                                        <td>Hợp kim thép</td>
+                                        <td>Chất liệu khung</td>
+                                        <td>{product.specifications.frameMaterial}</td>
                                     </tr>
                                     <tr>
-                                        <td>Pô tăng/cổ xe</td>
-                                        <td>Hợp kim nhôm</td>
+                                        <td>Kích thước bánh xe</td>
+                                        <td>{product.specifications.wheelSize}</td>
                                     </tr>
                                     <tr>
-                                        <td>Hệ thống Phanh (Thắng)</td>
-                                        <td>Thắng đĩa cơ</td>
+                                        <td>Hệ thống truyền lực</td>
+                                        <td>{product.specifications.drivetrain}</td>
                                     </tr>
                                     <tr>
-                                        <td>Tay đề</td>
-                                        <td>N/a</td>
+                                        <td>Hệ thống treo</td>
+                                        <td>{product.specifications.ForkAndSuspension}</td>
                                     </tr>
                                     <tr>
-                                        <td>Tăng tốc trước (Gạt đĩa)</td>
-                                        <td>N/a</td>
+                                        <td>Hệ thống phanh (thắng)</td>
+                                        <td>{product.specifications.brakes}</td>
                                     </tr>
                                     <tr>
-                                        <td>Tăng tốc sau (Gạt líp)</td>
-                                        <td>N/a</td>
+                                        <td>Yên xe</td>
+                                        <td>{product.specifications.saddle}</td>
                                     </tr>
                                     <tr>
-                                        <td>Đùi đĩa</td>
-                                        <td>Hợp kim thép</td>
+                                        <td>Trọng lượng</td>
+                                        <td>{product.specifications.weight}</td>
                                     </tr>
                                     <tr>
-                                        <td>Dĩa</td>
-                                        <td>1 tầng</td>
+                                        <td>Tay lái</td>
+                                        <td>{product.specifications.handlebarsAndStem}</td>
                                     </tr>
                                     <tr>
-                                        <td>Líp sau</td>
-                                        <td>NSXKCB</td>
+                                        <td>Phụ kiện kèm theo</td>
+                                        <td>{product.specifications.includedAccessories}</td>
                                     </tr>
                                     <tr>
-                                        <td>Xích</td>
-                                        <td>DTO</td>
+                                        <td>Bảo hành</td>
+                                        <td>{product.specifications.warranty}</td>
                                     </tr>
                                     <tr>
-                                        <td>Đùm xe</td>
-                                        <td>Hợp kim thép, Bi côn</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Vành xe</td>
-                                        <td>Hợp kim nhôm</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Lốp</td>
-                                        <td>WANDA 26X2.125</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Yên</td>
-                                        <td>VICKY</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cọc/cốt yên</td>
-                                        <td>Hợp kim thép Vicky</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Trọng lượng thùng</td>
-                                        <td>136x19x77</td>
+                                        <td>Mục đích sử dụng</td>
+                                        <td>{product.specifications.targetUsing}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -283,8 +251,14 @@ const ProductDetailCol = () => {
                         <div id="form">
                             <h3>Đánh giá</h3>
                             <div>
-                                <div style={{ width: '100%', border: '2px solid #2372dc', borderRadius: '10px', padding: '30px' }}>
-                                    <h3>Hãy là người đầu tiên đánh giá “Xe Đạp Địa Hình MTB Vicky Crazy VC800 26 Inch – Khung Thép | Phanh Đĩa Giá Rẻ | Khuyến mãi Hot” </h3>
+                                <div style={{
+                                    width: '100%',
+                                    border: '2px solid #2372dc',
+                                    borderRadius: '10px',
+                                    padding: '30px'
+                                }}>
+                                    <h3>Hãy là người đầu tiên đánh giá “Xe Đạp Địa Hình MTB Vicky Crazy VC800 26 Inch –
+                                        Khung Thép | Phanh Đĩa Giá Rẻ | Khuyến mãi Hot” </h3>
                                     <TextField
                                         id="filled-multiline-static"
                                         label="Đánh giá của bạn"
@@ -293,21 +267,18 @@ const ProductDetailCol = () => {
                                         variant="filled"
                                         fullWidth
                                     />
-                                    <div style={{ display: 'flex', gap: '30px', width: '100%', marginTop: '50px' }}>
-                                        <Input placeholder="Tên" fullWidth={true} />
-                                        <Input placeholder="Email" required={true} type="email" fullWidth={true} />
+                                    <div style={{display: 'flex', gap: '30px', width: '100%', marginTop: '50px'}}>
+                                        <Input placeholder="Tên" fullWidth={true}/>
+                                        <Input placeholder="Email" required={true} type="email" fullWidth={true}/>
                                     </div>
-                                    <Button style={{ marginTop: '20px', width: '150px', height: '45px' }} variant="contained" size="medium">
+                                    <Button style={{marginTop: '20px', width: '150px', height: '45px'}}
+                                            variant="contained" size="medium">
                                         Gửi
                                     </Button>
                                 </div>
                             </div>
                         </div>
                     </pdc.Comment>
-                </Col>
-                <Col sm={12} style={{margin : '40px 0' }}>
-                    <h2>Sản Phẩm Liên Quan</h2>
-                    <ProductSlider products={products} />
                 </Col>
             </Row>
         </Container>

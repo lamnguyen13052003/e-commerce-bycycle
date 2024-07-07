@@ -21,8 +21,8 @@ const cartSlice = createSlice({
             const cartItems = state.cartItems;
             let contain = false;
             cartItems.forEach((item: CartItemType) => {
-                if (item.id === cartItem.id) {
-                    item.quantity++;
+                if (item.id === cartItem.id && cartItem.type === item.type) {
+                    item.quantity += cartItem.quantity;
                     contain = true
                     return;
                 }
@@ -35,22 +35,24 @@ const cartSlice = createSlice({
             toast.success("Thêm sản phẩm thành công!")
             saveLocalStorage(state)
         },
-        increaseQuantityCartItem: function (state, payload: PayloadAction<string>) {
+        increaseQuantityCartItem: function (state, payload: PayloadAction<{ _id: ObjectId, type: string }>) {
             const cartItems = state.cartItems;
-            const id = payload.payload;
+            const id = payload.payload._id;
+            const type = payload.payload.type;
             cartItems.forEach((item: CartItemType) => {
-                if (item.id === id) {
+                if (item.id === id && type === item.type) {
                     item.quantity++;
                     toast.success("Thêm sản phẩm thành công!")
                     saveLocalStorage(state)
                 }
             });
         },
-        decreaseCartItem: function (state, payload: PayloadAction<string>) {
+        decreaseCartItem: function (state, payload: PayloadAction<{ _id: ObjectId, type: string }>) {
             const cartItems = state.cartItems;
-            const id = payload.payload;
+            const id = payload.payload._id;
+            const type = payload.payload.type;
             cartItems.forEach((item: CartItemType) => {
-                if (item.id === id) {
+                if (item.id === id && type === item.type) {
                     item.quantity--;
                     toast.success("Giảm sản phẩm thành công!")
                     saveLocalStorage(state)
@@ -59,7 +61,7 @@ const cartSlice = createSlice({
 
 
         },
-        removeCartItem: function (state, payload: PayloadAction<string>) {
+        removeCartItem: function (state, payload: PayloadAction<ObjectId>) {
             removeItem(state.cartItems, payload.payload);
             toast.success("Xóa sản phẩm thành công!")
             saveLocalStorage(state)
@@ -67,7 +69,7 @@ const cartSlice = createSlice({
     }
 });
 
-const removeItem = (cartItems: CartItemType[], id: string) => {
+const removeItem = (cartItems: CartItemType[], id: ObjectId) => {
     for (let i = 0; i < cartItems.length; i++) {
         if (cartItems[i].id === id) {
             cartItems.splice(i, 1);
