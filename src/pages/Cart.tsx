@@ -1,9 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Box, Button, Typography} from "@mui/material";
 import {Container} from "react-bootstrap";
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import WestIcon from '@mui/icons-material/West';
 import styled from 'styled-components';
 import styles from "../components/cart/scss/Cart.module.css";
@@ -12,34 +9,7 @@ import {CartItemTable} from "../components/cart/CartItemTable";
 import {CartItemType} from "../types/cartItem.type";
 import {useSelector} from "react-redux";
 import {RootState} from "../configs/store";
-
-
-function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-    event.preventDefault();
-}
-
-export function CartBreadcrumbs() {
-    const breadcrumbs = [
-        <Typography className="active_breadcrumbs" key="1" color="black">
-            GIỎ HÀNG
-        </Typography>,
-        <Link underline="none" key="2" color="#c4c4c4" href="./Checkout.tsx" onClick={handleClick}>
-            THÔNG TIN THANH TOÁN
-        </Link>,
-        <Link underline="none" key="3" color="#c4c4c4" href="./Cart.tsx" onClick={handleClick}>
-            HOÀN THÀNH ĐƠN HÀNG
-        </Link>,
-    ];
-
-    return (
-        <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small"/>}
-            aria-label="breadcrumb">
-            {breadcrumbs}
-        </Breadcrumbs>
-    );
-}
-
+import {CartBreadcrumbs, CartBreadcrumbStatus} from "../components/cart/CartBreadcrumbs";
 
 export default function Cart() {
     const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
@@ -47,9 +17,7 @@ export default function Cart() {
     return (
         <Container>
             <Box>
-                <BreadcrumbsWrapper>
-                    <CartBreadcrumbs/>
-                </BreadcrumbsWrapper>
+                <CartBreadcrumbs status={CartBreadcrumbStatus.CART}/>
             </Box>
             <CartWrapper>
                 <CartTable>
@@ -61,7 +29,7 @@ export default function Cart() {
                                     history.back();
                                 }}>
                             <WestIcon fontSize="small"/>
-                            <Typography> TIẾP TỤC XEM SẢN PHẨM</Typography>
+                            <Typography>TIẾP TỤC XEM SẢN PHẨM</Typography>
                         </Button>
                     </ContinueShopping>
                 </CartTable>
@@ -97,15 +65,4 @@ const CartWrapper = styled.div`
     width: 100%;
     max-width: 100%;
     gap: 10px;
-`;
-
-const BreadcrumbsWrapper = styled.div`
-    ol {
-        justify-content: center;
-        margin-bottom: 20px;
-
-        .active_breadcrumbs p & {
-            color: black;
-        }
-    }
 `;

@@ -14,6 +14,9 @@ import ForgetPassword from "./components/forget-password-form";
 import ChangePassword from "./components/reset-password-form";
 import Verify from "./components/verify-form";
 import {ProductDetail} from "./components/product-detail";
+import Contact from "./pages/Contact";
+import Checkout from "./pages/Checkout";
+import Pay from "./pages/Pay";
 
 
 function App() {
@@ -31,8 +34,10 @@ function App() {
                 </Route>
                 <Route path={"/:category/page/:page"} element={<Products />}/>
                 <Route path="/:category/page/:page/filter" element={<Products />} />
-                <Route path={"/product-detail"} element={<ProductDetail />} />
-
+                <Route path={"/product/:name"} element={<ProductDetail/>}/>
+                <Route path={"/contact"} element={<Contact/>}/>
+                <Route path={"/checkout"} element={<Checkout/>}/>
+                <Route path={"/pay"} element={<Pay/>}/>
             </Route>
         </Routes>
     );

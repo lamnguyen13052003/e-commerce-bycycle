@@ -1,20 +1,29 @@
-import {Express} from "express";
+import {Express, Request} from "express";
 import {Builder} from "builder-pattern";
 import {ResponseApi} from "../types/response.type";
 import {
-    getAll as getAllProduct,
+    getAll,
     getAttrForFilter,
     getProductsBestSale,
-    getProductsByCategory, getProductsByFilter,
+    getProductsByCategory,
+    getProductsByFilter,
+    getProductById
 } from "../service/product.service";
 import {ProductHasTotalType} from "../types/productsHasTotal.type";
 import FilterAttributeType from "../types/filterAttribute.type";
 import {ProductType} from "../types/product.type";
+import QueryString from "qs";
+import {CustomError} from "../errors/custom.error.type";
+import {log} from "../server";
+
+
+const TAG = "Product Controller"
 
 export const runProductController = (app: Express) => {
     const qs = require('qs')
     app.get("/api/products/all", (req, res) => {
-        getAllProduct().then((response) => {
+        log(TAG, "get all", req.body)
+        getAll().then((response) => {
             res.send(Builder<ResponseApi<ProductType[]>>()
                 .code(202)
                 .message("Success")
@@ -28,6 +37,7 @@ export const runProductController = (app: Express) => {
     app.get("/api/products/:category/page=:page", (req, res) => {
         const category = parseInt(req.params.category as string);
         const seeMore = parseInt(req.params.page as string);
+        log(TAG, "get products by category", req.body)
         getProductsByCategory(category, seeMore).then((response) => {
             res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)
@@ -38,8 +48,10 @@ export const runProductController = (app: Express) => {
             console.error("Failed to get products by category", error);
         })
     });
+
     app.get("/api/products/best-sale/:bestSale", (req, res) => {
         const bestSale: boolean = req.params.bestSale as string == "true";
+        log(TAG, "get products best sale", req.body)
         getProductsBestSale(bestSale).then((response) => {
             res.send(Builder<ResponseApi<ProductType[]>>()
                 .code(202)
@@ -50,8 +62,10 @@ export const runProductController = (app: Express) => {
             console.error("don't load product best sale", error);
         })
     });
+
     app.get("/api/products/:category/filter-attribute", (req, res) => {
         const category = parseInt(req.params.category as string);
+        log(TAG, "get attr for filter", req.body)
         getAttrForFilter(category).then((response) => {
             res.send(Builder<ResponseApi<FilterAttributeType>>()
                 .code(202)
@@ -68,11 +82,12 @@ export const runProductController = (app: Express) => {
 
         const category: number = parseInt(req.params.category as string);
         const seeMore: number = parseInt(req.params.page as string);
-        const brands : string[] = query.brands as string[];
-        const wheelSizes : string[] = query.wheelSizes as string[];
-        const materials : string[] = query.materials as string[];
-        const targetUsings : string[] = query.targetUsings as string[];
+        const brands: string[] = query.brands as string[];
+        const wheelSizes: string[] = query.wheelSizes as string[];
+        const materials: string[] = query.materials as string[];
+        const targetUsings: string[] = query.targetUsings as string[];
         const prices: string = req.query.prices as string
+        log(TAG, "get products by category", req.body)
         const newProduct : boolean = query.newProduct as string == "true";
         const bestSale : boolean = query.bestSale as string == "true";
         const sort : string = query.sort as string;
@@ -86,6 +101,21 @@ export const runProductController = (app: Express) => {
             console.error("Failed to get products by mix filter", error);
         })
     })
+
+    app.get("/api/product/:id", (req: Request<{ id: string }, any, any, QueryString.ParsedQs, Record<string, any>>,
+                                 res) => {
+        log(TAG, "get product by id", req.body)
+        getProductById(req.params.id)
+            .then((response) => {
+            res.send(Builder<ResponseApi<ProductType>>()
+                .code(202)
+                .message("Success")
+                .data(response)
+                .build());
+        }).catch((error: CustomError) => {
+            res.status(error.code).send(error.message);
+        });
+    });
 }
 
 

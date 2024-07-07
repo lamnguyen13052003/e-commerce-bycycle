@@ -1,6 +1,7 @@
 import {connection} from "../database.connect";
 import {ProductType} from "../types/product.type";
-import {Sort} from "mongodb";
+import {ObjectId, Sort} from "mongodb";
+import {productNotFound} from "../errors/error.enum";
 
 const collection = 'xe_dap';
 const productRepository = connection.collection(collection);
@@ -48,6 +49,7 @@ async function getProductsByFilter(
         products: products
     }
 }
+
 function getQuery(
     category: number,
     brands?: string[],
@@ -60,7 +62,7 @@ function getQuery(
 ): {}{
 
     let query: {} = {category: category}
-    let [minPrice, maxPrice] = (price=== undefined? price = '0-0' : price as string).split('-').map(Number)
+    let [minPrice, maxPrice] = (price === undefined ? price = '0-0' : price as string).split('-').map(Number)
 
     if (brands !== undefined){
         const brandsArr = customQuery(brands)
@@ -90,6 +92,7 @@ function getQuery(
 
     return query
 }
+
 async function getProductsBestSale(bestSale: boolean) {
     if (bestSale) {
         return productRepository
@@ -119,7 +122,14 @@ async function getAttrForFilter(category: number) {
             prices: {min: values[4][0].price, max: values[5][0].price}
         }
     })
+}
 
+async function getProductById(id: string) {
+    const result: Promise<ProductType | null> = productRepository.findOne<ProductType>({_id: ObjectId.createFromHexString(id)});
+    return result.then((product): ProductType => {
+        if (!product) throw productNotFound;
+        return product;
+    })
 }
 
 function customQuery(arr: string[])  {
@@ -130,4 +140,4 @@ function customQuery(arr: string[])  {
     })
 }
 
-export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter, getProductsByFilter};
+export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter, getProductsByFilter, getProductById};

@@ -1,0 +1,279 @@
+import React, {useEffect} from 'react';
+import {Box, Button, Divider, Stack} from "@mui/material";
+import {CartBreadcrumbs, CartBreadcrumbStatus} from "../components/cart/CartBreadcrumbs";
+import {Button as ButtonBootstrap, Col, Container, Form, Row} from "react-bootstrap";
+import {useForm} from "react-hook-form";
+import {CheckoutType, PayMethodEnum} from "../types/checkout.type";
+import axios, {AxiosResponse} from "axios";
+import {ResponseApiEsgoo} from "../types/responeApiEsgoo.type";
+import {LocaltionEsgooType} from "../types/localtionEsgoo.type";
+import {CartItemType} from "../types/cartItem.type";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../configs/store";
+import {setPayStatus} from "../slice/payStatus.slice";
+import {PayStatusEnum} from "../states/payStatus.stats";
+import {IC_CASH, IC_QR} from "../assets/images/icon/web.icon";
+import {useNavigate} from "react-router-dom";
+
+export default function Checkout() {
+    const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
+    const nav = useNavigate();
+    const {register, handleSubmit, formState: {errors}} = useForm<CheckoutType>();
+    const [provinces, setProvinces] = React.useState<LocaltionEsgooType[]>([])
+    const [districts, setDistricts] = React.useState<LocaltionEsgooType[]>([])
+    const [wards, setWards] = React.useState<LocaltionEsgooType[]>([])
+    const [fullAddress, setFullAddress] = React.useState<string>()
+    const [payMethodSelect, setPayMethodSelect] = React.useState<PayMethodEnum>(PayMethodEnum.CASH)
+    const dispatch = useDispatch();
+
+    const onSubmit = (data: CheckoutType) => {
+        data.payMethod = payMethodSelect
+        dispatch(setPayStatus({
+            status: PayStatusEnum.SUCCESS,
+            infoPay: data
+        }))
+        nav("/pay")
+    };
+
+    if (!cartItems.length) nav("/");
+
+    useEffect(() => {
+        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
+            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
+                setProvinces(response.data.data)
+            }).catch((error) => {
+            console.log(error)
+        });
+    }, []);
+
+    const selectProvinceHandle = (id: number) => {
+        setWards([])
+        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>(`https://esgoo.net/api-tinhthanh/2/${id}.htm`)
+            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
+                setDistricts(response.data.data)
+            }).catch((error) => {
+            console.log(error)
+        });
+
+        provinces.forEach((item) => {
+            if (item.id == id) {
+                setFullAddress(item.full_name)
+                return;
+            }
+        });
+    }
+
+    const selectDistrictHandle = (id: number) => {
+        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>(`https://esgoo.net/api-tinhthanh/3/${id}.htm`)
+            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
+                setWards(response.data.data)
+            }).catch((error) => {
+            console.log(error)
+        });
+
+        districts.forEach((item) => {
+            if (item.id == id) {
+                setFullAddress(prevState => item.full_name + ", " + prevState)
+                return
+            }
+        });
+    }
+
+    const getBorderPayMethod = (method: PayMethodEnum) => {
+        return method === payMethodSelect ? 'border-2 border-success' : 'border-1 border-secondary'
+    }
+
+    return (
+        <Container className={"mb-3 px-5"}>
+            <Box>
+                <CartBreadcrumbs status={CartBreadcrumbStatus.CHECKOUT}/>
+            </Box>
+            <Box>
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                    <Row>
+                        <Col md={4}>
+                            <h3>Thông tin người dùng</h3>
+                            <Form.Group as={Col} md="12" className="position-relative mb-3" controlId={"fullName"}>
+                                <Form.Label>Họ và tên</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder={"Nguyễn Văn A"}
+                                    {...register("fullName", {
+                                        required: 'Họ và tên không được để trống'
+                                    })}
+                                    isInvalid={!!errors.fullName}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip as={"div"}>
+                                    {errors.fullName?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group as={Col} md="12" className="position-relative mb-3" controlId={"email"}>
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    placeholder={"abc@gmail.com"}
+                                    {...register("email", {
+                                        required: 'Email không được để trống',
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                            message: "email không hợp lệ!"
+                                        }
+                                    })}
+                                    isInvalid={!!errors.email}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errors.email?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group as={Col} md="12" className="position-relative mb-3" controlId={"phoneNumber"}>
+                                <Form.Label>Số điện thoại</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder={"+8485535*****"}
+                                    {...register("phoneNumber", {
+                                        required: 'Số điện thoại không được để trống',
+                                        pattern: {
+                                            value: /^0[0-9]{9}$/,
+                                            message: "Số điện thoại không hợp lệ!"
+                                        }
+                                    })}
+                                    isInvalid={!!errors.phoneNumber}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errors.phoneNumber?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group as={Col} md="12" className="position-relative mb-3" controlId={"note"}>
+                                <Form.Label>Ghi chú</Form.Label>
+                                <Form.Control
+                                    as={"textarea"}
+                                    placeholder={"Ghi chú..."}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col md={1} className={"d-flex justify-content-center"}>
+                            <Divider style={{
+                                width: "2px",
+                                backgroundColor: "black",
+                                height: "100%"
+                            }} orientation="vertical" flexItem/>
+                        </Col>
+                        <Col md={3}>
+                            <h3>Thông tin giao hàng</h3>
+                            <Form.Group as={"div"} className="position-relative mb-3" controlId={"province"}>
+                                <Form.Label>Chọn tỉnh thành/thành phố</Form.Label>
+                                <Form.Select
+                                    {...register("province", {
+                                        required: 'Tỉnh thành/thành phố không được để trống',
+                                    })}
+                                    isInvalid={!!errors.province}
+                                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                                        selectProvinceHandle(parseInt(event.target.value))
+                                    }}
+                                >
+                                    <option defaultValue={""} value={""}>Chọn tỉnh thành/thành phố</option>
+                                    {provinces.map((item, index) => (
+                                        <option key={index} value={item.id}>{item.full_name}</option>
+                                    ))}
+                                </Form.Select>
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errors.province?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group as={"div"} className="position-relative mb-3" controlId={"district"}>
+                                <Form.Label>Chọn quận/huyện</Form.Label>
+                                <Form.Select
+                                    {...register("district", {
+                                        required: 'Quận/huyện không được để trống',
+                                    })}
+                                    isInvalid={!!errors.district}
+                                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                                        selectDistrictHandle(parseInt(event.target.value))
+                                    }}
+                                >
+                                    <option defaultValue={""} value={""}>Chọn quận/huyện</option>
+                                    {districts.map((item, index) => (
+                                        <option key={index} value={item.id}>{item.full_name}</option>
+                                    ))}
+                                </Form.Select>
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errors.district?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group as={"div"} className="position-relative mb-3" controlId={"ward"}>
+                                <Form.Label>Chọn phường/xã</Form.Label>
+                                <Form.Select
+                                    {...register("ward", {
+                                        required: 'Phường/xã không được để trống',
+                                    })}
+                                    isInvalid={!!errors.ward}
+                                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                                        const id = parseInt(event.target.value)
+                                        wards.forEach((item) => {
+                                            if (item.id == id) {
+                                                setFullAddress(prevState => item.full_name + ", " + prevState)
+                                                return
+                                            }
+                                        });
+                                    }}
+                                >
+                                    <option defaultValue={""} value={""}>Chọn phường/xã</option>
+                                    {wards.map((item, index) => (
+                                        <option key={index} value={item.id}>{item.full_name}</option>
+                                    ))}
+                                </Form.Select>
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errors.ward?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group as={"div"} className="position-relative mb-3" controlId={"fullAddress"}>
+                                <Form.Label>Địa chỉ cụ thể</Form.Label>
+                                <Form.Control
+                                    type={"text"}
+                                    {...register("fullAddress", {
+                                        required: 'Địa chỉ cụ thể không được để trống',
+                                    })}
+                                    isInvalid={!!errors.ward}
+                                    value={fullAddress}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errors.fullAddress?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                        <Col md={1} className={"d-flex justify-content-center"}>
+                            <Divider style={{
+                                width: "2px",
+                                backgroundColor: "black",
+                                height: "100%"
+                            }} orientation="vertical" flexItem/>
+                        </Col>
+                        <Col md={3}>
+                            <h3>Thông tin thanh toán</h3>
+                            <Stack direction={"row"} className="mb-3" gap={1}>
+                                <Button className={`p-2 border ${getBorderPayMethod(PayMethodEnum.CASH)}`}
+                                        onClick={() => {
+                                            setPayMethodSelect(PayMethodEnum.CASH)
+                                        }}>
+                                    <img width={30} src={IC_CASH} alt={"cash.png"}/>
+                                </Button>
+
+                                <Button className={`p-2 border ${getBorderPayMethod(PayMethodEnum.QR)}`}
+                                        onClick={() => {
+                                            setPayMethodSelect(PayMethodEnum.QR)
+                                        }}>
+                                    <img width={30} src={IC_QR} alt={"cash.png"}/>
+                                </Button>
+                            </Stack>
+                        </Col>
+                    </Row>
+                    <Stack direction={"row"} justifyContent={"end"}>
+                        <ButtonBootstrap type="submit" className={"bg-primary rounded rounded-2 text-white py-2 px-5"}>
+                            Thanh toán
+                        </ButtonBootstrap>
+                    </Stack>
+                </Form>
+            </Box>
+        </Container>
+    )
+}

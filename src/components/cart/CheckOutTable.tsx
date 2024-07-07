@@ -1,21 +1,13 @@
 import TableContainer from "@mui/material/TableContainer";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
+import {Button, Input, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
 import SellIcon from "@mui/icons-material/Sell";
-import {Button, Input, Typography} from "@mui/material";
 import styles from "./scss/Cart.module.css";
 import React from "react";
 import {CartItemType} from "../../types/cartItem.type";
+import {Link} from "react-router-dom";
+import {formatCurrency} from "../../utils/Formatter";
 
 export function CheckOutTable({cartItems}: { cartItems: CartItemType[] }) {
-    const formatCurrency = (amount: number): string => {
-        return Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(amount);
-    };
-
     const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
     return (
@@ -58,18 +50,25 @@ export function CheckOutTable({cartItems}: { cartItems: CartItemType[] }) {
                     </TableHead>
                 </Table>
             </TableContainer>
-            <Button className={`${styles.checkout_button}`} sx={{
-                ':hover': {backgroundColor: "red", color: "white"},
-                width: "100%",
-                maxWidth: "100%",
-                padding: "5px 16px",
-                textAlign: "center",
-                backgroundColor: "red",
-                color: "white",
-                margin: "10px 0px"
+            <Link to={"/checkout"}  onClick={(event) => {
+                if (!cartItems.length) {
+                    alert("Giỏ hàng của bạn đang trống!")
+                    event.preventDefault()
+                }
             }}>
-                <Typography sx={{width: "100%"}}>TIẾN HÀNH THANH TOÁN</Typography>
-            </Button>
+                <Button className={`${styles.checkout_button}`} sx={{
+                    ':hover': {backgroundColor: "red", color: "white"},
+                    width: "100%",
+                    maxWidth: "100%",
+                    padding: "5px 16px",
+                    textAlign: "center",
+                    backgroundColor: "red",
+                    color: "white",
+                    margin: "10px 0px"
+                }}>
+                    <Typography sx={{width: "100%"}}>TIẾN HÀNH THANH TOÁN</Typography>
+                </Button>
+            </Link>
         </>
     );
 }

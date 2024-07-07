@@ -161,7 +161,6 @@ function SelectSmallFilter() {
 }
 
 function Products() {
-
     const {category, page} = useParams()
     const [count, setCount] = useState(parseInt(page as string))
     const [btnFilterClick, setBtnFilterClick] = useState(0)
