@@ -2,7 +2,7 @@ import FilterAttributeType from "../types/filterAttribute.type";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axiosHttp from "../utils/axiosHttp";
 import {AxiosResponse} from "axios";
-import {ResponseApi} from "../utils/response.type";
+import {ResponseApi} from "../types/response.type";
 
 const initialFilterState: FilterAttributeType = {
     brands: [],
