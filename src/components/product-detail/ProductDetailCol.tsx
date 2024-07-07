@@ -284,8 +284,8 @@ const ProductDetailCol = () => {
                                         fullWidth
                                     />
                                     <div style={{display: "flex", gap: "30px", width: "100%", marginTop: "50px"}}>
-                                        <Input placeholder="Tên" fullWidth={true}/>
-                                        <Input placeholder="Email" required={true} typeof={"email"} fullWidth={true}/>
+                                        <TextField placeholder="Tên" fullWidth={true}/>
+                                        <TextField placeholder="Email" required={true} typeof={"email"} fullWidth={true}/>
                                     </div>
                                     <Button style={{marginTop: "20px", width: "150px", height: "45px"}}
                                             variant="contained" size="medium">Gửi</Button>

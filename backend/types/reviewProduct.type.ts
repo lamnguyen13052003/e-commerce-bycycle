@@ -1,6 +1,6 @@
 import {ObjectId} from "mongodb";
 
-export interface ReviewProduct{
+export interface ReviewProductType{
     _id: ObjectId,
     user_id: string,
     name: string,

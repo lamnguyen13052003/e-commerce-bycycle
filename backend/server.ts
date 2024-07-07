@@ -4,6 +4,7 @@ import {run} from "./database.connect";
 import {runAuthController} from "./controller/auth.controller";
 import {runProductController} from "./controller/product.controller";
 import bodyParser = require("body-parser");
+import {runReviewController} from "./controller/review.controller";
 
 export const log = (tag: string, title: string, data: object) => {
     console.log(`=================================${tag}==================================`)
@@ -30,7 +31,7 @@ runProductController(app);
 
 runAuthController(app);
 
-
+runReviewController(app);
 app.listen(1305, () => {
     console.log("Server dep zai da chay o port 1305");
 });
