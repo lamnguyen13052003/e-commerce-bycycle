@@ -160,7 +160,7 @@ function SelectSmallFilter() {
     );
 }
 
-function Products() {
+function Booth() {
     const {category, page} = useParams()
     const [count, setCount] = useState(parseInt(page as string))
     const [btnFilterClick, setBtnFilterClick] = useState(0)
@@ -267,5 +267,5 @@ interface Title {
     result: number
 }
 
-export default Products;
+export default Booth;
 
