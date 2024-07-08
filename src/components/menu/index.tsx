@@ -3,7 +3,7 @@ import {Nav, Navbar} from "react-bootstrap";
 import {DropdownSubmenu, MenuItem, NavDropdownMenu} from "react-bootstrap-submenu";
 import {Box} from "@mui/material";
 
-function Menu(props: any) {
+function Menu() {
     return (
         <Box>
             <Navbar collapseOnSelect>
@@ -18,12 +18,12 @@ function Menu(props: any) {
                             <MenuItem href={'/xe-dap-touring/page/1'}>Xe đạp touring </MenuItem>
                             <MenuItem href={'/xe-dap-nu/page/1'}>Xe đạp nữ </MenuItem>
                             <MenuItem href={'/xe-dap-gap/page/1'}>Xe đạp gấp </MenuItem>
-                            <DropdownSubmenu href="#action/3.7" title="Text to show">
+                           {/* <DropdownSubmenu href="#action/3.7" title="Text to show">
                                 <MenuItem>Sub 1</MenuItem>
                                 <DropdownSubmenu href="#action/3.7" title="Text to show">
                                     <MenuItem>Sub 2</MenuItem>
                                 </DropdownSubmenu>
-                            </DropdownSubmenu>
+                            </DropdownSubmenu>*/}
                         </NavDropdownMenu>
                     </Nav>
                 </Navbar.Collapse>

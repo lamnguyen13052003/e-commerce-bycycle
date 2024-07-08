@@ -36,27 +36,17 @@ function Home() {
     } = productsState
 
     useEffect(() => {
-        const promiseBabyBicycle = dispatch(getProductsByCategory({category: 0, page: 1}))
-        const promiseTouringBicycle = dispatch(getProductsByCategory({category: 1, page: 1}))
-        const promiseTopographicBicycle = dispatch(getProductsByCategory({category: 2, page: 1}))
-        const promiseSportBicycle = dispatch(getProductsByCategory({category: 3, page: 1}))
-        const promiseFoldBicycle = dispatch(getProductsByCategory({category: 4, page: 1}))
-        const promiseFemaleBicycle = dispatch(getProductsByCategory({category: 5, page: 1}))
-        const promiseRacingBicycle = dispatch(getProductsByCategory({category: 6, page: 1}))
-        const promise_best_sale = dispatch(getProductsByBestSale(true))
-        const promise_new = dispatch(getProductsByBestSale(false))
-
         return () => {
-            promiseBabyBicycle.abort();
-            promiseTouringBicycle.abort();
-            promiseTopographicBicycle.abort();
-            promiseSportBicycle.abort();
-            promiseFoldBicycle.abort();
-            promiseFemaleBicycle.abort();
-            promiseRacingBicycle.abort();
-            promise_best_sale.abort();
-            promise_new.abort();
-        };
+            dispatch(getProductsByCategory({category: 0, page: 0}))
+            dispatch(getProductsByCategory({category: 1, page: 0}))
+            dispatch(getProductsByCategory({category: 2, page: 0}))
+            dispatch(getProductsByCategory({category: 3, page: 0}))
+            dispatch(getProductsByCategory({category: 4, page: 0}))
+            dispatch(getProductsByCategory({category: 5, page: 0}))
+            dispatch(getProductsByCategory({category: 6, page: 0}))
+            dispatch(getProductsByBestSale(true))
+            dispatch(getProductsByBestSale(false))
+        }
     }, []);
 
     return (

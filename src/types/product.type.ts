@@ -16,7 +16,7 @@ export type ProductType = {
     category: number,
     base_description: BaseDescriptionProductType,
     detail_description: DetailDescriptionProductType[],
-    specifications: SpecificationsType[],
+    specifications: SpecificationsType,
     model: ModelType[],
     review: ReviewProduct[]
 }

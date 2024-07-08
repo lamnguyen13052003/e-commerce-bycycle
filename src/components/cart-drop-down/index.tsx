@@ -13,10 +13,13 @@ function CartDropDown(props: {
     const {cartItems, className, style} = props;
 
     return (
-        <Box width={"250px"}
+        <Box width={"350px"}
              className={className} style={style}>
             <Stack direction={"column"} className={"mt-2 border border-1 bg-white border-success rounded-3 p-2"}>
-                <Box>
+                <Box sx={{
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                }}>
                     {cartItems.map((item, index) =>
                         <CartItemDropDown key={index} {...item}/>)}
                 </Box>

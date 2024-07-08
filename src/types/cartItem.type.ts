@@ -1,5 +1,7 @@
+import {ObjectId} from "mongodb";
+
 export type CartItemType = {
-    id: string,
+    id: ObjectId,
     url: string,
     name: string,
     type: string,

@@ -1,5 +1,5 @@
 function TitleCategory(category: number) {
-    switch (category){
+    switch (category) {
         case 0:
             return "Xe đạp trẻ em"
         case 1:
@@ -18,8 +18,9 @@ function TitleCategory(category: number) {
             return ""
     }
 }
+
 function TitleCategorySlug(category: number) {
-    switch (category){
+    switch (category) {
         case 0:
             return "xe-dap-tre-em"
         case 1:
@@ -39,8 +40,8 @@ function TitleCategorySlug(category: number) {
     }
 }
 
-function TitleCategorySlugToNum(param: string | undefined){
-    switch (param){
+function TitleCategorySlugToNum(param: string | undefined) {
+    switch (param) {
         case "xe-dap-tre-em":
             return 0
         case "xe-dap-the-thao":

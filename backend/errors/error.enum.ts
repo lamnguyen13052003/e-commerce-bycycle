@@ -42,6 +42,12 @@ const changePasswordFail: CustomError = {
     message: "Đổi mật khẩu thất bại"
 }
 
+const productNotFound: CustomError = {
+    code: 404,
+    message: "Không tìm thấy sản phẩm"
+}
+
+
 export {
     wrongUsernameOrPassword,
     wrongVerifyCode,
@@ -51,5 +57,6 @@ export {
     registerFail,
     verifyFail,
     passwordNotCompare,
-    changePasswordFail
+    changePasswordFail,
+    productNotFound
 };

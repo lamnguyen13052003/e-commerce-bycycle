@@ -5,8 +5,6 @@ function CartDropDownEmpty() {
     return (
         <Stack direction={"column"}>
             <Divider orientation="vertical" flexItem/>
-            <span></span>
-            <Divider orientation="vertical" flexItem/>
             <Stack direction={"column"} gap={1}>
                 <Button className={"bg-primary rounded-3 text-uppercase fw-bold text-white"}>
                     xem giỏ hàng

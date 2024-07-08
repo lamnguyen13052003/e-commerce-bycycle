@@ -31,7 +31,7 @@ function ButtonAuth() {
                 ) : (
                     <>
                         <Link className={"text-decoration-none"} to={"/login"}>
-                            <Button>Đăng nhập</Button>
+                            <Button className={"fs-6"}>Đăng nhập</Button>
                         </Link>
                         <Link className={"text-decoration-none"} style={{
                             fontSize: "15px"

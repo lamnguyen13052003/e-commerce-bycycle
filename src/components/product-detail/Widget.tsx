@@ -1,13 +1,13 @@
 import React from 'react';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import * as pdc from "./ProductDetailComponent";
+import {Widget} from "./ProductDetailComponent";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
-const StickyWidget = () => {
-    return(
+const StickyWidget = (props: { warranty: string }) => {
+    return (
         <>
-            <pdc.Widget>
+            <Widget>
                 <Row>
                     <Col className={"trust"} sm={12}>
                         <h4>LÝ DO NÊN MUA HÀNG TẠI XEDAPGIAKHO:</h4>
@@ -51,7 +51,7 @@ const StickyWidget = () => {
                                     Cam kết chính hãng
                                 </h4>
                                 <p>
-                                    Bảo dưỡng 01 năm
+                                    Bảo dưỡng {props.warranty}
                                 </p>
                                 <span>Lưu ý: Thông số kỹ thuật có thể được thay đổi từ nhà sản xuất nhằm nâng cao chất lượng sản phẩm</span>
                             </div>
@@ -60,7 +60,7 @@ const StickyWidget = () => {
                     <Col className={"contact"} sm={12}>
                         <div className={"contact-content"}>
                             <LocalPhoneIcon fontSize="large"/>
-                            <div >
+                            <div>
                                 <h5>
                                     Hỗ Trợ Mua Hàng
                                 </h5>
@@ -83,7 +83,7 @@ const StickyWidget = () => {
                         </div>
                     </Col>
                 </Row>
-            </pdc.Widget>
+            </Widget>
         </>
     );
 }
