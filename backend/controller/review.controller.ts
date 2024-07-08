@@ -9,7 +9,6 @@ import {GetReviewHasTotalResponse} from "../responses/getReviewHasTotal.response
 import {UpdateReviewRequest} from "../requests/updateReview.request";
 
 export const runReviewController = (app: Express) => {
-    const qs = require('qs')
     app.post("/api/reviews/add/productId=:productId", (req, res) => {
         const productId: ObjectId = new ObjectId(req.params.productId);
         const {user_id, name, email, rating, comment, date} = req.body;

@@ -40,15 +40,13 @@ async function updateReview(review: UpdateReviewRequest, productId: ObjectId): P
 }
 
 async function deleteReview(reviewId: ObjectId): Promise<boolean> {
-    const product = await productRepository.findOne<ProductType>({"review._id": reviewId});
-    if (!product) return false;
-    const result = await productRepository.updateOne({"review._id": reviewId},
-        {$set: {"reviews.$": null}},
-        // {arrayFilters: [{"review._id": review._id}]}
-    );
-
-    console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`)
-    return true
+    const filter = {"review._id": reviewId};
+    const update = {$pull: {review: {_id: reviewId}}};
+    const product = await productRepository.findOneAndUpdate(
+        filter,
+        update,
+    )
+    return product !== null
 }
 
 export {addReview, getReviews, updateReview, deleteReview}
