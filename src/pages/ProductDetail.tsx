@@ -1,27 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import ProductDetailCol from "../product-detail/ProductDetailCol";
+import ProductDetailCol from "../components/product-detail/ProductDetailCol";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import StickyWidget from "./Widget";
+import StickyWidget from "../components/product-detail/Widget";
 import {Box} from "@mui/material";
 import {Splide, SplideSlide, SplideTrack} from '@splidejs/react-splide';
-import {ProductType} from "../../types/product.type";
-import Product, {keyGetSetRecentlyProduct} from "../product";
+import {ProductType} from "../types/product.type";
+import Product, {keyGetSetRecentlyProduct} from "../components/product";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate, useParams} from "react-router-dom";
-import {ObjectId} from "mongodb";
 import {AxiosResponse} from "axios";
-import {ResponseApi} from "../../types/response.type";
-import axiosHttp from "../../utils/axiosHttp";
+import {ResponseApi} from "../types/response.type";
+import axiosHttp from "../utils/axiosHttp";
 
 
 export function ProductDetail() {
+    document.title = "Chi tiết sản phẩm"
     const {name} = useParams<{ name: string }>();
     const [product, setProduct] = useState<ProductType>();
     const nav = useNavigate();
-    let id: ObjectId;
     useEffect(() => {
         return () => {
             try {
@@ -30,7 +29,7 @@ export function ProductDetail() {
                     .then((response: AxiosResponse<ResponseApi<ProductType>>) => {
                         setProduct(response.data.data)
                     })
-                    .catch(error => {
+                    .catch(() => {
                             nav("/");
                         }
                     )
@@ -40,13 +39,11 @@ export function ProductDetail() {
         }
     }, []);
 
-
     const recentlyProduct = (): ProductType[] => {
         const data = sessionStorage.getItem(keyGetSetRecentlyProduct);
         if (!data) return [];
         else return JSON.parse(data) as ProductType[];
     }
-
 
     return (
         <>

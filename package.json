@@ -61,7 +61,7 @@
     "server": "ts-node backend/server.ts",
     "client": "vite",
     "debug_server": "vite & ts-node backend/server.ts",
-    "start": "vite & ts-node backend/server.ts",
+    "start": "vite | ts-node backend/server.ts",
     "dev": "vite & ts-node backend/server.ts",
     "build": "VITE_CJS_TRACE=true && vite build",
     "preview": "vite preview",

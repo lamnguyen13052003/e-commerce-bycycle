@@ -16,6 +16,7 @@ import {IC_CASH, IC_QR} from "../assets/images/icon/web.icon";
 import {useNavigate} from "react-router-dom";
 
 export default function Checkout() {
+    document.title = "Tiến hành thanh toán"
     const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
     const nav = useNavigate();
     const {register, handleSubmit, formState: {errors}} = useForm<CheckoutType>();

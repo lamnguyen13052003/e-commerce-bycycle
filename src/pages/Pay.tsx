@@ -9,6 +9,7 @@ import {IC_CANCEL, IC_SUCCESS} from "../assets/images/icon/web.icon";
 import {Link, useNavigate} from "react-router-dom";
 
 function Pay() {
+    document.title = "Thanh toán";
     const payStatus = useSelector((state: RootState) => state.payStatus)
     const nav = useNavigate();
     if (!payStatus.status) nav("/");
