@@ -4,15 +4,20 @@ import {Collection, ObjectId, PushOperator, UpdateResult} from "mongodb";
 import {ReviewProductResponse} from "../responses/reviewProduct.response";
 import {ProductType} from "../types/product.type";
 import {UpdateReviewRequest} from "../requests/updateReview.request";
+import {response} from "express";
 
 const collection = 'xe_dap';
 const productRepository: Collection<ProductType> = connection.collection(collection);
 
 async function addReview(review: ReviewProductType, productId: ObjectId): Promise<boolean> {
-    const product = await productRepository.findOne<ProductType>({_id: productId})
-    if (!product) return false
-    await productRepository.updateOne({_id: productId}, {$push: {review: review}})
-    return true
+    const filter = {_id: productId};
+    const update = {$push: {review: review}}
+    return productRepository.findOneAndUpdate(
+        filter,
+        update
+    ).then((response) : boolean => {
+        return response !== null
+    })
 }
 
 async function getReviews(productId: ObjectId, seeMore: number) {
@@ -31,22 +36,25 @@ async function updateReview(review: UpdateReviewRequest, productId: ObjectId): P
     const options = {
         arrayFilters: [{"e1.email":review.email}]
     };
-    const product = await productRepository.findOneAndUpdate(
+    return productRepository.findOneAndUpdate(
         filter,
         update,
         options
-    )
-    return product !== null
+    ).then((response) : boolean => {
+        return response !== null
+    })
 }
 
 async function deleteReview(reviewId: ObjectId): Promise<boolean> {
     const filter = {"review._id": reviewId};
     const update = {$pull: {review: {_id: reviewId}}};
-    const product = await productRepository.findOneAndUpdate(
+
+    return productRepository.findOneAndUpdate(
         filter,
         update,
-    )
-    return product !== null
+    ).then((response) : boolean => {
+        return response !== null
+    })
 }
 
 export {addReview, getReviews, updateReview, deleteReview}
