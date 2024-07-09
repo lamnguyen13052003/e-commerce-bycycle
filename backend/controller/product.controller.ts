@@ -78,7 +78,6 @@ export const runProductController = (app: Express) => {
     })
 
     app.get("/api/products/:category/page=:page/filter", (req, res) => {
-        log(TAG, "get products by category", req.body)
         const query = qs.parse(req.query);
 
         const category: number = parseInt(req.params.category as string);
@@ -88,6 +87,7 @@ export const runProductController = (app: Express) => {
         const materials: string[] = query.materials as string[];
         const targetUsings: string[] = query.targetUsings as string[];
         const prices: string = req.query.prices as string
+        log(TAG, "get products by category", req.body)
         const newProduct : boolean = query.newProduct as string == "true";
         const bestSale : boolean = query.bestSale as string == "true";
         const sort : string = query.sort as string;
