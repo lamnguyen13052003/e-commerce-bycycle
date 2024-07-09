@@ -8,14 +8,22 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ColorSelector from './ColorSelector';
 import QuantityCell from '../cart/QuantityCell';
-import {Button, Input, TextField} from '@mui/material';
+import {Avatar, Box, Button, Grid, Input, Stack, TextField} from '@mui/material';
 import {formatCurrency} from "../../utils/Formatter";
 import {ProductType} from "../../types/product.type";
 import {useDispatch} from "react-redux";
 import {addCartItem} from "../../slice/cart.slice";
+import DisplayUserReview from "./DisplayUserReview";
+import HoverRating from "../hover-rating";
+import {green} from "@mui/material/colors";
+import {UserResponseType} from "../../types/userResponse.type";
+import {ReviewProductType} from "../../types/reviewProduct.type";
+import ReviewList from "../review-list";
 
-
+const currentUser = "user"
 const ProductDetailCol = (product: ProductType) => {
+    const data = sessionStorage.getItem(currentUser);
+    const userRes = JSON.parse(data as string) as UserResponseType
     const dispatch = useDispatch();
     const [selectedColor, setSelectedColor] = useState<string>(`${product.model[0].color},${product.model[0].color}`);
     const [quantity, setQuantity] = useState<number>(1);
@@ -250,15 +258,24 @@ const ProductDetailCol = (product: ProductType) => {
                         <div id="form">
                             <h3>Đánh giá</h3>
                             <div>
-                                <div style={{
+                                <Box style={{
                                     width: '100%',
                                     border: '2px solid #2372dc',
                                     borderRadius: '10px',
                                     padding: '30px'
                                 }}>
-                                    <h3>Hãy là người đầu tiên đánh giá “Xe Đạp Địa Hình MTB Vicky Crazy VC800 26 Inch –
-                                        Khung Thép | Phanh Đĩa Giá Rẻ | Khuyến mãi Hot” </h3>
-                                    <DisplayUserReview/>
+                                    <ReviewList reviews={product.review} userId={userRes._id}/>
+                                    <Grid container>
+                                        <Grid item xs={1}>
+                                            <Avatar className={'m-auto'} sx={{ backgroundColor: green[500] }}></Avatar>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <Stack direction={'column'} spacing={1}>
+                                                <Box className={'fw-bold'}>Name</Box>
+                                                <Box className={'fst-italic text-body-secondary'}>Email</Box>
+                                            </Stack>
+                                        </Grid>
+                                    </Grid>
                                     <HoverRating/>
                                     <TextField
                                         id="filled-multiline-static"
@@ -268,18 +285,11 @@ const ProductDetailCol = (product: ProductType) => {
                                         variant="filled"
                                         fullWidth
                                     />
-                                    <div style={{display: 'flex', gap: '30px', width: '100%', marginTop: '50px'}}>
-                                        <Input placeholder="Tên" fullWidth={true}/>
-                                        <Input placeholder="Email" required={true} type="email" fullWidth={true}/>
-                                    <div style={{display: "flex", gap: "30px", width: "100%", marginTop: "50px"}}>
-                                        <TextField placeholder="Tên" fullWidth={true}/>
-                                        <TextField placeholder="Email" required={true} typeof={"email"} fullWidth={true}/>
-                                    </div>
                                     <Button style={{marginTop: '20px', width: '150px', height: '45px'}}
                                             variant="contained" size="medium">
                                         Gửi
                                     </Button>
-                                </div>
+                                </Box>
                             </div>
                         </div>
                     </pdc.Comment>

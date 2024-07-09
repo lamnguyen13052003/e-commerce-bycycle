@@ -20,8 +20,9 @@ function getLabelText(value: number) {
     return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
 }
 
-export default function HoverRating() {
-    const [value, setValue] = React.useState<number | null>(2);
+export default function HoverRating(prop: {rating?: number
+}) {
+    const [value, setValue] = React.useState<number | null>(prop.rating? prop.rating : 2.5)
     const [hover, setHover] = React.useState(-1);
 
     return (

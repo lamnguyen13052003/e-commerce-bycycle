@@ -1,10 +1,9 @@
 import {connection} from "../database.connect";
 import {ReviewProductType} from "../types/reviewProduct.type";
-import {Collection, ObjectId, PushOperator, UpdateResult} from "mongodb";
+import {Collection, ObjectId} from "mongodb";
 import {ReviewProductResponse} from "../responses/reviewProduct.response";
 import {ProductType} from "../types/product.type";
 import {UpdateReviewRequest} from "../requests/updateReview.request";
-import {response} from "express";
 
 const collection = 'xe_dap';
 const productRepository: Collection<ProductType> = connection.collection(collection);
