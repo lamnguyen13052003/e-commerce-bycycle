@@ -16,7 +16,6 @@ import QueryString from "qs";
 import {CustomError} from "../errors/custom.error.type";
 import {log} from "../server";
 
-
 const TAG = "Product Controller"
 
 export const runProductController = (app: Express) => {

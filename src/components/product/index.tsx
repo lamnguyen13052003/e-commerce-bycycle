@@ -8,25 +8,15 @@ import LabelNew from "./LabelNew";
 import {ProductType} from "../../types/product.type";
 import {Link} from "react-router-dom";
 import {formatCurrency} from "../../utils/Formatter";
+import {pushRecentlyProduct} from "../../utils/sessionStorage";
 
-export const keyGetSetRecentlyProduct = "currentProduct";
 export default function Product(props: ProductType) {
     const calculateDiscount = () => {
         return Math.floor(props.price * (100 - (props.discount ? props.discount : 0)) / 100);
     }
 
     const onClickSeeDetailHandle = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        const data = sessionStorage.getItem(keyGetSetRecentlyProduct);
-
-        let recentlyProductList: ProductType[];
-        if (!data) recentlyProductList = [];
-        else recentlyProductList = JSON.parse(data) as ProductType[];
-
-        if (recentlyProductList.filter(product => product._id === props._id).length) return;
-
-        recentlyProductList.push(props);
-
-        sessionStorage.setItem(keyGetSetRecentlyProduct, JSON.stringify(recentlyProductList))
+        pushRecentlyProduct(props)
     }
 
     return (

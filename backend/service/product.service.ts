@@ -1,11 +1,11 @@
 import {connection} from "../database.connect";
 import {ProductType} from "../types/product.type";
-import {ObjectId, Sort} from "mongodb";
+import {ObjectId, Sort, WithId} from "mongodb";
 import {productNotFound} from "../errors/error.enum";
-import {c} from "vite/dist/node/types.d-aGj9QkWt";
+import {BillItemType} from "../types/billItem.type";
 
 const collection = 'xe_dap';
-const productRepository = connection.collection(collection);
+const productRepository = connection.collection<ProductType>(collection);
 
 async function getAll() {
     return productRepository
@@ -97,12 +97,12 @@ function getQuery(
 async function getProductsBestSale(bestSale: boolean) {
     if (bestSale) {
         return productRepository
-            .find<ProductType>({sale: true}).sort({"discount": -1}).limit(8)
+            .find({sale: true}).sort({"discount": -1}).limit(8)
             .toArray()
 
     }
     return productRepository
-        .find<ProductType>({new: true}).limit(8)
+        .find({new: true}).limit(8)
         .toArray()
 }
 
@@ -126,12 +126,53 @@ async function getAttrForFilter(category: number) {
 }
 
 async function getProductById(id: string) {
-    const result: Promise<ProductType | null> = productRepository.findOne<ProductType>({_id: ObjectId.createFromHexString(id)});
-    return result.then((product): ProductType => {
-        if (!product) throw productNotFound;
-        return product;
+    return productRepository
+        .findOne({_id: ObjectId.createFromHexString(id)})
+        .then((product): ProductType => {
+            if (!product) throw productNotFound;
+            return product;
+        })
+}
+
+function payProducts(billItemTypes: BillItemType[]) {
+    const array: BillItemType[] = []
+    billItemTypes.forEach(async (billItemType: BillItemType) => {
+        billItemType._id = ObjectId.createFromHexString(billItemType._id.toString())
+        return await productRepository
+            .findOneAndUpdate(
+                {
+                    "_id": billItemType._id,
+                    "model.color": billItemType.model,
+                    "model.quantity": {$gte: billItemType.quantity}
+                },
+                {$inc: {"model.$.quantity": -billItemType.quantity}}
+            )
+            .then((response) => {
+                if (!response) return false;
+                array.push(billItemType)
+                billItemType.price = response.discount ? (100 - response.discount) * response.price : response.price
+            })
+            .catch((error) => {
+                rollBackProduct(array)
+                return false;
+            });
+    });
+    return true;
+}
+
+async function rollBackProduct(billItemTypes: BillItemType[]) {
+    billItemTypes.map((billItemType: BillItemType) => {
+        productRepository
+            .updateMany(
+                {
+                    "_id": billItemType._id,
+                    "model.color": billItemType.model,
+                },
+                {$inc: {"model.$.quantity": billItemType.quantity}}
+            )
     })
 }
+
 
 function customQuery(arr: string[]) {
     if (arr.length === 0) return []
@@ -148,4 +189,5 @@ export {
     getAttrForFilter,
     getProductsByFilter,
     getProductById,
+    payProducts
 };

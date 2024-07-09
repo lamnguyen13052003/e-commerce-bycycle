@@ -12,7 +12,7 @@ const client = new MongoClient(uri, {
     }
 });
 
-async function run() {
+async function startDatabase() {
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db(database).command({ping: 1}).then(() => {
@@ -30,5 +30,5 @@ async function close() {
 const connection = client.db(database);
 
 
-export {run, close, connection};
+export {startDatabase, close, connection};
 
