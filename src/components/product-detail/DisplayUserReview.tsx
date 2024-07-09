@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Rating from "@mui/material/Rating";
 import {ArrowOutward, Delete, Edit} from "@mui/icons-material";
 import {ReviewProductType} from "../../types/reviewProduct.type";
-import {formatDateTime} from "../../utils/Formatter";
+import {formatDateTime, formatDateTimeVN} from "../../utils/Formatter";
 import {UserResponseType} from "../../types/userResponse.type";
 import HoverRating from "../hover-rating";
 import {ObjectId} from "mongodb";
@@ -37,7 +37,7 @@ export default function DisplayUserReview(props: {review: ReviewProductType, use
                           :
                           <HoverRating rating={props.review.rating}/>
                       }
-                      <Box className={'text-body-secondary'}>{formatDateTime(props.review.date)}</Box>
+                      <Box className={'text-body-secondary'}>{formatDateTimeVN(new Date(props.review.date) )}</Box>
                   </Stack>
               </Grid>
 

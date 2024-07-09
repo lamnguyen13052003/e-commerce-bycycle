@@ -13,17 +13,16 @@ import {formatCurrency} from "../../utils/Formatter";
 import {ProductType} from "../../types/product.type";
 import {useDispatch} from "react-redux";
 import {addCartItem} from "../../slice/cart.slice";
-import DisplayUserReview from "./DisplayUserReview";
 import HoverRating from "../hover-rating";
 import {green} from "@mui/material/colors";
 import {UserResponseType} from "../../types/userResponse.type";
-import {ReviewProductType} from "../../types/reviewProduct.type";
 import ReviewList from "../review-list";
 
 const currentUser = "user"
 const ProductDetailCol = (product: ProductType) => {
-    const data = sessionStorage.getItem(currentUser);
-    const userRes = JSON.parse(data as string) as UserResponseType
+    let data = sessionStorage.getItem(currentUser);
+    if(!data) data = "{}";
+    const userRes = JSON.parse(data) as UserResponseType
     const dispatch = useDispatch();
     const [selectedColor, setSelectedColor] = useState<string>(`${product.model[0].color},${product.model[0].color}`);
     const [quantity, setQuantity] = useState<number>(1);

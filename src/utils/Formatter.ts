@@ -5,6 +5,7 @@ const formatter = new Intl.NumberFormat('vi-VN', {
 
 const formatterDateTime = new Intl.DateTimeFormat('vi-VN', {
     dateStyle: "medium"
+
 })
 
 const formatCurrency = (n: number) => {
@@ -14,5 +15,16 @@ const formatCurrency = (n: number) => {
 const formatDateTime = (date: Date) => {
     return formatterDateTime.format(date);
 }
-
-export {formatCurrency, formatDateTime}
+const formatterDateTimeVN = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+});
+const formatDateTimeVN = (date: Date) => {
+    return formatterDateTimeVN.format(date);
+}
+export {formatCurrency, formatDateTime ,formatDateTimeVN}
