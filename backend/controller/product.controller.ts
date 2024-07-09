@@ -4,10 +4,10 @@ import {ResponseApi} from "../types/response.type";
 import {
     getAll,
     getAttrForFilter,
-    getProductById,
     getProductsBestSale,
     getProductsByCategory,
-    getProductsByFilter
+    getProductsByFilter,
+    getProductById
 } from "../service/product.service";
 import {ProductHasTotalType} from "../types/productsHasTotal.type";
 import FilterAttributeType from "../types/filterAttribute.type";
@@ -87,9 +87,9 @@ export const runProductController = (app: Express) => {
         const materials: string[] = query.materials as string[];
         const targetUsings: string[] = query.targetUsings as string[];
         const prices: string = req.query.prices as string
-        const newProduct: boolean = query.newProduct as string == "true";
-        const bestSale: boolean = query.bestSale as string == "true";
-        const sort: string = query.sort as string;
+        const newProduct : boolean = query.newProduct as string == "true";
+        const bestSale : boolean = query.bestSale as string == "true";
+        const sort : string = query.sort as string;
         getProductsByFilter(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
             res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)

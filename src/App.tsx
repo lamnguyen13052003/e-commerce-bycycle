@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-bootstrap-submenu/dist/index.css";
 import Cart from "./pages/Cart";
-import Booth from "./pages/Booth";
+import Products from "./pages/Products";
 import Sign from "./pages/Sign";
 import Login from "./components/login-form";
 import Register from "./components/register-form";
@@ -32,8 +32,8 @@ function App() {
                     <Route path={"/change-password"} element={<ChangePassword/>}/>
                     <Route path={"/verify"} element={<Verify/>}/>
                 </Route>
-                <Route path={"/:category/page/:page"} element={<Booth />}/>
-                <Route path="/:category/page/:page/filter" element={<Booth />} />
+                <Route path={"/:category/page/:page"} element={<Products />}/>
+                <Route path="/:category/page/:page/filter" element={<Products />} />
                 <Route path={"/product/:name"} element={<ProductDetail/>}/>
                 <Route path={"/contact"} element={<Contact/>}/>
                 <Route path={"/checkout"} element={<Checkout/>}/>
