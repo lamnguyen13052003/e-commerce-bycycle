@@ -57,8 +57,7 @@ export default function Checkout() {
                         } as BillItemType
                     })
                 })
-            .then(reponse => {
-                nav("/pay")
+            .then(() => {
                 dispatch(setPayStatus({
                     status: PayStatusEnum.SUCCESS,
                     infoPay: infoPay
@@ -75,15 +74,16 @@ export default function Checkout() {
             });
     };
 
-    if (!cartItems.length) nav("/");
-
     useEffect(() => {
-        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
-            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
-                setProvinces(response.data.data)
-            }).catch((error) => {
-            console.log(error)
-        });
+        return () => {
+            if (!cartItems.length) nav("/");
+            axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
+                .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
+                    setProvinces(response.data.data)
+                }).catch((error) => {
+                console.log(error)
+            });
+        }
     }, []);
 
     const selectProvinceHandle = (id: number) => {

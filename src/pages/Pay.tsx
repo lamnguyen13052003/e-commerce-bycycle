@@ -12,7 +12,11 @@ function Pay() {
     document.title = "Thanh toán";
     const payStatus = useSelector((state: RootState) => state.payStatus)
     const nav = useNavigate();
-    if (!payStatus.status) nav("/");
+    useEffect(() => {
+        return () => {
+            if (!payStatus.status) nav("/");
+        }
+    }, []);
 
     return (
         <Container className={"my-3"}>
