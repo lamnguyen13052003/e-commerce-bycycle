@@ -1,0 +1,27 @@
+import styled from "styled-components";
+
+export const AvatarCol = styled.div`
+    .datepicker {
+        table {
+            margin: 0;
+            -webkit-touch-callout: none;
+            user-select: none;
+
+            td {
+                border-radius: 0 !important;
+            }
+
+            th {
+                border-radius: 0;
+                font-weight: 500;
+            }
+
+            td, th {
+                width: 36px !important;
+                height: 36px !important;
+                border: none;
+                text-align: center;
+            }
+        }
+    }
+`

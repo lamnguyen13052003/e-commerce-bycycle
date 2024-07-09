@@ -17,6 +17,7 @@ import {ProductDetail} from "./components/product-detail";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Pay from "./pages/Pay";
+import Profile from "./pages/Profile";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                 <Route path={"/contact"} element={<Contact/>}/>
                 <Route path={"/checkout"} element={<Checkout/>}/>
                 <Route path={"/pay"} element={<Pay/>}/>
+                <Route path={"/profile"} element={<Profile/>} />
             </Route>
         </Routes>
     );
