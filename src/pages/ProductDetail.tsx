@@ -23,9 +23,10 @@ export function ProductDetail() {
     const nav = useNavigate();
     useEffect(() => {
         return () => {
+            window.scrollTo(0, 0)
             try {
                 const idString = name?.split("--")[1];
-                axiosHttp.get<any, AxiosResponse<any, ResponseApi<ProductType>>, any>(`api/product/${idString}`)
+                axiosHttp.get<any, AxiosResponse<any, ResponseApi<ProductType>>, any>(`api/product-detail/${idString}`)
                     .then((response: AxiosResponse<ResponseApi<ProductType>>) => {
                         setProduct(response.data.data)
                     })

@@ -4,10 +4,10 @@ import {ResponseApi} from "../types/response.type";
 import {
     getAll,
     getAttrForFilter,
+    getProductById,
     getProductsBestSale,
     getProductsByCategory,
-    getProductsByFilter,
-    getProductById
+    getProductsByFilter
 } from "../service/product.service";
 import {ProductHasTotalType} from "../types/productsHasTotal.type";
 import FilterAttributeType from "../types/filterAttribute.type";
@@ -88,9 +88,9 @@ export const runProductController = (app: Express) => {
         const materials: string[] = query.materials as string[];
         const targetUsings: string[] = query.targetUsings as string[];
         const prices: string = req.query.prices as string
-        const newProduct : boolean = query.newProduct as string == "true";
-        const bestSale : boolean = query.bestSale as string == "true";
-        const sort : string = query.sort as string;
+        const newProduct: boolean = query.newProduct as string == "true";
+        const bestSale: boolean = query.bestSale as string == "true";
+        const sort: string = query.sort as string;
         getProductsByFilter(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
             res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)
@@ -102,17 +102,19 @@ export const runProductController = (app: Express) => {
         })
     })
 
-    app.get("/api/product/:id", (req: Request<{ id: string }, any, any, QueryString.ParsedQs, Record<string, any>>,
-                                 res) => {
+    app.get("/api/product-detail/:id", (req: Request<{
+                                            id: string
+                                        }, any, any, QueryString.ParsedQs, Record<string, any>>,
+                                        res) => {
         log(TAG, "get product by id", req.body)
         getProductById(req.params.id)
             .then((response) => {
-            res.send(Builder<ResponseApi<ProductType>>()
-                .code(202)
-                .message("Success")
-                .data(response)
-                .build());
-        }).catch((error: CustomError) => {
+                res.send(Builder<ResponseApi<ProductType>>()
+                    .code(202)
+                    .message("Success")
+                    .data(response)
+                    .build());
+            }).catch((error: CustomError) => {
             res.status(error.code).send(error.message);
         });
     });

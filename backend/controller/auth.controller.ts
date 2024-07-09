@@ -5,7 +5,7 @@ import {ResponseApi} from "../types/response.type";
 import {UserType} from "../types/user.type";
 import {log} from "../server";
 
-const TAG = "Athentication Controller"
+const TAG = "Authentication Controller"
 
 export const runAuthController = (app: Express) => {
     app.post("/api/login", (req, res) => {

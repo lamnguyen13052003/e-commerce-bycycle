@@ -2,6 +2,7 @@ import {connection} from "../database.connect";
 import {ProductType} from "../types/product.type";
 import {ObjectId, Sort} from "mongodb";
 import {productNotFound} from "../errors/error.enum";
+import {c} from "vite/dist/node/types.d-aGj9QkWt";
 
 const collection = 'xe_dap';
 const productRepository = connection.collection(collection);
@@ -38,7 +39,7 @@ async function getProductsByFilter(
 
 
     const query = getQuery(category, brands, wheelSizes, materials, targetUsings, price, newProduct, bestSale)
-    const sortQuery: Sort = ((sort===undefined? 'asc': sort) === 'asc'? {"price": 1} :  {"price": -1})
+    const sortQuery: Sort = ((sort === undefined ? 'asc' : sort) === 'asc' ? {"price": 1} : {"price": -1})
     const total = await productRepository.countDocuments(query)
     let y = 8 * count
     if (y >= total) y = total
@@ -59,12 +60,12 @@ function getQuery(
     price?: string,
     newProduct?: boolean,
     bestSale?: boolean,
-): {}{
+): {} {
 
     let query: {} = {category: category}
     let [minPrice, maxPrice] = (price === undefined ? price = '0-0' : price as string).split('-').map(Number)
 
-    if (brands !== undefined){
+    if (brands !== undefined) {
         const brandsArr = customQuery(brands)
         query = {...query, 'base_description.brand': {$in: brandsArr}}
     }
@@ -132,12 +133,19 @@ async function getProductById(id: string) {
     })
 }
 
-function customQuery(arr: string[])  {
+function customQuery(arr: string[]) {
     if (arr.length === 0) return []
 
     return arr.map((item) => {
-       return  item.replace('-', ' ')
+        return item.replace('-', ' ')
     })
 }
 
-export {getAll, getProductsByCategory, getProductsBestSale, getAttrForFilter, getProductsByFilter, getProductById};
+export {
+    getAll,
+    getProductsByCategory,
+    getProductsBestSale,
+    getAttrForFilter,
+    getProductsByFilter,
+    getProductById,
+};

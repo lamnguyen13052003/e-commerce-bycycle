@@ -14,6 +14,9 @@ import {setPayStatus} from "../slice/payStatus.slice";
 import {PayStatusEnum} from "../states/payStatus.stats";
 import {IC_CASH, IC_QR} from "../assets/images/icon/web.icon";
 import {useNavigate} from "react-router-dom";
+import axiosHttp from "../utils/axiosHttp";
+import {ResponseApi} from "../types/response.type";
+import {ProductType} from "../types/product.type";
 
 export default function Checkout() {
     document.title = "Tiến hành thanh toán"
@@ -29,10 +32,17 @@ export default function Checkout() {
 
     const onSubmit = (data: CheckoutType) => {
         data.payMethod = payMethodSelect
-        dispatch(setPayStatus({
-            status: PayStatusEnum.SUCCESS,
-            infoPay: data
-        }))
+        axiosHttp.post<any, AxiosResponse<any, ResponseApi<string>>, any>("/").then(reponse => {
+            dispatch(setPayStatus({
+                status: PayStatusEnum.SUCCESS,
+                infoPay: data
+            }))
+        }).catch(error => {
+            dispatch(setPayStatus({
+                status: PayStatusEnum.FAILED,
+                infoPay: data
+            }))
+        });
         nav("/pay")
     };
 
