@@ -5,8 +5,7 @@ import Typography from "@mui/material/Typography";
 import Rating from "@mui/material/Rating";
 import {ArrowOutward, Delete, Edit} from "@mui/icons-material";
 import {ReviewProductType} from "../../types/reviewProduct.type";
-import {formatDateTime, formatDateTimeVN} from "../../utils/Formatter";
-import {UserResponseType} from "../../types/userResponse.type";
+import {formatDateTimeVN} from "../../utils/Formatter";
 import HoverRating from "../hover-rating";
 import {ObjectId} from "mongodb";
 
@@ -24,13 +23,12 @@ export default function DisplayUserReview(props: {review: ReviewProductType, use
               <Grid item xs={1}>
                   <Avatar alt={props.review.name} src={props.review.arlAvatar} className={'m-auto'} sx={{ backgroundColor: green[500] }}></Avatar>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                   <Stack direction={'column'} spacing={1}>
                       <Box className={'fw-bold'}>{props.review.name}</Box>
-                      <Box className={'fst-italic text-body-secondary'}>{props.review.email}</Box>
                   </Stack>
               </Grid>
-              <Grid className={'d-flex justify-content-end '} item xs={7}>
+              <Grid className={'d-flex justify-content-end '} item xs={6}>
                   <Stack direction={'column'} >
                       {!clickIconEdit?
                       <Box><Rating name="read-only" value={props.review.rating} readOnly /></Box>

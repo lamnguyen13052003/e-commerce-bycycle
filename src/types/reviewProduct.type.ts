@@ -5,7 +5,6 @@ export interface ReviewProductType{
     user_id: ObjectId,
     name: string,
     arlAvatar: string,
-    email: string,
     rating: number,
     comment: string,
     date: Date

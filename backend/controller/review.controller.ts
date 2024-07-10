@@ -43,7 +43,6 @@ export const runReviewController = (app: Express) => {
         const {_id, email, rating, comment} = req.body;
         const review: UpdateReviewRequest = {
             _id: _id,
-            email: email,
             rating: rating,
             comment: comment
         }

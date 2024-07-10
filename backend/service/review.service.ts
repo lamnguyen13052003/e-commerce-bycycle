@@ -33,7 +33,7 @@ async function updateReview(review: UpdateReviewRequest, productId: ObjectId): P
     const filter = {_id: productId};
     const update = {$set: {"review.$[e1].rating": review.rating, "review.$[e1].comment": review.comment}};
     const options = {
-        arrayFilters: [{"e1.email":review.email}]
+        arrayFilters: [{"e1._id": review._id}]
     };
     return productRepository.findOneAndUpdate(
         filter,

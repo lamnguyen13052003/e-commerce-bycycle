@@ -264,26 +264,38 @@ const ProductDetailCol = (product: ProductType) => {
                                     padding: '30px'
                                 }}>
                                     <ReviewList reviews={product.review} userId={userRes._id}/>
+                                    {userRes._id &&
                                     <Grid container>
                                         <Grid item xs={1}>
-                                            <Avatar className={'m-auto'} sx={{ backgroundColor: green[500] }}></Avatar>
+                                            <Avatar alt={!userRes.fullName? ``: userRes.fullName}
+                                                    src={!userRes.urlAvatar? ``: `${userRes.urlAvatar}`}
+                                                    className={'m-auto'} sx={{ backgroundColor: green[500] }}></Avatar>
                                         </Grid>
                                         <Grid item xs={3}>
                                             <Stack direction={'column'} spacing={1}>
-                                                <Box className={'fw-bold'}>Name</Box>
+                                                <Box className={'fw-bold'}>{!userRes.fullName? `Name`: userRes.fullName}</Box>
                                                 <Box className={'fst-italic text-body-secondary'}>Email</Box>
                                             </Stack>
                                         </Grid>
                                     </Grid>
+                                    }
                                     <HoverRating/>
-                                    <TextField
-                                        id="filled-multiline-static"
-                                        label="Đánh giá của bạn"
-                                        multiline
-                                        rows={4}
-                                        variant="filled"
-                                        fullWidth
-                                    />
+                                    <Box
+                                        component="form"
+                                        noValidate
+                                        autoComplete="off"
+                                    >
+                                        <TextField
+                                            id="filled-multiline-static"
+                                            label="Đánh giá của bạn"
+                                            multiline
+                                            rows={4}
+                                            variant="filled"
+                                            fullWidth
+                                            helperText="Vui lòng đánh giá."
+                                        />
+                                    </Box>
+
                                     <Button style={{marginTop: '20px', width: '150px', height: '45px'}}
                                             variant="contained" size="medium">
                                         Gửi
