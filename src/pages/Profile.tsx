@@ -45,6 +45,7 @@ const ProfilePage: React.FC = () => {
                 <ProfileCard
                     firstName={profileData.firstName}
                     lastName={profileData.lastName}
+                    gender={profileData.gender}
                     email={profileData.email}
                     phone={profileData.phone}
                     address={`${profileData.address}, ${profileData.street}, ${profileData.city}, ${profileData.state}, ${profileData.zip}`}
