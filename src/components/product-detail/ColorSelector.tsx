@@ -1,22 +1,23 @@
 import React from 'react';
+import {ModelType} from "../../types/modelProduct.type";
 
 interface ColorSelectorProps {
-    colors: { color1: string, color2: string, name: string }[];
+    models: ModelType [];
     selectedColor: string;
-    onSelectColor: (color1: string, color2: string) => void;
+    onSelectColor: (model: ModelType) => void;
 }
 
-const ColorSelector: React.FC<ColorSelectorProps> = ({ colors, selectedColor, onSelectColor }) => {
+const ColorSelector: React.FC<ColorSelectorProps> = ({models, selectedColor, onSelectColor}) => {
     return (
         <div>
-            <div style={{ display: 'flex', gap: '10px' }}>
-                {colors.map((color, index) => {
-                    const isSelected = selectedColor === `${color.color1},${color.color2}`;
+            <div style={{display: 'flex', gap: '10px'}}>
+                {models.map((model, index) => {
+                    const isSelected = selectedColor === model.color;
                     return (
                         <div
                             key={index}
                             className="color-wrapper"
-                            onClick={() => onSelectColor(color.color1, color.color2)}
+                            onClick={() => onSelectColor(model)}
                             style={{
                                 cursor: 'pointer',
                                 border: isSelected ? '3px solid black' : 'none',
@@ -27,12 +28,12 @@ const ColorSelector: React.FC<ColorSelectorProps> = ({ colors, selectedColor, on
                                 style={{
                                     width: '40px',
                                     height: '40px',
-                                    backgroundImage: `linear-gradient(45deg, ${color.color1} 50%, ${color.color2} 50%)`,
+                                    backgroundImage: `linear-gradient(45deg, ${model.color} 50%, ${model.color} 50%)`,
                                     borderRadius: '99px',
-                                    border: '1px solid gray' // Inner border for all elements
+                                    border: '1px solid gray'
                                 }}
-                                title={color.name}
-                                aria-label={color.name}
+                                title={model.color}
+                                aria-label={model.color}
                             />
                         </div>
                     );

@@ -12,6 +12,7 @@ import {RootState} from "../configs/store";
 import {CartBreadcrumbs, CartBreadcrumbStatus} from "../components/cart/CartBreadcrumbs";
 
 export default function Cart() {
+    document.title = "Giỏ hàng";
     const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
 
     return (

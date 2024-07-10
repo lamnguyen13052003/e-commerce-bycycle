@@ -16,7 +16,6 @@ import QueryString from "qs";
 import {CustomError} from "../errors/custom.error.type";
 import {log} from "../server";
 
-
 const TAG = "Product Controller"
 
 export const runProductController = (app: Express) => {
@@ -102,17 +101,19 @@ export const runProductController = (app: Express) => {
         })
     })
 
-    app.get("/api/product/:id", (req: Request<{ id: string }, any, any, QueryString.ParsedQs, Record<string, any>>,
-                                 res) => {
+    app.get("/api/product-detail/:id", (req: Request<{
+                                            id: string
+                                        }, any, any, QueryString.ParsedQs, Record<string, any>>,
+                                        res) => {
         log(TAG, "get product by id", req.body)
         getProductById(req.params.id)
             .then((response) => {
-            res.send(Builder<ResponseApi<ProductType>>()
-                .code(202)
-                .message("Success")
-                .data(response)
-                .build());
-        }).catch((error: CustomError) => {
+                res.send(Builder<ResponseApi<ProductType>>()
+                    .code(202)
+                    .message("Success")
+                    .data(response)
+                    .build());
+            }).catch((error: CustomError) => {
             res.status(error.code).send(error.message);
         });
     });

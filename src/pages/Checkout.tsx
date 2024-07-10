@@ -3,7 +3,7 @@ import {Box, Button, Divider, Stack} from "@mui/material";
 import {CartBreadcrumbs, CartBreadcrumbStatus} from "../components/cart/CartBreadcrumbs";
 import {Button as ButtonBootstrap, Col, Container, Form, Row} from "react-bootstrap";
 import {useForm} from "react-hook-form";
-import {CheckoutType, PayMethodEnum} from "../types/checkout.type";
+import {InfoPayType, PayMethodEnum} from "../types/infoPay.type";
 import axios, {AxiosResponse} from "axios";
 import {ResponseApiEsgoo} from "../types/responeApiEsgoo.type";
 import {LocaltionEsgooType} from "../types/localtionEsgoo.type";
@@ -14,11 +14,19 @@ import {setPayStatus} from "../slice/payStatus.slice";
 import {PayStatusEnum} from "../states/payStatus.stats";
 import {IC_CASH, IC_QR} from "../assets/images/icon/web.icon";
 import {useNavigate} from "react-router-dom";
+import axiosHttp from "../utils/axiosHttp";
+import {ResponseApi} from "../types/response.type";
+import {BillItemType} from "../types/billItem.type";
+import {getUser} from "../utils/sessionStorage";
+import {toast} from "react-toastify";
+import {PayRequest} from "../requests/pay.request";
+import {clearCart} from "../slice/cart.slice";
 
 export default function Checkout() {
+    document.title = "Tiến hành thanh toán"
     const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
     const nav = useNavigate();
-    const {register, handleSubmit, formState: {errors}} = useForm<CheckoutType>();
+    const {register, handleSubmit, formState: {errors}} = useForm<InfoPayType>();
     const [provinces, setProvinces] = React.useState<LocaltionEsgooType[]>([])
     const [districts, setDistricts] = React.useState<LocaltionEsgooType[]>([])
     const [wards, setWards] = React.useState<LocaltionEsgooType[]>([])
@@ -26,24 +34,56 @@ export default function Checkout() {
     const [payMethodSelect, setPayMethodSelect] = React.useState<PayMethodEnum>(PayMethodEnum.CASH)
     const dispatch = useDispatch();
 
-    const onSubmit = (data: CheckoutType) => {
-        data.payMethod = payMethodSelect
-        dispatch(setPayStatus({
-            status: PayStatusEnum.SUCCESS,
-            infoPay: data
-        }))
-        nav("/pay")
+    const onSubmit = (infoPay: InfoPayType) => {
+        infoPay.payMethod = payMethodSelect
+        const user = getUser();
+        if (!user || !user._id) {
+            toast.error("Vui lòng đăng nhập để tiếp tục thanh toán")
+            return
+        }
+        infoPay._id = user._id
+
+
+        axiosHttp
+            .post<any, AxiosResponse<any, ResponseApi<string>>, PayRequest>(
+                "/api/pay",
+                {
+                    infoPay: infoPay,
+                    products: cartItems.map((item: CartItemType) => {
+                        return {
+                            _id: item.id,
+                            model: item.type,
+                            quantity: item.quantity
+                        } as BillItemType
+                    })
+                })
+            .then(() => {
+                dispatch(setPayStatus({
+                    status: PayStatusEnum.SUCCESS,
+                    infoPay: infoPay
+                }))
+                dispatch(clearCart());
+                nav("/pay")
+            })
+            .catch(error => {
+                dispatch(setPayStatus({
+                    status: PayStatusEnum.FAILED,
+                    infoPay: infoPay
+                }))
+                nav("/pay")
+            });
     };
 
-    if (!cartItems.length) nav("/");
-
     useEffect(() => {
-        axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
-            .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
-                setProvinces(response.data.data)
-            }).catch((error) => {
-            console.log(error)
-        });
+        return () => {
+            if (!cartItems.length) nav("/");
+            axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
+                .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
+                    setProvinces(response.data.data)
+                }).catch((error) => {
+                console.log(error)
+            });
+        }
     }, []);
 
     const selectProvinceHandle = (id: number) => {

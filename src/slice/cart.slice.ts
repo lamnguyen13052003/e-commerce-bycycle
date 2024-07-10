@@ -65,7 +65,13 @@ const cartSlice = createSlice({
             removeItem(state.cartItems, payload.payload);
             toast.success("Xóa sản phẩm thành công!")
             saveLocalStorage(state)
-        }
+        },
+        clearCart: function (state, payload: PayloadAction<void>) {
+            while (state.cartItems.length) {
+                state.cartItems.pop();
+            }
+            saveLocalStorage(state)
+        },
     }
 });
 
@@ -82,5 +88,5 @@ const saveLocalStorage = (cart: CartState) => {
     localStorage.setItem("cart", JSON.stringify(cart))
 }
 
-export const {addCartItem, removeCartItem, increaseQuantityCartItem, decreaseCartItem} = cartSlice.actions;
+export const {addCartItem, removeCartItem, increaseQuantityCartItem, decreaseCartItem, clearCart} = cartSlice.actions;
 export const cartReducer = cartSlice.reducer

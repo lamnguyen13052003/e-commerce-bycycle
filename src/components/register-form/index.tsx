@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import {login, userNameVerify} from "../../slice/auth.slice";
 
 function Register() {
+    document.title = "Đăng ký tài khoản";
     const dispatch = useDispatch();
     dispatch(setTitle({title: "Đăng ký tài khoản"}));
     const nav = useNavigate();

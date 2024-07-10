@@ -12,6 +12,7 @@ import {login, userNameVerify} from "../../slice/auth.slice";
 import {LoginRequest} from "../../requests/login.request";
 
 function Login() {
+    document.title = "Đăng nhập tài khoản"
     const dispatch = useDispatch();
     dispatch(setTitle({title: "Đăng nhập tài khoản"}))
     const nav = useNavigate();

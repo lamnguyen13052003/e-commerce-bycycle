@@ -13,22 +13,18 @@ import {formatCurrency} from "../../utils/Formatter";
 import {ProductType} from "../../types/product.type";
 import {useDispatch} from "react-redux";
 import {addCartItem} from "../../slice/cart.slice";
+import {ModelType} from "../../types/modelProduct.type";
 
 
 const ProductDetailCol = (product: ProductType) => {
     const dispatch = useDispatch();
-    const [selectedColor, setSelectedColor] = useState<string>(`${product.model[0].color},${product.model[0].color}`);
+    const [modelSelected, setModelSelected] = useState<ModelType>(product.model[0]);
     const [quantity, setQuantity] = useState<number>(1);
 
-    const handleSelectColor = (color1: string, color2: string) => {
-        setSelectedColor(`${color1},${color2}`);
+    const handleSelectColor = (model: ModelType) => {
+        setModelSelected(model);
     };
 
-
-    const getType = () => {
-        const colors = selectedColor.split(",");
-        return colors[0] === colors[1] ? colors[0] : colors.join("/");
-    }
 
     return (
         <Container>
@@ -101,14 +97,10 @@ const ProductDetailCol = (product: ProductType) => {
                                         <div>
                                             <h4>Chọn màu sắc:</h4>
                                             <ColorSelector
-                                                colors={product.model.map(model => {
-                                                    return {
-                                                        color1: model.color,
-                                                        color2: model.color,
-                                                        name: model.color
-                                                    };
+                                                models={product.model.map(model => {
+                                                    return model;
                                                 })}
-                                                selectedColor={selectedColor}
+                                                selectedColor={modelSelected.color}
                                                 onSelectColor={handleSelectColor}
                                             />
                                         </div>
@@ -117,8 +109,9 @@ const ProductDetailCol = (product: ProductType) => {
                                             <div>
                                                 <QuantityCell id={product._id}
                                                               hasDispatch={false}
-                                                              type={selectedColor}
+                                                              type={modelSelected.color}
                                                               quantity={quantity}
+                                                              max={modelSelected.quantity}
                                                               onChange={(quantity) => {
                                                                   setQuantity(quantity);
                                                               }}
@@ -131,7 +124,7 @@ const ProductDetailCol = (product: ProductType) => {
                                                         url: product.model[0].pathImageColor,
                                                         price: product.discount ? (100 - product.discount) * product.price / 100 : product.price,
                                                         quantity: quantity,
-                                                        type: selectedColor,
+                                                        type: modelSelected.color,
                                                     }))
                                                     setQuantity(1)
                                                 }}>

@@ -1,3 +1,5 @@
+import {ObjectId} from "mongodb";
+
 export enum PayMethodEnum {
     CASH = "Tiền mặt",
     QR = "QR",
@@ -5,7 +7,8 @@ export enum PayMethodEnum {
     MASTER = "MASTER"
 }
 
-export type CheckoutType = {
+export type InfoPayType = {
+    _id?: ObjectId,
     fullName: string,
     phoneNumber: string,
     email: string,

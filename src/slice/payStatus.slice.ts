@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {PayStatusState} from "../states/payStatus.stats";
+import {PayStatusEnum, PayStatusState} from "../states/payStatus.stats";
 
 
 const initial: PayStatusState = {}
@@ -11,7 +11,6 @@ const payStatusSlice = createSlice({
         setPayStatus: (state, action: PayloadAction<PayStatusState>) => {
             state.status = action.payload.status
             state.infoPay = action.payload.infoPay
-            console.log(action.payload)
         }
     }
 });

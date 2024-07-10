@@ -1,4 +1,4 @@
-import {CheckoutType} from "../types/checkout.type";
+import {InfoPayType} from "../types/infoPay.type";
 
 export enum PayStatusEnum {
     SUCCESS,
@@ -7,5 +7,5 @@ export enum PayStatusEnum {
 
 export type PayStatusState = {
     status?: PayStatusEnum
-    infoPay?: CheckoutType
+    infoPay?: InfoPayType
 }
