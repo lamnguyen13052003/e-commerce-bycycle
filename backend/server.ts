@@ -1,9 +1,10 @@
-import express from "express";
+import express, {Express} from "express";
 import cors from "cors";
-import {run} from "./database.connect";
+import {startDatabase} from "./database.connect";
 import {runAuthController} from "./controller/auth.controller";
 import {runProductController} from "./controller/product.controller";
 import bodyParser = require("body-parser");
+import {runPayController} from "./controller/pay.controller";
 
 export const log = (tag: string, title: string, body: object) => {
     console.log(`=================================${tag}==================================`)
@@ -11,26 +12,33 @@ export const log = (tag: string, title: string, body: object) => {
     console.log("body: ", body)
 }
 
-
-run().catch(() => {
-    console.log("Failed to connect to MongoDB")
-});
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(bodyParser.urlencoded({extended: true}));
+const runService = (app: Express) => {
+    runProductController(app);
+    runAuthController(app);
+    runPayController(app);
+}
 
 
-app.get("/", (req, res) => {
-    res.send("Hello World");
-});
+const runServer = () => {
+    startDatabase().catch(() => {
+        console.log("Failed to connect to MongoDB")
+    });
 
-runProductController(app);
+    const app = express();
+    app.use(cors());
+    app.use(express.json());
+    app.use(bodyParser.urlencoded({extended: true}));
 
-runAuthController(app);
+    app.get("/", (req, res) => {
+        res.send("Hello World");
+    });
+
+    app.listen(1305, () => {
+        console.log("Server dep zai da chay o port 1305");
+    });
+
+    runService(app);
+}
 
 
-app.listen(1305, () => {
-    console.log("Server dep zai da chay o port 1305");
-});
+runServer();

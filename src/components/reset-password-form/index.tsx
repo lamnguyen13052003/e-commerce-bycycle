@@ -9,6 +9,7 @@ import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 
 function ChangePassword() {
+    document.title = "Đổi mật khẩu";
     const dispatch = useDispatch();
     const nav = useNavigate();
 

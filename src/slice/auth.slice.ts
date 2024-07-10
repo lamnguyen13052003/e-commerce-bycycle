@@ -2,13 +2,19 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import SignTitleState from "../states/signTitle.state";
 import {AuthState} from "../states/auth.state";
 import {User} from "../styles/type";
+import {
+    getUser,
+    getUsernameVerify,
+    removeUser,
+    removeUsernameVerify,
+    saveUser,
+    saveUsernameVerify
+} from "../utils/sessionStorage";
 
 const loadAuthState = () => {
     const auth: AuthState = {};
-    const user = sessionStorage.getItem("user")
-    const usernameVerify = sessionStorage.getItem("usernameVerify")
-    auth.user = user ? JSON.parse(user) : undefined
-    auth.usernameVerify = usernameVerify ? usernameVerify : undefined
+    auth.user = getUser()
+    auth.usernameVerify = getUsernameVerify()
     return auth
 }
 
@@ -19,19 +25,19 @@ const authSlice = createSlice({
     initialState: initial,
     reducers: {
         login: (state, action: PayloadAction<User>) => {
-            sessionStorage.setItem("user", JSON.stringify(action.payload))
+            saveUser(action.payload)
             state.user = action.payload
         },
         userNameVerify: (state, action: PayloadAction<string>) => {
-            sessionStorage.setItem("usernameVerify", JSON.stringify(action.payload))
+            saveUsernameVerify(action.payload)
             state.usernameVerify = action.payload
         },
         logout: (state, action: PayloadAction<void>) => {
-            sessionStorage.removeItem("user")
+            removeUser()
             state.user = undefined
         },
         verify: (state, action: PayloadAction<void>) => {
-            sessionStorage.removeItem("usernameVerify")
+            removeUsernameVerify()
             state.usernameVerify = undefined
         },
     }

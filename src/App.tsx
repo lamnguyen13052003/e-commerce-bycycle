@@ -13,7 +13,7 @@ import Register from "./components/register-form";
 import ForgetPassword from "./components/forget-password-form";
 import ChangePassword from "./components/reset-password-form";
 import Verify from "./components/verify-form";
-import {ProductDetail} from "./components/product-detail";
+import {ProductDetail} from "./pages/ProductDetail";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Pay from "./pages/Pay";

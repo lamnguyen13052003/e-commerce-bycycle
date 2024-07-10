@@ -30,6 +30,7 @@ xe dap nu: 5
 xe dap gap : 6
  */
 function getRootState(count: number, filterClick: number) {
+    document.title = "Danh mục sản phẩm"
     const {category} = useParams()
     const category_id: number = TitleCategorySlugToNum(category)
     let data: ProductHasTotalType
@@ -246,15 +247,15 @@ function Products() {
                     </Stack>
                     <ProductList products={rootState.data.products}/>
                     <Box className={'py-2 px-4 justify-content-center d-flex'}>
-                            <Button className={'focus-ring focus-ring-info'}
-                                    onClick={() => {
-                                        handlerClickSeeMore()
-                                    }}
-                                    href={isHasFilter ? `/${category}/page/${count}/filter?${rootState.query}` : `/${category}/page/${count}`}
-                                    disabled={handlerDisabled()}
-                                    variant="outlined" endIcon={<ArrowDropDownIcon/>}>
-                                Tải thêm sản phẩm
-                            </Button>
+                        <Button className={'focus-ring focus-ring-info'}
+                                onClick={() => {
+                                    handlerClickSeeMore()
+                                }}
+                                href={isHasFilter ? `/${category}/page/${count}/filter?${rootState.query}` : `/${category}/page/${count}`}
+                                disabled={handlerDisabled()}
+                                variant="outlined" endIcon={<ArrowDropDownIcon/>}>
+                            Tải thêm sản phẩm
+                        </Button>
                     </Box>
                 </Stack>
             </Container>

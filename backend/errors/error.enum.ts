@@ -46,6 +46,10 @@ const productNotFound: CustomError = {
     code: 404,
     message: "Không tìm thấy sản phẩm"
 }
+const payFailed: CustomError = {
+    code: 404,
+    message: "Thanh toán thất bại"
+}
 
 
 export {
@@ -58,5 +62,6 @@ export {
     verifyFail,
     passwordNotCompare,
     changePasswordFail,
-    productNotFound
+    productNotFound,
+    payFailed
 };

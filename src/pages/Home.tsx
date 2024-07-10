@@ -21,6 +21,7 @@ xe dap nu: 5
 xe dap gap : 6
  */
 function Home() {
+    document.title = "Trang chủ"
     const productsState = useSelector((state: RootState) => state.product)
     const dispatch = useAppDispatch()
     const {

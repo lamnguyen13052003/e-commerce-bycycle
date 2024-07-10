@@ -1,5 +1,5 @@
 import {connection} from "../database.connect";
-import {UserType} from "../types/user.type";
+import {UserHasPasswordType} from "../types/userHasPasswordType";
 import {
     accountExist,
     accountNotExist,
@@ -18,24 +18,24 @@ import {ChangePasswordRequest} from "../requests/changePassword.request";
 import {ObjectId} from "mongodb";
 
 const collection = 'user';
-const userRepository = connection.collection(collection);
+const userRepository = connection.collection<UserHasPasswordType>(collection);
 
 async function existUsername(username?: string): Promise<boolean> {
     const query = {username: username}
     return userRepository
-        .findOne<UserType>(query)
+        .findOne(query)
         .then((response): boolean => {
             return !!response;
         });
 }
 
-async function login(loginRequest: LoginRequest): Promise<UserType> {
+async function login(loginRequest: LoginRequest): Promise<UserHasPasswordType> {
     const exist = await existUsername(loginRequest.username);
     if (!exist)
         throw accountNotExist;
     return userRepository
-        .findOne<UserType>(loginRequest)
-        .then((response: UserType | null): UserType => {
+        .findOne(loginRequest)
+        .then((response: UserHasPasswordType | null): UserHasPasswordType => {
             if (!response) throw wrongUsernameOrPassword;
             if (response.verifyCode || response.verifyCode === "") throw accountNotVerify;
             response.password = undefined;
@@ -44,10 +44,10 @@ async function login(loginRequest: LoginRequest): Promise<UserType> {
         });
 }
 
-async function register(registerRequest: RegisterRequest): Promise<UserType> {
+async function register(registerRequest: RegisterRequest): Promise<UserHasPasswordType> {
     const exist = await existUsername(registerRequest.username);
     if (registerRequest.password !== registerRequest.confirmPassword) throw passwordNotCompare;
-    const user: UserType = {
+    const user: UserHasPasswordType = {
         username: registerRequest.username,
         password: registerRequest.password,
         fullName: registerRequest.fullName,
@@ -57,11 +57,11 @@ async function register(registerRequest: RegisterRequest): Promise<UserType> {
     if (exist) throw accountExist;
     return userRepository
         .insertOne(user)
-        .then((response): UserType => {
+        .then((response): UserHasPasswordType => {
             if (!response) throw registerFail;
             return {
                 id: response.insertedId,
-            } as UserType;
+            } as UserHasPasswordType;
         })
 }
 
@@ -69,7 +69,7 @@ async function verify(verifyRequest: VerifyRequest): Promise<boolean> {
     const exist = await existUsername(verifyRequest.username);
     if (!exist) throw accountNotExist;
     return userRepository
-        .findOne<UserType>(verifyRequest)
+        .findOne<UserHasPasswordType>(verifyRequest)
         .then((response): Promise<boolean> => {
             if (!response) throw wrongVerifyCode;
             return verifySuccess(response._id);
