@@ -21,23 +21,17 @@ import {DialogType} from "../../types/dialogType";
 import ResponsiveDialog from "../response-dialog/ResponsiveDialog";
 import {Link} from "react-router-dom";
 
-const currentUser = "user"
+
 const ProductDetailCol = (product: ProductType) => {
-    let data = sessionStorage.getItem(currentUser);
-    if(!data) data = "{}";
-    const userRes = JSON.parse(data) as UserResponseType
+    const userRes = getUser();
     const dispatch = useDispatch();
-    const [selectedColor, setSelectedColor] = useState<string>(`${product.model[0].color},${product.model[0].color}`);
+    const [modelSelected, setModelSelected] = useState<ModelType>(product.model[0]);
     const [quantity, setQuantity] = useState<number>(1);
 
-    const handleSelectColor = (color1: string, color2: string) => {
-        setSelectedColor(`${color1},${color2}`);
+    const handleSelectColor = (model: ModelType) => {
+        setModelSelected(model);
     };
 
-    const getType = () => {
-        const colors = selectedColor.split(",");
-        return colors[0] === colors[1] ? colors[0] : colors.join("/");
-    }
 
     const [open, setOpen] = useState(false);
 
@@ -119,14 +113,10 @@ const ProductDetailCol = (product: ProductType) => {
                                         <div>
                                             <h4>Chọn màu sắc:</h4>
                                             <ColorSelector
-                                                colors={product.model.map(model => {
-                                                    return {
-                                                        color1: model.color,
-                                                        color2: model.color,
-                                                        name: model.color
-                                                    };
+                                                models={product.model.map(model => {
+                                                    return model;
                                                 })}
-                                                selectedColor={selectedColor}
+                                                selectedColor={modelSelected.color}
                                                 onSelectColor={handleSelectColor}
                                             />
                                         </div>
@@ -135,8 +125,9 @@ const ProductDetailCol = (product: ProductType) => {
                                             <div>
                                                 <QuantityCell id={product._id}
                                                               hasDispatch={false}
-                                                              type={selectedColor}
+                                                              type={modelSelected.color}
                                                               quantity={quantity}
+                                                              max={modelSelected.quantity}
                                                               onChange={(quantity) => {
                                                                   setQuantity(quantity);
                                                               }}
@@ -149,7 +140,7 @@ const ProductDetailCol = (product: ProductType) => {
                                                         url: product.model[0].pathImageColor,
                                                         price: product.discount ? (100 - product.discount) * product.price / 100 : product.price,
                                                         quantity: quantity,
-                                                        type: selectedColor,
+                                                        type: modelSelected.color,
                                                     }))
                                                     setQuantity(1)
                                                 }}>
@@ -162,8 +153,7 @@ const ProductDetailCol = (product: ProductType) => {
                                         </div>
                                         <div>
                                             <ul>
-                                                <li>Gọi đặt mua: 0999 999 999 | Chat với chúng em!
-                                                </li>
+                                                <li>Gọi đặt mua: 0855354919 | Chat với chúng em!</li>
                                                 <li>Hãy nhập số điện thoại của anh chị vào đây ạ, chúng em sẽ gọi lại tư
                                                     vấn ngay cho anh chị về sản phẩm này ạ!
                                                 </li>

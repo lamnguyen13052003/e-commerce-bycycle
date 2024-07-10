@@ -16,12 +16,12 @@ import QueryString from "qs";
 import {CustomError} from "../errors/custom.error.type";
 import {log} from "../server";
 
-
 const TAG = "Product Controller"
 
 export const runProductController = (app: Express) => {
     const qs = require('qs')
     app.get("/api/products/all", (req, res) => {
+        log(TAG, "get all", req.body)
         getAll().then((response) => {
             res.send(Builder<ResponseApi<ProductType[]>>()
                 .code(202)
@@ -36,6 +36,7 @@ export const runProductController = (app: Express) => {
     app.get("/api/products/:category/page=:page", (req, res) => {
         const category = parseInt(req.params.category as string);
         const seeMore = parseInt(req.params.page as string);
+        log(TAG, "get products by category", req.body)
         getProductsByCategory(category, seeMore).then((response) => {
             res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)
@@ -49,6 +50,7 @@ export const runProductController = (app: Express) => {
 
     app.get("/api/products/best-sale/:bestSale", (req, res) => {
         const bestSale: boolean = req.params.bestSale as string == "true";
+        log(TAG, "get products best sale", req.body)
         getProductsBestSale(bestSale).then((response) => {
             res.send(Builder<ResponseApi<ProductType[]>>()
                 .code(202)
@@ -62,6 +64,7 @@ export const runProductController = (app: Express) => {
 
     app.get("/api/products/:category/filter-attribute", (req, res) => {
         const category = parseInt(req.params.category as string);
+        log(TAG, "get attr for filter", req.body)
         getAttrForFilter(category).then((response) => {
             res.send(Builder<ResponseApi<FilterAttributeType>>()
                 .code(202)
@@ -74,6 +77,7 @@ export const runProductController = (app: Express) => {
     })
 
     app.get("/api/products/:category/page=:page/filter", (req, res) => {
+        log(TAG, "get products by category", req.body)
         const query = qs.parse(req.query);
 
         const category: number = parseInt(req.params.category as string);
@@ -97,16 +101,19 @@ export const runProductController = (app: Express) => {
         })
     })
 
-    app.get("/api/product/:id", (req: Request<{ id: string }, any, any, QueryString.ParsedQs, Record<string, any>>,
-                                 res) => {
+    app.get("/api/product-detail/:id", (req: Request<{
+                                            id: string
+                                        }, any, any, QueryString.ParsedQs, Record<string, any>>,
+                                        res) => {
+        log(TAG, "get product by id", req.body)
         getProductById(req.params.id)
             .then((response) => {
-            res.send(Builder<ResponseApi<ProductType>>()
-                .code(202)
-                .message("Success")
-                .data(response)
-                .build());
-        }).catch((error: CustomError) => {
+                res.send(Builder<ResponseApi<ProductType>>()
+                    .code(202)
+                    .message("Success")
+                    .data(response)
+                    .build());
+            }).catch((error: CustomError) => {
             res.status(error.code).send(error.message);
         });
     });

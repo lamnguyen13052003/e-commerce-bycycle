@@ -14,14 +14,16 @@ export interface QuantityCellProps {
     type: string,
     quantity: number;
     hasDispatch: boolean;
+    max?: number;
     onChange: (quantity: number) => void;
 }
 
 
 function QuantityCell(props: QuantityCellProps) {
-    const {id, type, quantity, hasDispatch, onChange} = props;
+    const {id, type, quantity, hasDispatch, onChange, max} = props;
     const dispatch = useDispatch();
     const increaseQuantity = () => {
+        if (max && quantity >= max) return
         if (hasDispatch)
             dispatch(increaseQuantityCartItem({
                 _id: id,

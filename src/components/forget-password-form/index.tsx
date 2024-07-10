@@ -12,6 +12,7 @@ interface IFormForgetPassword {
 }
 
 function ForgetPassword() {
+    document.title = "Quên mật khẩu";
     const dispatch = useDispatch();
     dispatch(setTitle({title: "Quên mật khẩu"}))
     const nav = useNavigate();

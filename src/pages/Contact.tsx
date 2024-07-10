@@ -6,6 +6,7 @@ import {ContactType} from "../types/contact.type";
 
 
 function Contact() {
+    document.title = "Liên hệ"
     const {register, handleSubmit, formState: {errors}} = useForm<ContactType>();
     const onSubmit = (data: ContactType) => {
         console.log(data)
