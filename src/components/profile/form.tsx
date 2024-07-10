@@ -1,5 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { Card, Form, Button, Col, Row } from 'react-bootstrap';
+import { Col, Row, Card, Form, Button } from 'react-bootstrap';
+
+interface ProfileFormProps {
+    onSave: (data: FormData) => void;
+}
 
 interface FormData {
     firstName: string;
@@ -10,13 +14,9 @@ interface FormData {
     phone: string;
     address: string;
     street: string;
+    district: string;
     city: string;
-    state: string;
     zip: string;
-}
-
-interface ProfileFormProps {
-    onSave: (data: FormData) => void;
 }
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ onSave }) => {
@@ -29,17 +29,14 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onSave }) => {
         phone: "",
         address: "",
         street: "",
+        district: "",
         city: "",
-        state: "",
         zip: ""
     });
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { id, value } = e.target;
-        setFormData({
-            ...formData,
-            [id]: value
-        });
+        setFormData({ ...formData, [id]: value });
     };
 
     const handleSubmit = (e: FormEvent) => {
@@ -47,24 +44,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onSave }) => {
         onSave(formData);
     };
 
-    const handleReset = () => {
-        setFormData({
-            firstName: "",
-            lastName: "",
-            birthday: "",
-            gender: "",
-            email: "",
-            phone: "",
-            address: "",
-            street: "",
-            city: "",
-            state: "",
-            zip: ""
-        });
-    };
-
     return (
-        <Col style={{ padding: "20px", border: "2px solid #efefef", borderRadius: "25px" }} className="bg-white shadow-sm mb-4">
+        <Card border="light" className="bg-white shadow-sm mb-4">
             <Card.Body>
                 <h5 className="mb-4">Thông tin cá nhân</h5>
                 <Form onSubmit={handleSubmit}>
@@ -72,52 +53,30 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onSave }) => {
                         <Col md={6} className="mb-3">
                             <Form.Group controlId="firstName">
                                 <Form.Label>Họ</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Họ của bạn"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                />
+                                <Form.Control required type="text" placeholder="Họ của bạn" value={formData.firstName} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                         <Col md={6} className="mb-3">
                             <Form.Group controlId="lastName">
                                 <Form.Label>Tên</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Tên của bạn"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                />
+                                <Form.Control required type="text" placeholder="Tên của bạn" value={formData.lastName} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="align-items-center">
                         <Col md={6} className="mb-3">
                             <Form.Group controlId="birthday">
                                 <Form.Label>Ngày sinh</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="date"
-                                    value={formData.birthday}
-                                    onChange={handleChange}
-                                />
+                                <Form.Control required type="date" value={formData.birthday} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                         <Col md={6} className="mb-3">
                             <Form.Group controlId="gender">
                                 <Form.Label>Giới tính</Form.Label>
-                                <Form.Select
-                                    required
-                                    value={formData.gender}
-                                    onChange={handleChange}
-                                >
-                                    <option value="" disabled hidden>Chọn giới tính</option>
+                                <Form.Select value={formData.gender} onChange={handleChange}>
+                                    <option value="">Chọn giới tính</option>
                                     <option value="Nữ">Nữ</option>
                                     <option value="Nam">Nam</option>
-                                    <option value="Khác">Khác</option>
                                 </Form.Select>
                             </Form.Group>
                         </Col>
@@ -126,74 +85,45 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onSave }) => {
                         <Col md={6} className="mb-3">
                             <Form.Group controlId="email">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="email"
-                                    placeholder="name@company.com"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                />
+                                <Form.Control required type="email" placeholder="name@company.com" value={formData.email} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                         <Col md={6} className="mb-3">
                             <Form.Group controlId="phone">
-                                <Form.Label>Số điện thoại</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="tel"
-                                    placeholder="+12-345 678 910"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                />
+                                <Form.Label>Phone</Form.Label>
+                                <Form.Control required type="text" placeholder="+12-345 678 910" value={formData.phone} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                     </Row>
+
                     <h5 className="my-4">Địa chỉ</h5>
                     <Row>
                         <Col sm={6} className="mb-3">
                             <Form.Group controlId="address">
                                 <Form.Label>Số nhà</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Nhập số nhà"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                />
+                                <Form.Control required type="text" placeholder="Nhập số nhà" value={formData.address} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                         <Col sm={6} className="mb-3">
                             <Form.Group controlId="street">
                                 <Form.Label>Tên đường</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Nhập tên đường"
-                                    value={formData.street}
-                                    onChange={handleChange}
-                                />
+                                <Form.Control required type="text" placeholder="Nhập tên đường" value={formData.street} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                     </Row>
                     <Row>
                         <Col sm={4} className="mb-3">
-                            <Form.Group controlId="city">
+                            <Form.Group controlId="district">
                                 <Form.Label>Quận/ Huyện</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Quận/ Huyện"
-                                    value={formData.city}
-                                    onChange={handleChange}
-                                />
+                                <Form.Control required type="text" placeholder="Quận/ Huyện" value={formData.district} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                         <Col sm={4} className="mb-3">
-                            <Form.Group controlId="state">
-                                <Form.Label>Tỉnh/thành</Form.Label>
+                            <Form.Group controlId="city">
+                                <Form.Label>Thành phố</Form.Label>
                                 <Form.Select
                                     required
-                                    value={formData.state}
+                                    value={formData.district}
                                     onChange={handleChange}
                                 >
                                     <option value="" disabled hidden>Chọn tỉnh/thành</option>
@@ -260,30 +190,21 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onSave }) => {
                                     <option value="Vĩnh Long">Vĩnh Long</option>
                                     <option value="Vĩnh Phúc">Vĩnh Phúc</option>
                                     <option value="Yên Bái">Yên Bái</option>
-                                    {/* Add more options as needed */}
                                 </Form.Select>
                             </Form.Group>
                         </Col>
-                        <Col sm={4} className="mb-3">
+                        <Col sm={4}>
                             <Form.Group controlId="zip">
                                 <Form.Label>Mã Bưu Điện</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Mã bưu điện"
-                                    value={formData.zip}
-                                    onChange={handleChange}
-                                />
+                                <Form.Control required type="text" placeholder="Mã Bưu Điện" value={formData.zip}
+                                              onChange={handleChange}/>
                             </Form.Group>
                         </Col>
                     </Row>
-                    <div className="mt-3 d-flex justify-content-between">
-                        <Button variant="primary" type="submit">Lưu</Button>
-                        <Button variant="secondary" type="button" onClick={handleReset}>Đặt lại</Button>
-                    </div>
+                    <Button variant="primary" type="submit">Lưu thay đổi</Button>
                 </Form>
             </Card.Body>
-        </Col>
+        </Card>
     );
 };
 

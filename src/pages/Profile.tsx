@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Col, Row } from 'react-bootstrap';
 import ProfileCard from "../components/profile/card";
 import ProfileForm from "../components/profile/form";
+import Avatar from "../../assets/images/profile/me.png";
 
 interface FormData {
     firstName: string;
@@ -12,8 +13,8 @@ interface FormData {
     phone: string;
     address: string;
     street: string;
+    district: string;
     city: string;
-    state: string;
     zip: string;
 }
 
@@ -21,15 +22,15 @@ const ProfilePage: React.FC = () => {
     const [profileData, setProfileData] = useState<FormData>({
         firstName: "Tùng",
         lastName: "Quang",
-        birthday: "",
-        gender: "",
-        email: "example@example.com",
-        phone: "+12-345 678 910",
-        address: "123 Main St",
-        street: "",
-        city: "Tp. Hồ Chí Minh",
-        state: "",
-        zip: ""
+        birthday: "22/10/2003",
+        gender: "Nam",
+        email: "21130152@st.hcmuaf.edu.vn",
+        phone: "0932003572",
+        address: "2/11A",
+        street: "Đường 6",
+        district: "Tp. Thủ Đức",
+        city: "Tp. HCM",
+        zip: "",
     });
 
     const handleSave = (data: FormData) => {
@@ -38,17 +39,17 @@ const ProfilePage: React.FC = () => {
 
     return (
         <Row>
-            <Col sm={9} style={{padding: "40px"}}>
+            <Col sm={9} style={{ padding: "40px" }}>
                 <ProfileForm onSave={handleSave} />
             </Col>
-            <Col sm={3} style={{padding: "40px"}}>
+            <Col sm={3} style={{ padding: "40px" }}>
                 <ProfileCard
                     firstName={profileData.firstName}
                     lastName={profileData.lastName}
                     gender={profileData.gender}
                     email={profileData.email}
                     phone={profileData.phone}
-                    address={`${profileData.address}, ${profileData.street}, ${profileData.city}, ${profileData.state}, ${profileData.zip}`}
+                    address={`${profileData.address}, ${profileData.street}, ${profileData.district}, ${profileData.city}, ${profileData.zip}`}
                     city={profileData.city}
                 />
             </Col>
