@@ -1,5 +1,5 @@
 import {connection} from "../database.connect";
-import {UserHasPasswordType} from "../types/userHasPasswordType";
+import {UserHasPasswordType} from "../types/userHasPassword.type";
 import {
     accountExist,
     accountNotExist,
@@ -17,7 +17,7 @@ import {RegisterRequest} from "../requests/register.request";
 import {ChangePasswordRequest} from "../requests/changePassword.request";
 import {ObjectId} from "mongodb";
 
-const collection = 'user';
+const collection = 'users';
 const userRepository = connection.collection<UserHasPasswordType>(collection);
 
 async function existUsername(username?: string): Promise<boolean> {
@@ -48,12 +48,10 @@ async function register(registerRequest: RegisterRequest): Promise<UserHasPasswo
     const exist = await existUsername(registerRequest.username);
     if (registerRequest.password !== registerRequest.confirmPassword) throw passwordNotCompare;
     const user: UserHasPasswordType = {
-        username: registerRequest.username,
-        password: registerRequest.password,
-        fullName: registerRequest.fullName,
+        ...registerRequest,
+        urlAvatar: "https://i.imgur.com/7bIq1J9.png",
         verifyCode: generateVerifyCode(),
-        urlAvatar: ""
-    }
+    };
     if (exist) throw accountExist;
     return userRepository
         .insertOne(user)
@@ -61,6 +59,7 @@ async function register(registerRequest: RegisterRequest): Promise<UserHasPasswo
             if (!response) throw registerFail;
             return {
                 id: response.insertedId,
+                verifyCode: user.verifyCode,
             } as UserHasPasswordType;
         })
 }

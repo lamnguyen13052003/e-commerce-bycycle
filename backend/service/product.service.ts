@@ -4,7 +4,7 @@ import {ObjectId, Sort, WithId} from "mongodb";
 import {productNotFound} from "../errors/error.enum";
 import {BillItemType} from "../types/billItem.type";
 
-const collection = 'xe_dap';
+const collection = 'products';
 const productRepository = connection.collection<ProductType>(collection);
 
 async function getAll() {

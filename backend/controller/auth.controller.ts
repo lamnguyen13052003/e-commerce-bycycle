@@ -2,7 +2,7 @@ import {changePassword, forgetPassword, login, register, verify} from "../servic
 import {Express} from "express";
 import {Builder} from "builder-pattern";
 import {ResponseApi} from "../types/response.type";
-import {UserHasPasswordType} from "../types/userHasPasswordType";
+import {UserHasPasswordType} from "../types/userHasPassword.type";
 import {log} from "../server";
 
 const TAG = "Authentication Controller"
@@ -26,7 +26,7 @@ export const runAuthController = (app: Express) => {
         register(req.body).then((data) => {
             res.send(Builder<ResponseApi<UserHasPasswordType>>()
                 .code(202)
-                .message("Success")
+                .message(`Mã xác thực là: ${data.verifyCode}`)
                 .data(data)
                 .build())
         }).catch((error) => {

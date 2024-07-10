@@ -1,4 +1,4 @@
-import {User} from "../styles/type";
+import {User} from "../types/user.type";
 import {ProductType} from "../types/product.type";
 
 enum KEY {
@@ -24,7 +24,11 @@ const removeUsernameVerify = () => {
 
 const getUser = (): User | undefined => {
     const data = sessionStorage.getItem(KEY.USER)
-    if (data) return JSON.parse(data) as User
+    if (!data) return undefined;
+    const result = JSON.parse(data) as User
+    if (result.birthday)
+        result.birthday = new Date(result.birthday)
+    return result;
 }
 
 const getUsernameVerify = (): string | undefined => {
@@ -45,4 +49,13 @@ const pushRecentlyProduct = (product: ProductType) => {
     sessionStorage.setItem(KEY.RECENTLY_PRODUCT, JSON.stringify(recentlyProductList))
 }
 
-export {saveUser, saveUsernameVerify, removeUser, removeUsernameVerify, getUser, getUsernameVerify, getRecentlyProduct, pushRecentlyProduct}
+export {
+    saveUser,
+    saveUsernameVerify,
+    removeUser,
+    removeUsernameVerify,
+    getUser,
+    getUsernameVerify,
+    getRecentlyProduct,
+    pushRecentlyProduct
+}

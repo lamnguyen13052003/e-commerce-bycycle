@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import SignTitleState from "../states/signTitle.state";
 import {AuthState} from "../states/auth.state";
-import {User} from "../styles/type";
+import {User} from "../types/user.type";
 import {
     getUser,
     getUsernameVerify,

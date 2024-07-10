@@ -7,7 +7,7 @@ import {SubmitHandler, useForm} from "react-hook-form"
 import axios from "axios";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {User} from "../../styles/type";
+import {User} from "../../types/user.type";
 import {login, userNameVerify} from "../../slice/auth.slice";
 import {LoginRequest} from "../../requests/login.request";
 

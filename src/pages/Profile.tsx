@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Col, Row } from 'react-bootstrap';
-import ProfileCard from "../components/profile/card";
-import ProfileForm from "../components/profile/form";
+import React, {useState} from "react";
+import {Col, Container, Row} from 'react-bootstrap';
+import ProfileMenu from "../components/profile/profileMenu";
+import ProfileForm from "../components/profile/personalInfo";
 import Avatar from "../../assets/images/profile/me.png";
 
 interface FormData {
@@ -38,22 +38,16 @@ const ProfilePage: React.FC = () => {
     };
 
     return (
-        <Row>
-            <Col sm={9} style={{ padding: "40px" }}>
-                <ProfileForm onSave={handleSave} />
-            </Col>
-            <Col sm={3} style={{ padding: "40px" }}>
-                <ProfileCard
-                    firstName={profileData.firstName}
-                    lastName={profileData.lastName}
-                    gender={profileData.gender}
-                    email={profileData.email}
-                    phone={profileData.phone}
-                    address={`${profileData.address}, ${profileData.street}, ${profileData.district}, ${profileData.city}, ${profileData.zip}`}
-                    city={profileData.city}
-                />
-            </Col>
-        </Row>
+        <Container>
+            <Row className={"justify-content-between"}>
+                <Col sm={3}>
+                    <ProfileMenu/>
+                </Col>
+                <Col sm={9}>
+                    <ProfileForm/>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

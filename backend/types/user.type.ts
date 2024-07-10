@@ -5,4 +5,8 @@ export type User = {
     fullName?: string,
     urlAvatar?: string,
     username?: string,
+    phone?: string,
+    birthday?: Date,
+    gender?: string,
+    email?: string,
 }

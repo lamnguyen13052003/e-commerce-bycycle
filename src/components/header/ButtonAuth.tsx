@@ -16,14 +16,16 @@ function ButtonAuth() {
 
     return (
         <Stack direction={"row"} gap={1} justifyContent={"center"} alignItems={"center"}>
-            <Avatar sx={{
-                backgroundColor: green[500]
-            }}>
-            </Avatar>
+            <Link to={auth.user ? "/profile" : ""}>
+                <Avatar sx={{
+                    backgroundColor: green[500]
+                }}>
+                </Avatar>
+            </Link>
             <Stack direction={"column"}>
                 {auth.user ? (
                     <>
-                        <Link className={"text-decoration-none"} to={"#"}>
+                        <Link className={"text-decoration-none"} to={auth.user ? "/profile" : ""}>
                             <Button>{auth.user.fullName}</Button>
                         </Link>
                         <Button onClick={logoutHandle} className={"justify-content-start w-100"}>Đăng xuất</Button>
