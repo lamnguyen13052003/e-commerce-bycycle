@@ -1,5 +1,5 @@
 export interface InitialState<T>{
-    data?: T,
-    loading: boolean,
-    error: null
+    data: T,
+    loading?: boolean,
+    error?: null
 }

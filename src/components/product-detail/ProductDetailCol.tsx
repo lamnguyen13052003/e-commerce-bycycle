@@ -55,15 +55,12 @@ const ProductDetailCol = (product: ProductType) => {
     };
 
     const handleAddReview = () => {
-        if (handleValidReview() || !user || !user?._id || !user.fullName) return;
+        if (handleValidReview() || !user || !user?._id ) return;
         dispatch(addReview({
             productId: product._id,
             user_id: user._id,
-            name: user.fullName,
-            urlAvatar: user.urlAvatar,
             rating: rating,
             comment: textReview,
-            date: new Date()
         }));
     }
     return (

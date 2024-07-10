@@ -1,17 +1,18 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axiosHttp from "../utils/axiosHttp";
-import {InitialState} from "../states/initial.state";
 import AddReviewRequest from "../requests/addReview.request";
 import {AxiosResponse} from "axios";
+import {ReviewProductType} from "../types/reviewProduct.type";
+import {ObjectId} from "mongodb";
+import {ReviewProductHasTotal} from "../types/reviewProductHasTotal";
 
-
-const initialState: InitialState<AddReviewRequest> = {
-    loading: false,
-    error: null
+const initialState:  ReviewProductHasTotal= {
+    reviews: [],
+    total: 0
 }
 
 const addReview = createAsyncThunk('reviewProduct/addReview', async (review: AddReviewRequest, thunkAPI) => {
-    return axiosHttp.post<any, AxiosResponse<any, any>, AddReviewRequest>(`/reviews/add/productId=:${review.productId}`, review, {
+    return axiosHttp.post<any, AxiosResponse<any, any>, AddReviewRequest>(`/api/reviews/add`, review, {
         signal: thunkAPI.signal
     }).then((response) => {
         return response.data
@@ -32,8 +33,7 @@ const reviewProductSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder.addCase(addReview.fulfilled, (state, action) => {
-            state.loading = false
-            return action.payload
+           state.reviews.push(action.payload)
         })
 
     }

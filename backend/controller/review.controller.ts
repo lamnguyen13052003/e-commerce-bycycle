@@ -18,8 +18,8 @@ export const runReviewController = (app: Express) => {
         const {productId, userId, comment, rating} = req.body;
 
         const review: ReviewProductType = {
-            userId: ObjectId.createFromHexString(userId.toString()),
-            productId: ObjectId.createFromHexString(productId.toString()),
+            userId: userId,
+            productId: productId,
             rating: rating,
             comment: comment,
             date: new Date()
@@ -40,7 +40,6 @@ export const runReviewController = (app: Express) => {
         res) => {
         const productId: ObjectId = new ObjectId(req.params.productId);
         const seeMore: number = parseInt(req.params.seeMore);
-        console.log(productId, seeMore)
         getReviews(productId, seeMore)
             .then((response) => {
                 res.send(Builder<ResponseApi<GetReviewHasTotalResponse>>().code(202).message("Success").data({
