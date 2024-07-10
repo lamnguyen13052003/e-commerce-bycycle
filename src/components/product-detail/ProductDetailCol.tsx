@@ -17,6 +17,9 @@ import HoverRating from "../hover-rating";
 import {green} from "@mui/material/colors";
 import {UserResponseType} from "../../types/userResponse.type";
 import ReviewList from "../review-list";
+import {DialogType} from "../../types/dialogType";
+import ResponsiveDialog from "../response-dialog/ResponsiveDialog";
+import {Link} from "react-router-dom";
 
 const currentUser = "user"
 const ProductDetailCol = (product: ProductType) => {
@@ -31,12 +34,20 @@ const ProductDetailCol = (product: ProductType) => {
         setSelectedColor(`${color1},${color2}`);
     };
 
-
     const getType = () => {
         const colors = selectedColor.split(",");
         return colors[0] === colors[1] ? colors[0] : colors.join("/");
     }
 
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpenDialog = () => {
+        setOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
     return (
         <Container>
             <Row>
@@ -274,7 +285,6 @@ const ProductDetailCol = (product: ProductType) => {
                                         <Grid item xs={3}>
                                             <Stack direction={'column'} spacing={1}>
                                                 <Box className={'fw-bold'}>{!userRes.fullName? `Name`: userRes.fullName}</Box>
-                                                <Box className={'fst-italic text-body-secondary'}>Email</Box>
                                             </Stack>
                                         </Grid>
                                     </Grid>
@@ -292,14 +302,31 @@ const ProductDetailCol = (product: ProductType) => {
                                             rows={4}
                                             variant="filled"
                                             fullWidth
-                                            helperText="Vui lòng đánh giá."
                                         />
                                     </Box>
-
                                     <Button style={{marginTop: '20px', width: '150px', height: '45px'}}
+                                            onClick={() => {!userRes._id? handleClickOpenDialog() : () => {}}}
                                             variant="contained" size="medium">
                                         Gửi
                                     </Button>
+                                    <ResponsiveDialog
+                                        open={open}
+                                        handleClose={handleCloseDialog}
+                                        title="Thông báo"
+                                        content="Vui lòng đăng nhập trước khi bình luận."
+                                        actions={
+                                            <>
+                                                <Button onClick={handleCloseDialog} color="secondary">
+                                                    Hủy
+                                                </Button>
+                                                <Link to={'/login'}>
+                                                    <Button  color="primary" autoFocus>
+                                                        Đồng ý
+                                                    </Button>
+                                                </Link>
+                                            </>
+                                        }
+                                    />
                                 </Box>
                             </div>
                         </div>

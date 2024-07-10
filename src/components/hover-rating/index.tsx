@@ -28,7 +28,7 @@ export default function HoverRating(prop: {rating?: number
     return (
         <Box
             sx={{
-                width: 200,
+                fontWeight: 'bold',
                 display: 'flex',
                 alignItems: 'center',
             }}

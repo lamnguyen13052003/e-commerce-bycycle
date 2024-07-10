@@ -1,22 +1,20 @@
 import {Express} from "express";
 import {addReview, deleteReview, getReviews, updateReview} from "../service/review.service";
 import {ReviewProductType} from "../types/reviewProduct.type";
-import {ObjectId, UpdateResult} from "mongodb";
+import {ObjectId} from "mongodb";
 import {Builder} from "builder-pattern";
 import {ResponseApi} from "../types/response.type";
-import {ProductType} from "../types/product.type";
 import {GetReviewHasTotalResponse} from "../responses/getReviewHasTotal.response";
 import {UpdateReviewRequest} from "../requests/updateReview.request";
 
 export const runReviewController = (app: Express) => {
     app.post("/api/reviews/add/productId=:productId", (req, res) => {
         const productId: ObjectId = new ObjectId(req.params.productId);
-        const {user_id, name, email, rating, comment, date} = req.body;
+        const {user_id, name, rating, comment, date} = req.body;
         const review: ReviewProductType = {
             _id: new ObjectId(),
             user_id: user_id,
             name: name,
-            email: email,
             rating: rating,
             comment: comment,
             date: date
