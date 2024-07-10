@@ -4,7 +4,7 @@ import {ObjectId, Sort, WithId} from "mongodb";
 import {productNotFound} from "../errors/error.enum";
 import {BillItemType} from "../types/billItem.type";
 
-const collection = 'xe_dap';
+const collection = 'products';
 const productRepository = connection.collection<ProductType>(collection);
 
 async function getAll() {
@@ -173,6 +173,12 @@ async function rollBackProduct(billItemTypes: BillItemType[]) {
     })
 }
 
+async function checkProductId(id: ObjectId): Promise<boolean> {
+    return await productRepository.findOne({_id: id}).then((response) => {
+        return !!response;
+    })
+}
+
 
 function customQuery(arr: string[]) {
     if (arr.length === 0) return []
@@ -189,5 +195,6 @@ export {
     getAttrForFilter,
     getProductsByFilter,
     getProductById,
-    payProducts
+    payProducts,
+    checkProductId
 };

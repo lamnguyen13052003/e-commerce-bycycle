@@ -28,6 +28,10 @@ const accountNotExist: CustomError = {
     code: 404,
     message: "Tài khoản chưa được đăng ký"
 }
+const userNotFound: CustomError = {
+    code: 404,
+    message: "Tài khoản không tồn tại"
+}
 
 const registerFail: CustomError = {
     code: 404,
@@ -41,7 +45,6 @@ const changePasswordFail: CustomError = {
     code: 404,
     message: "Đổi mật khẩu thất bại"
 }
-
 const productNotFound: CustomError = {
     code: 404,
     message: "Không tìm thấy sản phẩm"
@@ -49,6 +52,10 @@ const productNotFound: CustomError = {
 const payFailed: CustomError = {
     code: 404,
     message: "Thanh toán thất bại"
+}
+const reviewIdNotExists: CustomError = {
+    code: 404,
+    message: "Id review không tồn tại"
 }
 
 
@@ -63,5 +70,7 @@ export {
     passwordNotCompare,
     changePasswordFail,
     productNotFound,
-    payFailed
+    payFailed,
+    userNotFound,
+    reviewIdNotExists
 };

@@ -1,9 +1,10 @@
 import {ObjectId} from "mongodb";
 
-export interface ReviewProductType {
+export interface ReviewProductResponseType {
     _id?: ObjectId,
+    name: string,
     userId: ObjectId,
-    productId: ObjectId,
+    avatar: string,
     rating: number,
     comment: string,
     date: Date

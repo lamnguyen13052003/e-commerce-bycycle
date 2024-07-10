@@ -17,7 +17,7 @@ import {RegisterRequest} from "../requests/register.request";
 import {ChangePasswordRequest} from "../requests/changePassword.request";
 import {ObjectId} from "mongodb";
 
-const collection = 'user';
+const collection = 'users';
 const userRepository = connection.collection<UserHasPasswordType>(collection);
 
 async function existUsername(username?: string): Promise<boolean> {
@@ -112,6 +112,13 @@ async function changePassword(changePasswordRequest: ChangePasswordRequest): Pro
         });
 }
 
+
+async function checkUserId(id: ObjectId): Promise<boolean> {
+    return await userRepository.findOne({_id: id}).then((response) => {
+        return !!response;
+    })
+}
+
 const generateVerifyCode = () => {
     const number = Math.floor(Math.random() * 999999);
     switch (number.toString().length) {
@@ -130,4 +137,4 @@ const generateVerifyCode = () => {
     }
 }
 
-export {login, register, verify, forgetPassword, changePassword};
+export {login, register, verify, forgetPassword, changePassword, checkUserId};

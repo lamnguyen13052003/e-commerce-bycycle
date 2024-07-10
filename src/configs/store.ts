@@ -7,6 +7,7 @@ import filterReducer from "../slice/filter.slice";
 import {cartReducer} from "../slice/cart.slice";
 import selectFilterReducer from "../slice/selectFilter.slice";
 import {payStatusReducer} from "../slice/payStatus.slice";
+import reviewProductReducer from "../slice/reviewProduct.slice";
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
         cart: cartReducer,
         payStatus: payStatusReducer,
         selectFilter: selectFilterReducer,
+        reviewProduct: reviewProductReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
 });

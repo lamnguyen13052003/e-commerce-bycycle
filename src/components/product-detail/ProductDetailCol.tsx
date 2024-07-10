@@ -11,20 +11,22 @@ import QuantityCell from '../cart/QuantityCell';
 import {Avatar, Box, Button, Grid, Input, Stack, TextField} from '@mui/material';
 import {formatCurrency} from "../../utils/Formatter";
 import {ProductType} from "../../types/product.type";
-import {useDispatch} from "react-redux";
 import {addCartItem} from "../../slice/cart.slice";
 import HoverRating from "../hover-rating";
 import {green} from "@mui/material/colors";
-import {UserResponseType} from "../../types/userResponse.type";
 import ReviewList from "../review-list";
-import {DialogType} from "../../types/dialogType";
 import ResponsiveDialog from "../response-dialog/ResponsiveDialog";
 import {Link} from "react-router-dom";
+import {getUser} from "../../utils/sessionStorage";
+import {ModelType} from "../../types/modelProduct.type";
+import {addReview} from "../../slice/reviewProduct.slice";
+import AddReviewRequest from "../../requests/addReview.request";
+import {useAppDispatch} from "../../configs/store";
 
 
 const ProductDetailCol = (product: ProductType) => {
-    const userRes = getUser();
-    const dispatch = useDispatch();
+    const user = getUser();
+    const dispatch = useAppDispatch();
     const [modelSelected, setModelSelected] = useState<ModelType>(product.model[0]);
     const [quantity, setQuantity] = useState<number>(1);
 
@@ -32,16 +34,38 @@ const ProductDetailCol = (product: ProductType) => {
         setModelSelected(model);
     };
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const [textReview, setTextReview] = useState<string>('');
+    const [rating, setRating] = useState<number>(3);
 
-    const [open, setOpen] = useState(false);
+    const handleValidReview = () => {
+        return textReview === '';
+    }
+
+    const handleChangeTextReview = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTextReview(event.target.value);
+    }
 
     const handleClickOpenDialog = () => {
-        setOpen(true);
+        setOpenDialog(true);
     };
 
     const handleCloseDialog = () => {
-        setOpen(false);
+        setOpenDialog(false);
     };
+
+    const handleAddReview = () => {
+        if (handleValidReview() || !user || !user?._id || !user.fullName) return;
+        dispatch(addReview({
+            productId: product._id,
+            user_id: user._id,
+            name: user.fullName,
+            urlAvatar: user.urlAvatar,
+            rating: rating,
+            comment: textReview,
+            date: new Date()
+        }));
+    }
     return (
         <Container>
             <Row>
@@ -254,73 +278,87 @@ const ProductDetailCol = (product: ProductType) => {
                         </div>
                         <div id="product-content"></div>
                     </pdc.Des>
-                    <pdc.Comment className="mb-3">
-                        <div id="form">
-                            <h3>Đánh giá</h3>
-                            <div>
-                                <Box style={{
-                                    width: '100%',
-                                    border: '2px solid #2372dc',
-                                    borderRadius: '10px',
-                                    padding: '30px'
-                                }}>
-                                    <ReviewList reviews={product.review} userId={userRes._id}/>
-                                    {userRes._id &&
-                                    <Grid container>
-                                        <Grid item xs={1}>
-                                            <Avatar alt={!userRes.fullName? ``: userRes.fullName}
-                                                    src={!userRes.urlAvatar? ``: `${userRes.urlAvatar}`}
-                                                    className={'m-auto'} sx={{ backgroundColor: green[500] }}></Avatar>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Stack direction={'column'} spacing={1}>
-                                                <Box className={'fw-bold'}>{!userRes.fullName? `Name`: userRes.fullName}</Box>
-                                            </Stack>
-                                        </Grid>
-                                    </Grid>
-                                    }
-                                    <HoverRating/>
-                                    <Box
-                                        component="form"
-                                        noValidate
-                                        autoComplete="off"
-                                    >
-                                        <TextField
-                                            id="filled-multiline-static"
-                                            label="Đánh giá của bạn"
-                                            multiline
-                                            rows={4}
-                                            variant="filled"
-                                            fullWidth
-                                        />
-                                    </Box>
-                                    <Button style={{marginTop: '20px', width: '150px', height: '45px'}}
-                                            onClick={() => {!userRes._id? handleClickOpenDialog() : () => {}}}
-                                            variant="contained" size="medium">
-                                        Gửi
-                                    </Button>
-                                    <ResponsiveDialog
-                                        open={open}
-                                        handleClose={handleCloseDialog}
-                                        title="Thông báo"
-                                        content="Vui lòng đăng nhập trước khi bình luận."
-                                        actions={
-                                            <>
-                                                <Button onClick={handleCloseDialog} color="secondary">
-                                                    Hủy
-                                                </Button>
-                                                <Link to={'/login'}>
-                                                    <Button  color="primary" autoFocus>
-                                                        Đồng ý
-                                                    </Button>
-                                                </Link>
-                                            </>
-                                        }
-                                    />
-                                </Box>
-                            </div>
-                        </div>
-                    </pdc.Comment>
+                    {user && user._id ?
+                        (<>
+                            <pdc.Comment className="mb-3">
+                                <div id="form">
+                                    <h3>Đánh giá</h3>
+                                    <div>
+                                        <Box style={{
+                                            width: '100%',
+                                            border: '2px solid #2372dc',
+                                            borderRadius: '10px',
+                                            padding: '30px'
+                                        }}>
+                                            <ReviewList reviews={product.review} userId={user._id}/>
+                                            {user._id &&
+                                                <Grid container>
+                                                    <Grid item xs={1}>
+                                                        <Avatar alt={!user.fullName ? `` : user.fullName}
+                                                                src={!user.urlAvatar ? `` : `${user.urlAvatar}`}
+                                                                className={'m-auto'}
+                                                                sx={{backgroundColor: green[500]}}></Avatar>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <Stack direction={'column'} spacing={1}>
+                                                            <Box
+                                                                className={'fw-bold'}>{!user.fullName ? `Name` : user.fullName}</Box>
+                                                        </Stack>
+                                                    </Grid>
+                                                </Grid>
+                                            }
+                                            <HoverRating rating={rating}/>
+                                            <Box
+                                                component="form"
+                                                noValidate
+                                                autoComplete="off"
+                                            >
+                                                <TextField
+                                                    id="filled-multiline-static"
+                                                    onChange={handleChangeTextReview}
+                                                    label="Đánh giá của bạn"
+                                                    multiline
+                                                    rows={4}
+                                                    variant="filled"
+                                                    fullWidth
+                                                    {...(handleValidReview() ? {
+                                                        error: true,
+                                                        helperText: "Vui lòng nhập đánh giá"
+                                                    } : {})}
+                                                />
+                                            </Box>
+                                            <Button style={{marginTop: '20px', width: '150px', height: '45px'}}
+                                                    onClick={() => {
+                                                        !user._id ? handleClickOpenDialog() : handleAddReview()
+                                                    }}
+                                                    variant="contained" size="medium">
+                                                Gửi
+                                            </Button>
+                                            <ResponsiveDialog
+                                                open={openDialog}
+                                                handleClose={handleCloseDialog}
+                                                title="Thông báo"
+                                                content="Vui lòng đăng nhập trước khi bình luận."
+                                                actions={
+                                                    <>
+                                                        <Button onClick={handleCloseDialog} color="secondary">
+                                                            Hủy
+                                                        </Button>
+                                                        <Link to={'/login'}>
+                                                            <Button color="primary" autoFocus>
+                                                                Đồng ý
+                                                            </Button>
+                                                        </Link>
+                                                    </>
+                                                }
+                                            />
+                                        </Box>
+                                    </div>
+                                </div>
+                            </pdc.Comment>
+                        </>) :
+                        (<></>)}
+
                 </Col>
             </Row>
         </Container>

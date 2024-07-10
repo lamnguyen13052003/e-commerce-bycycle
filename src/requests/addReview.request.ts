@@ -1,7 +1,10 @@
+import {ObjectId} from "mongodb";
+
 export default interface AddReviewRequest {
-    productId: string,
+    productId: ObjectId,
+    user_id: ObjectId,
     name: string,
-    email: string,
+    urlAvatar?: string,
     rating: number,
     comment: string,
     date: Date

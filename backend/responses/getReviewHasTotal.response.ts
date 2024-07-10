@@ -1,6 +1,6 @@
-import {ReviewProductResponse} from "./reviewProduct.response";
+import {ReviewProductResponseType} from "../types/reviewProductResponse.type";
 
 export type GetReviewHasTotalResponse = {
     total: number;
-    reviews: ReviewProductResponse[];
+    reviews: ReviewProductResponseType[];
 }
