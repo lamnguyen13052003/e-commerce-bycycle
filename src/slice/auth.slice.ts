@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import SignTitleState from "../states/signTitle.state";
 import {AuthState} from "../states/auth.state";
 import {User} from "../types/user.type";
 import {
@@ -8,7 +7,8 @@ import {
     removeUser,
     removeUsernameVerify,
     saveUser,
-    saveUsernameVerify
+    saveUsernameVerify,
+    updateProfile as saveProfile,
 } from "../utils/sessionStorage";
 
 const loadAuthState = () => {
@@ -32,16 +32,28 @@ const authSlice = createSlice({
             saveUsernameVerify(action.payload)
             state.usernameVerify = action.payload
         },
-        logout: (state, action: PayloadAction<void>) => {
+        logout: (state, action: PayloadAction<{}>) => {
             removeUser()
             state.user = undefined
         },
-        verify: (state, action: PayloadAction<void>) => {
+        verifySuccess: (state, action: PayloadAction<{}>) => {
             removeUsernameVerify()
             state.usernameVerify = undefined
+        },
+        updateProfile: (state, action: PayloadAction<User>) => {
+            const user = action.payload;
+            state.user = {
+                ...state.user,
+                fullName: user.fullName,
+                phone: user.phone,
+                birthday: user.birthday,
+                gender: user.gender,
+                email: user.email
+            }
+            saveProfile(user)
         },
     }
 });
 
-export const {login, logout, userNameVerify, verify} = authSlice.actions;
+export const {login, logout, userNameVerify, verifySuccess, updateProfile} = authSlice.actions;
 export const authReducer = authSlice.reducer

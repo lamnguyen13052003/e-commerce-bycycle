@@ -103,7 +103,7 @@ export const runProductController = (app: Express) => {
 
     app.get("/api/product-detail/:id", (req: Request<{
                                             id: string
-                                        }, any, any, QueryString.ParsedQs, Record<string, any>>,
+                                        }, any, any, any, any>,
                                         res) => {
         log(TAG, "get product by id", req.body)
         getProductById(req.params.id)

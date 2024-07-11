@@ -26,7 +26,7 @@ function ButtonAuth() {
                 {auth.user ? (
                     <>
                         <Link className={"text-decoration-none"} to={auth.user ? "/profile" : ""}>
-                            <Button>{auth.user.fullName}</Button>
+                            <Button className={"text-start"}>{auth.user.fullName}</Button>
                         </Link>
                         <Button onClick={logoutHandle} className={"justify-content-start w-100"}>Đăng xuất</Button>
                     </>

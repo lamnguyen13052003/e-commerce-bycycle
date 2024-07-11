@@ -1,14 +1,17 @@
 import React from 'react';
-import {Button, TextField, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
+import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {setTitle} from "../../slice/signTitle.slice";
 import {Link, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {RegisterRequest} from "../../requests/register.request";
-import axios from "axios";
 import {toast} from "react-toastify";
-import {login, userNameVerify} from "../../slice/auth.slice";
+import {userNameVerify} from "../../slice/auth.slice";
 import {Col, Row} from "react-bootstrap";
+import axiosHttp from "../../utils/axiosHttp";
+import {AxiosResponse} from "axios";
+import {ResponseApi} from "../../types/response.type";
+import {UserHasPasswordType} from "../../../backend/types/userHasPassword.type";
 
 function Register() {
     document.title = "Đăng ký tài khoản";
@@ -18,26 +21,16 @@ function Register() {
 
     const {register, getValues, handleSubmit, formState: {errors}} = useForm<RegisterRequest>();
 
-    const registerHandle = async (data: RegisterRequest) => {
-        return axios.request({
-            url: "http://localhost:1305/api/register",
-            method: "POST",
-            data: data,
-        })
-    }
-
     const onSubmit: SubmitHandler<RegisterRequest> = (form) => {
-        const promise = registerHandle(form)
+        const promise = axiosHttp.post<string, AxiosResponse<ResponseApi<UserHasPasswordType>>>("/api/auth/register", form)
         toast.promise(promise, {
             pending: "Promise is pending",
             success: {
                 render({data}) {
-                    dispatch(login(data.data.data))
                     return data.data.message
                 },
                 autoClose: 5000,
                 onClose: () => {
-                    dispatch(userNameVerify(form.username ?? ""))
                     nav("/verify")
                 },
             },
@@ -48,7 +41,12 @@ function Register() {
                     return `${response.message}`
                 }
             }
-        });
+        }).then(response => {
+                const user: UserHasPasswordType | undefined = response.data.data;
+                if (user && user.username)
+                    dispatch(userNameVerify(user.username))
+            }
+        );
     }
 
     return (
@@ -57,7 +55,6 @@ function Register() {
               onSubmit={handleSubmit(onSubmit)}
         >
             <TextField
-                id="outlined-basic"
                 className={"w-100"}
                 type={"text"}
                 {...register(
@@ -77,7 +74,6 @@ function Register() {
                         required: "Tên đăng nhập không được để trống",
                     }
                 )}
-                id="outlined-basic"
                 className={"w-100"}
                 type={"string"}
                 error={!!errors.username}
@@ -93,7 +89,6 @@ function Register() {
                                 required: "Email không được để trống",
                             }
                         )}
-                        id="outlined-basic"
                         className={"w-100"}
                         type={"email"}
                         error={!!errors.email}
@@ -108,7 +103,6 @@ function Register() {
                                 required: "Số điện thoại không được để trống",
                             }
                         )}
-                        id="outlined-basic"
                         className={"w-100"}
                         type={"tel"}
                         error={!!errors.phone}
@@ -125,7 +119,6 @@ function Register() {
                             {...register(
                                 "gender",
                             )}
-                            id="outlined-basic"
                             className={"w-100"}
                             label="Giới tính"
                             variant="outlined"
@@ -143,7 +136,6 @@ function Register() {
                                 required: "Ngày sinh không được để trống",
                             }
                         )}
-                        id="outlined-basic"
                         className={"w-100"}
                         type={"date"}
                         error={!!errors.birthday}
@@ -159,7 +151,6 @@ function Register() {
                         required: "Mật khẩu không được để trống",
                     }
                 )}
-                id="outlined-basic"
                 className={"w-100"}
                 type={"password"}
                 label="Mật khẩu"
@@ -175,7 +166,6 @@ function Register() {
                         validate: (value) => value === getValues().password || "Mật khẩu không khớp"
                     }
                 )}
-                id="outlined-basic"
                 className={"w-100"}
                 type={"password"}
                 label="Nhập lại mật khẩu"

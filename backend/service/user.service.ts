@@ -6,7 +6,7 @@ import {
     accountNotVerify,
     changePasswordFail,
     passwordNotCompare,
-    registerFail,
+    registerFail, updateProfileFail,
     verifyFail,
     wrongUsernameOrPassword,
     wrongVerifyCode
@@ -16,6 +16,7 @@ import {LoginRequest} from "../requests/login.request";
 import {RegisterRequest} from "../requests/register.request";
 import {ChangePasswordRequest} from "../requests/changePassword.request";
 import {ObjectId} from "mongodb";
+import {User} from "../types/user.type";
 
 const collection = 'users';
 const userRepository = connection.collection<UserHasPasswordType>(collection);
@@ -58,7 +59,7 @@ async function register(registerRequest: RegisterRequest): Promise<UserHasPasswo
         .then((response): UserHasPasswordType => {
             if (!response) throw registerFail;
             return {
-                id: response.insertedId,
+                username: user.username,
                 verifyCode: user.verifyCode,
             } as UserHasPasswordType;
         })
@@ -111,6 +112,26 @@ async function changePassword(changePasswordRequest: ChangePasswordRequest): Pro
         });
 }
 
+async function updateProfile(user: User): Promise<User> {
+    if (!user._id) throw accountNotExist;
+    return await userRepository
+        .findOneAndUpdate({_id: ObjectId.createFromHexString(user._id.toString())}, {
+            $set: {
+                birthday: user.birthday,
+                email: user.email,
+                fullName: user.fullName,
+                phone: user.phone,
+                gender: user.gender
+            }
+        }).then((response): User => {
+            if (!response) throw updateProfileFail;
+            return user;
+        })
+        .catch(() => {
+            throw updateProfileFail;
+        });
+}
+
 const generateVerifyCode = () => {
     const number = Math.floor(Math.random() * 999999);
     switch (number.toString().length) {
@@ -129,4 +150,4 @@ const generateVerifyCode = () => {
     }
 }
 
-export {login, register, verify, forgetPassword, changePassword};
+export {login, register, verify, forgetPassword, changePassword, updateProfile};

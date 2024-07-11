@@ -1,110 +1,205 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Card, Col, Form, Modal, Row} from 'react-bootstrap';
 import {Stack} from "@mui/material";
 import {useForm} from "react-hook-form";
 import {ObjectId} from "mongodb";
 import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../configs/store";
 import {User} from "../../types/user.type";
+import axiosHttp from "../../utils/axiosHttp";
+import {AxiosResponse} from "axios";
+import {ResponseApi} from "../../types/response.type";
+import {toast} from "react-toastify";
+import {updateProfile} from "../../slice/auth.slice";
 
 type changePasswordForm = {
-    _id: ObjectId
-    currentPassword: string;
-    newPassword: string;
-    confirmPassword: string;
+    _id?: ObjectId
+    currentPassword?: string;
+    newPassword?: string;
+    confirmPassword?: string;
 }
 
 function ProfileForm() {
-    const auth = useSelector((state: RootState) => state.auth);
+    const user: User | undefined = useSelector((state: RootState) => state.auth.user);
+    const dispatch = useDispatch();
     const nav = useNavigate();
-    useEffect(() => {
-        if (!auth.user)
-            nav("/login")
-    }, [auth]);
-
-    const {register, getValues, handleSubmit, formState: {errors}} = useForm<changePasswordForm>();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    const [profile, setProfile] = useState<User>({
-        fullName: auth.user?.fullName,
-        birthday: auth.user?.birthday,
-        gender: auth.user?.gender,
-        email: auth.user?.email,
-        phone: auth.user?.phone,
+    const {
+        register: registerChangePassword,
+        getValues: getValuesChangePassword,
+        handleSubmit: handleSubmitChangePassword,
+        formState: {errors: errorsChangePassword}
+    } = useForm<changePasswordForm>({
+        values: {
+            _id: user?._id
+        }
     });
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const {id, value} = e.target;
-        setProfile({...profile, [id]: value});
-    };
-
+    const {
+        register: registerUpdateProfile,
+        handleSubmit: handleSubmitUpdateProfile,
+        formState: {errors: errorsUpdateProfile}
+    } = useForm<User>(
+        {
+            values: {
+                _id: user?._id,
+                fullName: user?.fullName,
+                birthday: user?.birthday,
+                gender: user?.gender,
+                email: user?.email,
+                phone: user?.phone,
+            }
+        }
+    );
     const onSubmitChangePassword = (data: changePasswordForm) => {
         handleClose();
     }
+    const onSubmitUpdateProfile = (data: User) => {
+        const promise = axiosHttp.put<string, AxiosResponse<ResponseApi<User>>>("/api/user/update-profile", data)
+        toast.promise(promise, {
+            pending: "Promise is pending",
+            success: {
+                render({data}) {
+                    return data.data.message
+                },
+                autoClose: 1000,
+            },
+            error: {
+                render: ({data}) => {
+                    // @ts-ignore
+                    const response = data.response.data
+                    return `${response.message}`
+                }
+            }
+        }).then(response => {
+            const result = response.data.data;
+            if (!result)
+                return;
+            handleClose();
+            dispatch(updateProfile(result))
+        })
+    }
 
     const getBirthday = () => {
-        if (!profile.birthday) return ""
-        const date = profile.birthday;
+        if (!user || !user.birthday) return ""
+        const date = user.birthday;
         const month = date.getMonth();
         const day = date.getDate();
         return `${date.getFullYear()}-${month.toString().length == 1 ? "0" + (month + 1) : month + 1}-${day.toString().length == 1 ? "0" + day : day}`;
     }
 
+    useEffect(() => {
+        if (!user)
+            nav("/login")
+
+    }, [user])
+
     return (
         <Card border="light" className="bg-white shadow-sm mb-4">
             <Card.Body>
                 <h5 className="mb-4">Thông tin cá nhân</h5>
-                <Form onSubmit={(e) => {
-                    e.preventDefault();
-                }}>
+                <Form onSubmit={handleSubmitUpdateProfile(onSubmitUpdateProfile)}>
                     <Row>
                         <Col md={12} className="mb-3">
-                            <Form.Group controlId="firstName">
+                            <Form.Group controlId="firstName" className={"position-relative"}>
                                 <Form.Label>Họ và tên</Form.Label>
-                                <Form.Control required type="text" placeholder="Họ và tên của bạn"
-                                              value={profile.fullName}
-                                              onChange={handleChange}/>
+                                <Form.Control type="text"
+                                              placeholder="Họ và tên của bạn"
+                                              {...registerUpdateProfile(
+                                                  "fullName",
+                                                  {
+                                                      required: "Vui lòng nhập họ và tên",
+                                                  }
+                                              )}
+                                              isInvalid={!!errorsUpdateProfile.fullName}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errorsUpdateProfile.fullName?.message}
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                     </Row>
                     <Row className="align-items-center">
                         <Col md={6} className="mb-3">
-                            <Form.Group controlId="birthday">
+                            <Form.Group controlId="birthday" className={"position-relative"}>
                                 <Form.Label>Ngày sinh</Form.Label>
-                                <Form.Control required type="date"
-                                              value={getBirthday()}
-                                              onChange={handleChange}/>
+                                <Form.Control type="date"
+                                              {...registerUpdateProfile(
+                                                  "birthday",
+                                                  {
+                                                      required: "Vui lòng nhập ngày sinh"
+                                                  }
+                                              )}
+                                              isInvalid={!!errorsUpdateProfile.birthday}/>
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errorsUpdateProfile.birthday?.message}
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col md={6} className="mb-3">
-                            <Form.Group controlId="gender">
+                            <Form.Group controlId="gender" className={"position-relative"}>
                                 <Form.Label>Giới tính</Form.Label>
-                                <Form.Select value={profile.gender} onChange={handleChange}>
+                                <Form.Select
+                                    {...registerUpdateProfile(
+                                        "gender",
+                                        {
+                                            required: "Vui lòng chọn giới tính"
+                                        }
+                                    )}
+                                    isInvalid={!!errorsUpdateProfile.gender}
+                                >
                                     <option value="">Chọn giới tính</option>
                                     <option value="Nữ">Nữ</option>
                                     <option value="Nam">Nam</option>
                                 </Form.Select>
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errorsUpdateProfile.gender?.message}
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                     </Row>
                     <Row>
                         <Col md={6} className="mb-3">
-                            <Form.Group controlId="email">
+                            <Form.Group controlId="email" className={"position-relative"}>
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control required type="text" placeholder="Email của bạn"
-                                              value={profile.email}
-                                              onChange={handleChange}/>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Email của bạn"
+                                    {...registerUpdateProfile(
+                                        "email",
+                                        {
+                                            required: "Vui lòng nhập email",
+                                        }
+                                    )}
+                                    isInvalid={!!errorsUpdateProfile.email}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errorsUpdateProfile.email?.message}
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col md={6} className="mb-3">
-                            <Form.Group controlId="phoneNumber">
+                            <Form.Group controlId="phoneNumber" className={"position-relative"}>
                                 <Form.Label>Số điện thọại</Form.Label>
-                                <Form.Control required type="text" placeholder="Số điện thọại của bạn"
-                                              value={profile.phone}
-                                              onChange={handleChange}/>
+                                <Form.Control type="text"
+                                              placeholder="Số điện thọại của bạn"
+                                              {...registerUpdateProfile(
+                                                  "phone",
+                                                  {
+                                                      required: "Vui lòng nhập số điện thoại",
+                                                      pattern: {
+                                                          value: /^[0-9]{10}$/,
+                                                          message: "Số điện thoại không hợp lệ"
+                                                      }
+                                                  }
+                                              )}
+                                              isInvalid={!!errorsUpdateProfile.phone}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errorsUpdateProfile.phone?.message}
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -125,30 +220,22 @@ function ProfileForm() {
                     <Modal.Header closeButton>
                         <Modal.Title>Đổi mật khẩu</Modal.Title>
                     </Modal.Header>
-                    <Form.Control
-                        type="hidden"
-                        placeholder="Mật khẩu hiện tại"
-                        {...register(
-                            "_id",
-                        )}
-                        value={auth.user?._id?.toString()}
-                    />
                     <Modal.Body>
                         <Form.Group controlId="currentPassword" className={"position-relative"}>
                             <Form.Label>Mật khẩu hiện tại</Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Mật khẩu hiện tại"
-                                {...register(
+                                {...registerChangePassword(
                                     "currentPassword",
                                     {
                                         required: "Vui lòng nhập mật khẩu hiện tại"
                                     }
                                 )}
-                                isInvalid={!!errors.currentPassword}
+                                isInvalid={!!errorsChangePassword.currentPassword}
                             />
                             <Form.Control.Feedback type="invalid" tooltip>
-                                {errors.currentPassword?.message}
+                                {errorsChangePassword.currentPassword?.message}
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="newPassword" className={"position-relative"}>
@@ -156,16 +243,16 @@ function ProfileForm() {
                             <Form.Control
                                 type="password"
                                 placeholder="Mật khẩu mới"
-                                {...register(
+                                {...registerChangePassword(
                                     "newPassword",
                                     {
                                         required: "Vui lòng nhập mật khẩu mới"
                                     }
                                 )}
-                                isInvalid={!!errors.newPassword}
+                                isInvalid={!!errorsChangePassword.newPassword}
                             />
                             <Form.Control.Feedback type="invalid" tooltip>
-                                {errors.newPassword?.message}
+                                {errorsChangePassword.newPassword?.message}
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="confirmPassword" className={"position-relative"}>
@@ -173,17 +260,17 @@ function ProfileForm() {
                             <Form.Control
                                 type="password"
                                 placeholder="Xác nhận mật khẩu"
-                                {...register(
+                                {...registerChangePassword(
                                     "confirmPassword",
                                     {
                                         required: "Vui lòng nhập lại mật khẩu mới",
-                                        validate: value => value === getValues().newPassword || "Mật khẩu không khớp"
+                                        validate: value => value === getValuesChangePassword().newPassword || "Mật khẩu không khớp"
                                     }
                                 )}
-                                isInvalid={!!errors.confirmPassword}
+                                isInvalid={!!errorsChangePassword.confirmPassword}
                             />
                             <Form.Control.Feedback type="invalid" tooltip>
-                                {errors.confirmPassword?.message}
+                                {errorsChangePassword.confirmPassword?.message}
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -192,7 +279,8 @@ function ProfileForm() {
                         <Button variant="secondary" onClick={handleClose}>
                             Hủy
                         </Button>
-                        <Button variant="primary" type={"submit"} onClick={handleSubmit(onSubmitChangePassword)}>
+                        <Button variant="primary" type={"submit"}
+                                onClick={handleSubmitChangePassword(onSubmitChangePassword)}>
                             Lưu
                         </Button>
                     </Modal.Footer>
@@ -200,6 +288,6 @@ function ProfileForm() {
             </Modal>
         </Card>
     );
-};
+}
 
 export default ProfileForm;

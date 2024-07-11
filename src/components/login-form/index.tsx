@@ -4,12 +4,14 @@ import {useDispatch} from "react-redux";
 import {setTitle} from "../../slice/signTitle.slice";
 import {Link, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form"
-import axios from "axios";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {User} from "../../types/user.type";
 import {login, userNameVerify} from "../../slice/auth.slice";
 import {LoginRequest} from "../../requests/login.request";
+import axiosHttp from "../../utils/axiosHttp";
+import {AxiosResponse} from "axios";
+import {ResponseApi} from "../../types/response.type";
 
 function Login() {
     document.title = "Đăng nhập tài khoản"
@@ -18,28 +20,22 @@ function Login() {
     const nav = useNavigate();
 
     const loginHandle = async (data: LoginRequest) => {
-        return axios.request({
-            url: "http://localhost:1305/api/login",
-            method: "POST",
-            data: data,
-        })
+        return axiosHttp.post("/login", data)
     }
 
-    let user: User;
 
     const {register, handleSubmit, formState: {errors}} = useForm<LoginRequest>()
     const onSubmit: SubmitHandler<LoginRequest> = (form) => {
-        const promise = loginHandle(form)
+        const promise = axiosHttp.post<string, AxiosResponse<ResponseApi<User>, any>, any>("/api/auth/login", form)
         toast.promise(promise, {
             pending: "Promise is pending",
             success: {
                 render({data}) {
-                    user = data.data.data;
-                    return `Xin chào ${user.fullName}`
+                    const user = data.data.data;
+                    return `Xin chào ${user?.fullName}`
                 },
                 autoClose: 1000,
                 onClose: () => {
-                    dispatch(login(user))
                     nav("/")
                 },
             },
@@ -57,6 +53,10 @@ function Login() {
                     return `${response.message}`
                 }
             }
+        }).then((response) => {
+            const user = response.data.data;
+            if (user)
+                dispatch(login(user))
         });
     }
 
@@ -67,7 +67,6 @@ function Login() {
               onSubmit={handleSubmit(onSubmit)}
         >
             <TextField
-                id="outlined-basic"
                 className={"w-100"}
                 type={"text"}
                 {...register(
@@ -82,7 +81,6 @@ function Login() {
                 variant="outlined"/>
             <br/>
             <TextField
-                id="outlined-basic"
                 className={"w-100"}
                 type={"password"}
                 {...register(

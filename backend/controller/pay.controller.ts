@@ -11,7 +11,7 @@ const billService = BillService.newInstance();
 
 export const runPayController = (app: Express) => {
     app.post("/api/pay", (
-            req: Request<any, any, PayRequest, any>,
+            req: Request<any, any, PayRequest, any, any>,
             res) => {
             log(TAG, "save bill", req.body)
 

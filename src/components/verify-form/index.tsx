@@ -1,74 +1,64 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, Stack, TextField} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {setTitle} from "../../slice/signTitle.slice";
 import {useForm} from "react-hook-form";
 import {VerifyRequest} from "../../requests/verify.request";
-import axios from "axios";
+import {AxiosResponse} from "axios";
 import {toast} from "react-toastify";
-import {verify} from "../../slice/auth.slice";
+import {verifySuccess} from "../../slice/auth.slice";
 import {useNavigate} from "react-router-dom";
+import axiosHttp from "../../utils/axiosHttp";
+import {ResponseApi} from "../../types/response.type";
+import {RootState} from "../../configs/store";
 
-interface inputCode {
-    "field_1": number,
-    "field_2": number,
-    "field_3": number,
-    "field_4": number,
-    "field_5": number,
-    "field_6": number,
+interface InputCode {
+    "field_1"?: number,
+    "field_2"?: number,
+    "field_3"?: number,
+    "field_4"?: number,
+    "field_5"?: number,
+    "field_6"?: number,
 }
 
-function Verify() {
+const initialInputCode: InputCode = {
+    "field_1": undefined,
+    "field_2": undefined,
+    "field_3": undefined,
+    "field_4": undefined,
+    "field_5": undefined,
+    "field_6": undefined,
+}
+
+function VerifyAccount() {
     const dispatch = useDispatch();
-    dispatch(setTitle({title: "Xác thực tài khoản"}));
-    const auth = useSelector((state: any) => state.auth)
+    const auth = useSelector((state: RootState) => state.auth)
     const nav = useNavigate();
-
-    const {register, handleSubmit, formState: {errors}} = useForm<inputCode>();
-
-    const verifyHandle = async (data: VerifyRequest) => {
-        return axios.request({
-            url: "http://localhost:1305/api/verify",
-            method: "POST",
-            data: data,
-        })
-    }
-
+    const {register, handleSubmit, formState: {errors}} = useForm<InputCode>({values: initialInputCode});
     const renderInput = () => {
-        const input: any[] = []
-        for (let i = 0; i < 6; i++) {
-            const name = `field_${i + 1}`
-
-            input.push(
-                <TextField
-                    id="outlined-basic"
-                    type={"text"}
-                    label="*"
-                    style={{
-                        width: "50px",
-                    }}
-                    // @ts-ignore
-                    {...register(name,
-                        {required: "Vui lòng nhập mã xác thực"})
-                    }
-                    // @ts-ignore
-                    error={!!errors[name]}
-                    // @ts-ignore
-                    helperText={errors[name]?.message}
-                    autoComplete={"off"}
-                    variant="outlined"/>);
-        }
-
-        return input
+        const keys = Object.keys(initialInputCode) as (keyof InputCode)[];
+        return keys.map(key => <TextField
+            type={"text"}
+            label="*"
+            style={{
+                width: "50px",
+            }}
+            {...register(key,
+                {required: "Vui lòng nhập mã xác thực"})
+            }
+            error={!!errors[key]}
+            helperText={errors[key]?.message}
+            autoComplete={"off"}
+            variant="outlined"/>)
     }
 
-    const onSubmit = (inputCode: inputCode) => {
+    const onSubmit = (inputCode: InputCode) => {
         const verifyRequest: VerifyRequest = {
-            username: auth.usernameVerify,
+            username: auth.usernameVerify ?? "",
             verifyCode: Object.values(inputCode).join("")
         }
 
-        const promise = verifyHandle(verifyRequest)
+        const promise = axiosHttp.post<string, AxiosResponse<ResponseApi<boolean>>>("/api/auth/verify", verifyRequest)
         toast.promise(promise, {
             pending: "Promise is pending",
             success: {
@@ -77,7 +67,6 @@ function Verify() {
                 },
                 autoClose: 1000,
                 onClose: () => {
-                    dispatch(verify())
                     nav("/login")
                 },
             },
@@ -88,8 +77,17 @@ function Verify() {
                     return `${response.message}`
                 }
             }
-        });
+        }).then(response => {
+            const result = response.data.data;
+            if (result)
+                dispatch(verifySuccess())
+        })
     }
+
+    useEffect(() => {
+        dispatch(setTitle({title: "Xác thực tài khoản"}));
+        if (!auth.usernameVerify) nav("/")
+    }, []);
 
     return (
         <form className={"p-3 d-flex flex-column w-100 align-items-center"}
@@ -101,10 +99,11 @@ function Verify() {
                 {renderInput()}
             </Stack>
             <br/>
-            <Button className={"w-25"} type={"submit"} variant="contained" color="success">Xác
-                thực</Button>
+            <Button className={"w-25"} type={"submit"} variant="contained" color="success">
+                Xác thực
+            </Button>
         </form>
     );
 }
 
-export default Verify;
+export default VerifyAccount;

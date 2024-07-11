@@ -25,10 +25,18 @@ const removeUsernameVerify = () => {
 const getUser = (): User | undefined => {
     const data = sessionStorage.getItem(KEY.USER)
     if (!data) return undefined;
-    const result = JSON.parse(data) as User
-    if (result.birthday)
-        result.birthday = new Date(result.birthday)
-    return result;
+    return JSON.parse(data) as User
+}
+
+const updateProfile = (user: User): void => {
+    const oldUser = getUser();
+    if (!oldUser) return;
+    oldUser.birthday = user.birthday
+    oldUser.email = user.email
+    oldUser.fullName = user.fullName
+    oldUser.phone = user.phone
+    oldUser.gender = user.gender
+    saveUser(oldUser);
 }
 
 const getUsernameVerify = (): string | undefined => {
@@ -57,5 +65,6 @@ export {
     getUser,
     getUsernameVerify,
     getRecentlyProduct,
-    pushRecentlyProduct
+    pushRecentlyProduct,
+    updateProfile
 }

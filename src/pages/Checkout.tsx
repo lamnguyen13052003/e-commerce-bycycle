@@ -21,8 +21,10 @@ import {getUser} from "../utils/sessionStorage";
 import {toast} from "react-toastify";
 import {PayRequest} from "../requests/pay.request";
 import {clearCart} from "../slice/cart.slice";
+import {User} from "../types/user.type";
 
 export default function Checkout() {
+    const user: User | undefined = useSelector((state: RootState) => state.auth.user);
     document.title = "Tiến hành thanh toán"
     const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
     const nav = useNavigate();
@@ -34,15 +36,19 @@ export default function Checkout() {
     const [payMethodSelect, setPayMethodSelect] = React.useState<PayMethodEnum>(PayMethodEnum.CASH)
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        return () => {
+            if (!user) nav("/login")
+        }
+    }, []);
+
     const onSubmit = (infoPay: InfoPayType) => {
         infoPay.payMethod = payMethodSelect
-        const user = getUser();
         if (!user || !user._id) {
             toast.error("Vui lòng đăng nhập để tiếp tục thanh toán")
             return
         }
         infoPay._id = user._id
-
 
         axiosHttp
             .post<any, AxiosResponse<any, ResponseApi<string>>, PayRequest>(
