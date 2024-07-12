@@ -12,12 +12,14 @@ import {Button, Input, TextField} from '@mui/material';
 import {formatCurrency} from "../../utils/Formatter";
 import {ProductType} from "../../types/product.type";
 import {useDispatch} from "react-redux";
-import {addCartItem} from "../../slice/cart.slice";
+import {addCartItem, addCartItemPayNow} from "../../slice/cart.slice";
 import {ModelType} from "../../types/modelProduct.type";
+import { useNavigate } from 'react-router';
 
 
 const ProductDetailCol = (product: ProductType) => {
     const dispatch = useDispatch();
+    const nav = useNavigate();
     const [modelSelected, setModelSelected] = useState<ModelType>(product.model[0]);
     const [quantity, setQuantity] = useState<number>(1);
 
@@ -131,7 +133,17 @@ const ProductDetailCol = (product: ProductType) => {
                                                     Thêm vào giỏ hàng
                                                 </Button>
                                             </div>
-                                            <Button className="buy-now" variant="contained">
+                                            <Button className="buy-now" variant="contained" onClick={() => {
+                                                dispatch(addCartItemPayNow({
+                                                    id: product._id,
+                                                    name: product.name,
+                                                    url: product.model[0].pathImageColor,
+                                                    price: product.discount ? (100 - product.discount) * product.price / 100 : product.price,
+                                                    quantity: quantity,
+                                                    type: modelSelected.color,
+                                                }))
+                                                nav("/checkout")
+                                            }}>
                                                 Mua ngay
                                             </Button>
                                         </div>

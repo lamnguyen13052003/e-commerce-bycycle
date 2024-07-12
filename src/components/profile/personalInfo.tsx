@@ -30,6 +30,7 @@ function ProfileForm() {
     const {
         register: registerChangePassword,
         getValues: getValuesChangePassword,
+        setValue: setValueChangePassword,
         handleSubmit: handleSubmitChangePassword,
         formState: {errors: errorsChangePassword}
     } = useForm<changePasswordForm>({
@@ -54,7 +55,31 @@ function ProfileForm() {
         }
     );
     const onSubmitChangePassword = (data: changePasswordForm) => {
-        handleClose();
+        const promise = axiosHttp.put<string, AxiosResponse<ResponseApi<User>>>("/api/user/change-password", data)
+        toast.promise(promise, {
+            pending: "Promise is pending",
+            success: {
+                render({data}) {
+                    return data.data.message
+                },
+                autoClose: 1000,
+            },
+            error: {
+                render: ({data}) => {
+                    // @ts-ignore
+                    const response = data.response.data
+                    return `${response.message}`
+                }
+            }
+        }).then(response => {
+            const result = response.data.data;
+            if (!result)
+                return;
+            handleClose();
+            setValueChangePassword("currentPassword", "")
+            setValueChangePassword("newPassword", "")
+            setValueChangePassword("confirmPassword", "")
+        })
     }
     const onSubmitUpdateProfile = (data: User) => {
         const promise = axiosHttp.put<string, AxiosResponse<ResponseApi<User>>>("/api/user/update-profile", data)
@@ -77,23 +102,13 @@ function ProfileForm() {
             const result = response.data.data;
             if (!result)
                 return;
-            handleClose();
             dispatch(updateProfile(result))
         })
-    }
-
-    const getBirthday = () => {
-        if (!user || !user.birthday) return ""
-        const date = user.birthday;
-        const month = date.getMonth();
-        const day = date.getDate();
-        return `${date.getFullYear()}-${month.toString().length == 1 ? "0" + (month + 1) : month + 1}-${day.toString().length == 1 ? "0" + day : day}`;
     }
 
     useEffect(() => {
         if (!user)
             nav("/login")
-
     }, [user])
 
     return (

@@ -19,7 +19,7 @@ export const runPayController = (app: Express) => {
                 .then(() => {
                     res.send(Builder<ResponseApi<boolean>>()
                         .code(202)
-                        .message("Success")
+                        .message("Thành công!")
                         .data(true)
                         .build())
                 })

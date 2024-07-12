@@ -4,6 +4,10 @@ const wrongUsernameOrPassword: CustomError = {
     code: 404,
     message: "Tài khoản hoặc mật khẩu không đúng"
 };
+const wrongPassword: CustomError = {
+    code: 404,
+    message: "Mật khẩu không đúng"
+};
 
 const wrongVerifyCode: CustomError = {
     code: 404,
@@ -67,5 +71,6 @@ export {
     changePasswordFail,
     productNotFound,
     payFailed,
-    updateProfileFail
+    updateProfileFail,
+    wrongPassword
 };

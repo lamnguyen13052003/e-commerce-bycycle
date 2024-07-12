@@ -3,9 +3,9 @@ import cors from "cors";
 import {startDatabase} from "./database.connect";
 import {runAuthController} from "./controller/auth.controller";
 import {runProductController} from "./controller/product.controller";
-import bodyParser = require("body-parser");
 import {runPayController} from "./controller/pay.controller";
 import {runUserController} from "./controller/user.controller";
+import bodyParser = require("body-parser");
 
 export const log = (tag: string, title: string, body: object) => {
     console.log(`=================================${tag}==================================`)

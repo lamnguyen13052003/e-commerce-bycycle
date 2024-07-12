@@ -12,6 +12,7 @@ const ColorSelector: React.FC<ColorSelectorProps> = ({models, selectedColor, onS
         <div>
             <div style={{display: 'flex', gap: '10px'}}>
                 {models.map((model, index) => {
+                    if (!model.quantity) return;
                     const isSelected = selectedColor === model.color;
                     return (
                         <div

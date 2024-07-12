@@ -17,16 +17,15 @@ import {useNavigate} from "react-router-dom";
 import axiosHttp from "../utils/axiosHttp";
 import {ResponseApi} from "../types/response.type";
 import {BillItemType} from "../types/billItem.type";
-import {getUser} from "../utils/sessionStorage";
 import {toast} from "react-toastify";
 import {PayRequest} from "../requests/pay.request";
-import {clearCart} from "../slice/cart.slice";
+import {clearCart, clearCartPayNow} from "../slice/cart.slice";
 import {User} from "../types/user.type";
 
 export default function Checkout() {
     const user: User | undefined = useSelector((state: RootState) => state.auth.user);
-    document.title = "Tiến hành thanh toán"
-    const cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
+    let payNow: boolean = false;
+    let cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
     const nav = useNavigate();
     const {register, handleSubmit, formState: {errors}} = useForm<InfoPayType>();
     const [provinces, setProvinces] = React.useState<LocaltionEsgooType[]>([])
@@ -35,12 +34,6 @@ export default function Checkout() {
     const [fullAddress, setFullAddress] = React.useState<string>()
     const [payMethodSelect, setPayMethodSelect] = React.useState<PayMethodEnum>(PayMethodEnum.CASH)
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        return () => {
-            if (!user) nav("/login")
-        }
-    }, []);
 
     const onSubmit = (infoPay: InfoPayType) => {
         infoPay.payMethod = payMethodSelect
@@ -68,7 +61,10 @@ export default function Checkout() {
                     status: PayStatusEnum.SUCCESS,
                     infoPay: infoPay
                 }))
-                dispatch(clearCart());
+                if (payNow)
+                    dispatch(clearCartPayNow());
+                else
+                    dispatch(clearCart());
                 nav("/pay")
             })
             .catch(error => {
@@ -81,8 +77,13 @@ export default function Checkout() {
     };
 
     useEffect(() => {
+        document.title = "Tiến hành thanh toán"
+        if (!cartItems.length) {
+            cartItems = useSelector((state: RootState) => state.cart.cartItemsPayNow);
+            payNow = true;
+        }
+        if (!cartItems.length) nav("/");
         return () => {
-            if (!cartItems.length) nav("/");
             axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
                 .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
                     setProvinces(response.data.data)
@@ -297,14 +298,14 @@ export default function Checkout() {
                         <Col md={3}>
                             <h3>Thông tin thanh toán</h3>
                             <Stack direction={"row"} className="mb-3" gap={1}>
-                                <Button className={`p-2 border ${getBorderPayMethod(PayMethodEnum.CASH)}`}
+                                <Button title={"Thanh toán khi nhận hàng"} className={`p-2 border ${getBorderPayMethod(PayMethodEnum.CASH)}`}
                                         onClick={() => {
                                             setPayMethodSelect(PayMethodEnum.CASH)
                                         }}>
                                     <img width={30} src={IC_CASH} alt={"cash.png"}/>
                                 </Button>
 
-                                <Button className={`p-2 border ${getBorderPayMethod(PayMethodEnum.QR)}`}
+                                <Button title={"Chuyển khoản"} className={`p-2 border ${getBorderPayMethod(PayMethodEnum.QR)}`}
                                         onClick={() => {
                                             setPayMethodSelect(PayMethodEnum.QR)
                                         }}>

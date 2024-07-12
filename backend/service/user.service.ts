@@ -9,7 +9,8 @@ import {
     registerFail, updateProfileFail,
     verifyFail,
     wrongUsernameOrPassword,
-    wrongVerifyCode
+    wrongVerifyCode,
+    wrongPassword
 } from "../errors/error.enum";
 import {VerifyRequest} from "../requests/verify.request";
 import {LoginRequest} from "../requests/login.request";
@@ -96,20 +97,20 @@ async function forgetPassword(username: string): Promise<boolean> {
 }
 
 async function changePassword(changePasswordRequest: ChangePasswordRequest): Promise<boolean> {
-    const exist = await existUsername(changePasswordRequest.username);
-    if (changePasswordRequest.password !== changePasswordRequest.confirmPassword) throw passwordNotCompare;
-    if (!exist) throw accountNotExist;
     return userRepository
-        .updateOne({username: changePasswordRequest.username}, {
-            $set: {
-                password: changePasswordRequest.password
-            }
-        }).then((response): boolean => {
+        .findOneAndUpdate({
+                _id: ObjectId.createFromHexString(changePasswordRequest._id.toString()),
+                password: changePasswordRequest.currentPassword
+            },
+            {
+                $set: {
+                    password: changePasswordRequest.newPassword
+                }
+            })
+        .then((response): boolean => {
+            if (!response) throw wrongPassword;
             return true;
         })
-        .catch(() => {
-            throw changePasswordFail;
-        });
 }
 
 async function updateProfile(user: User): Promise<User> {

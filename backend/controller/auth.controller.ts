@@ -13,7 +13,7 @@ export const runAuthController = (app: Express) => {
         login(req.body).then((data) => {
             res.send(Builder<ResponseApi<UserHasPasswordType>>()
                 .code(202)
-                .message("Success")
+                .message("Thành công!")
                 .data(data)
                 .build())
         }).catch((error) => {
@@ -40,7 +40,7 @@ export const runAuthController = (app: Express) => {
             .then((data) => {
                 res.send(Builder<ResponseApi<boolean>>()
                     .code(202)
-                    .message("Success")
+                    .message("Thành công!")
                     .data(data)
                     .build())
             }).catch((error) => {
@@ -54,7 +54,7 @@ export const runAuthController = (app: Express) => {
             .then((data) => {
                 res.send(Builder<ResponseApi<boolean>>()
                     .code(202)
-                    .message("Success")
+                    .message("Thành công!")
                     .data(data)
                     .build())
             }).catch((error) => {
@@ -68,7 +68,7 @@ export const runAuthController = (app: Express) => {
             .then((data) => {
                 res.send(Builder<ResponseApi<boolean>>()
                     .code(202)
-                    .message("Success")
+                    .message("Thành công!")
                     .data(data)
                     .build())
             }).catch((error) => {
