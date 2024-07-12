@@ -15,10 +15,13 @@ import {AxiosResponse} from "axios";
 import {ResponseApi} from "../types/response.type";
 import axiosHttp from "../utils/axiosHttp";
 import {getRecentlyProduct} from "../utils/sessionStorage";
+import {RootState} from '../configs/store';
+import {useSelector} from 'react-redux';
 
 
 export function ProductDetail() {
     document.title = "Chi tiết sản phẩm"
+    const user = useSelector((state: RootState) => state.auth.user);
     const {name} = useParams<{ name: string }>();
     const [product, setProduct] = useState<ProductType>();
     const nav = useNavigate();
@@ -27,7 +30,11 @@ export function ProductDetail() {
             window.scrollTo(0, 0)
             try {
                 const idString = name?.split("--")[1];
-                axiosHttp.get<any, AxiosResponse<any, ResponseApi<ProductType>>, any>(`api/product-detail/${idString}`)
+                axiosHttp.get<any, AxiosResponse<any, ResponseApi<ProductType>>, any>(`api/product-detail/${idString}`, {
+                    params: {
+                        user: user?._id ? user._id : ""
+                    }
+                })
                     .then((response: AxiosResponse<ResponseApi<ProductType>>) => {
                         setProduct(response.data.data)
                     })

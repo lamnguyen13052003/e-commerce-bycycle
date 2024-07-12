@@ -14,6 +14,8 @@ import FilterAttributeType from "../types/filterAttribute.type";
 import {ProductType} from "../types/product.type";
 import {CustomError} from "../errors/custom.error.type";
 import {log} from "../server";
+import {ObjectId} from "mongodb";
+import {getReviews} from "../service/review.service";
 
 const TAG = "Product Controller"
 
@@ -86,9 +88,9 @@ export const runProductController = (app: Express) => {
         const materials: string[] = query.materials as string[];
         const targetUsings: string[] = query.targetUsings as string[];
         const prices: string = req.query.prices as string
-        const newProduct : boolean = query.newProduct as string == "true";
-        const bestSale : boolean = query.bestSale as string == "true";
-        const sort : string = query.sort as string;
+        const newProduct: boolean = query.newProduct as string == "true";
+        const bestSale: boolean = query.bestSale as string == "true";
+        const sort: string = query.sort as string;
         getProductsByFilter(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
             res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)
@@ -102,17 +104,26 @@ export const runProductController = (app: Express) => {
 
     app.get("/api/product-detail/:id", (req: Request<{
                                             id: string
-                                        }, any, any, any, any>,
+                                        }, any, any, {
+                                            user: string
+                                        }, any>,
                                         res) => {
         log(TAG, "get product by id", req.body)
-        getProductById(req.params.id)
-            .then((response) => {
-                res.send(Builder<ResponseApi<ProductType>>()
-                    .code(202)
-                    .message("Thành công!")
-                    .data(response)
-                    .build());
-            }).catch((error: CustomError) => {
+        const promiseProduct = getProductById(req.params.id, req.query.user)
+        const promiseGetReviews = getReviews(ObjectId.createFromHexString(req.params.id), 1)
+
+        Promise.all([promiseProduct, promiseGetReviews]).then(([product, getReviews]) => {
+            if (!product) {
+                res.status(404).send("Product not found")
+                return;
+            }
+            product.reviews = getReviews.reviews;
+            res.send(Builder<ResponseApi<ProductType>>()
+                .code(202)
+                .message("Thành công!")
+                .data(product)
+                .build());
+        }).catch(error => {
             res.status(error.code).send(error.message);
         });
     });

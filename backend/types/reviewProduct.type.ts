@@ -1,10 +1,7 @@
-import {ObjectId} from "mongodb";
+import { ObjectId } from "mongodb"
+import AddReviewRequest from "../../src/requests/addReview.request"
 
-export interface ReviewProductType {
+export type ReviewProductType = AddReviewRequest & {
     _id?: ObjectId,
-    userId: ObjectId,
-    productId: ObjectId,
-    rating: number,
-    comment: string,
     date: Date
 }

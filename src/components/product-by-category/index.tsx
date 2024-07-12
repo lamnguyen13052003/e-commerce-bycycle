@@ -1,6 +1,5 @@
 import React from 'react';
 import {Box, Button, Stack} from "@mui/material";
-import ProductProps from "../../type/product.type";
 import {Link} from "react-router-dom";
 import ProductList from "../product-list";
 import {ProductByCategoryType} from "../../types/productByCategory.type";

@@ -1,7 +1,6 @@
-import {ReviewProductType} from "./reviewProduct.type";
-import AddReviewRequest from "../requests/addReview.request";
+import {ReviewProductResponseType} from "./reviewProductResponse.type";
 
 export interface ReviewProductHasTotal {
-    reviews: AddReviewRequest[];
+    reviews: ReviewProductResponseType[];
     total: number;
 }

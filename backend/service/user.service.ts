@@ -4,14 +4,13 @@ import {
     accountExist,
     accountNotExist,
     accountNotVerify,
-    changePasswordFail,
     passwordNotCompare,
     registerFail,
     updateProfileFail,
     verifyFail,
+    wrongPassword,
     wrongUsernameOrPassword,
-    wrongVerifyCode,
-    wrongPassword
+    wrongVerifyCode
 } from "../errors/error.enum";
 import {VerifyRequest} from "../requests/verify.request";
 import {LoginRequest} from "../requests/login.request";
@@ -132,9 +131,9 @@ async function updateProfile(user: User): Promise<User> {
 }
 
 
-async function checkUserId(id: ObjectId): Promise<boolean> {
+async function checkUserId(id: ObjectId): Promise<UserHasPasswordType | null> {
     return await userRepository.findOne({_id: id}).then((response) => {
-        return !!response;
+        return response;
     })
 }
 

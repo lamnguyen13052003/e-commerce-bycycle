@@ -3,6 +3,7 @@ import {ProductType} from "../types/product.type";
 import {ObjectId, Sort, WithId} from "mongodb";
 import {productNotFound} from "../errors/error.enum";
 import {BillItemType} from "../types/billItem.type";
+import BillService from "./bill.service";
 
 const collection = 'products';
 const productRepository = connection.collection<ProductType>(collection);
@@ -17,7 +18,10 @@ async function getProductsByCategory(category: number, count: number) {
     const total = await productRepository.countDocuments({category: category, "model.quantity": {$gte: 1}})
     let y = 8 * count
     if (y >= total) y = total
-    const products = await productRepository.find<ProductType>({category: category, "model.quantity": {$gte: 1}}).limit(y).toArray()
+    const products = await productRepository.find<ProductType>({
+        category: category,
+        "model.quantity": {$gte: 1}
+    }).limit(y).toArray()
 
     return {
         total: total,
@@ -112,8 +116,14 @@ async function getAttrForFilter(category: number) {
             productRepository.distinct('specifications.wheelSize', {category: category, "model.quantity": {$gte: 1}}),
             productRepository.distinct('base_description.material', {category: category, "model.quantity": {$gte: 1}}),
             productRepository.distinct('specifications.targetUsing', {category: category, "model.quantity": {$gte: 1}}),
-            productRepository.find({category: category, "model.quantity": {$gte: 1}}).sort({price: 1}).limit(1).toArray(),
-            productRepository.find({category: category, "model.quantity": {$gte: 1}}).sort({price: -1}).limit(1).toArray()])
+            productRepository.find({
+                category: category,
+                "model.quantity": {$gte: 1}
+            }).sort({price: 1}).limit(1).toArray(),
+            productRepository.find({
+                category: category,
+                "model.quantity": {$gte: 1}
+            }).sort({price: -1}).limit(1).toArray()])
     return result.then((values) => {
         return {
             brands: values[0],
@@ -125,12 +135,17 @@ async function getAttrForFilter(category: number) {
     })
 }
 
-async function getProductById(id: string) {
+async function getProductById(productId: string, userId: string) {
+    let hasBuy = false;
+    if (userId) hasBuy = await BillService.newInstance().checkBuy(productId, userId)
     return productRepository
-        .findOne({_id: ObjectId.createFromHexString(id), "model.quantity": {$gte: 1}})
+        .findOne({_id: ObjectId.createFromHexString(productId), "model.quantity": {$gte: 1}})
         .then((product): ProductType => {
             if (!product) throw productNotFound;
+            product.hasBuy = hasBuy
             return product;
+        }).catch(() => {
+            throw productNotFound;
         })
 }
 
@@ -173,9 +188,9 @@ async function rollBackProduct(billItemTypes: BillItemType[]) {
     })
 }
 
-async function checkProductId(id: ObjectId): Promise<boolean> {
+async function checkProductId(id: ObjectId): Promise<ProductType | null> {
     return await productRepository.findOne({_id: id}).then((response) => {
-        return !!response;
+        return response;
     })
 }
 

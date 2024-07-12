@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import * as pdc from './ProductDetailComponent';
@@ -11,62 +11,69 @@ import QuantityCell from '../cart/QuantityCell';
 import {Avatar, Box, Button, Grid, Input, Stack, TextField} from '@mui/material';
 import {formatCurrency} from "../../utils/Formatter";
 import {ProductType} from "../../types/product.type";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addCartItem, addCartItemPayNow} from "../../slice/cart.slice";
 import HoverRating from "../hover-rating";
 import {green} from "@mui/material/colors";
 import ReviewList from "../review-list";
-import ResponsiveDialog from "../response-dialog/ResponsiveDialog";
-import {Link} from "react-router-dom";
-import {getUser} from "../../utils/sessionStorage";
 import {ModelType} from "../../types/modelProduct.type";
-import { useNavigate } from 'react-router';
-import {addReview} from "../../slice/reviewProduct.slice";
-import AddReviewRequest from "../../requests/addReview.request";
-import {useAppDispatch} from "../../configs/store";
-
+import {useNavigate} from 'react-router';
+import {RootState} from "../../configs/store";
+import AddReviewRequest from '../../requests/addReview.request';
+import {toast} from 'react-toastify';
+import axiosHttp from '../../utils/axiosHttp';
+import {AxiosError, AxiosResponse} from 'axios';
+import {ResponseApi} from '../../types/response.type';
+import {ReviewProductResponseType} from '../../types/reviewProductResponse.type';
+import {useForm} from "react-hook-form";
+import {addReview, setReviews} from '../../slice/reviewProduct.slice';
 
 const ProductDetailCol = (product: ProductType) => {
-    const user = getUser();
-    const appDispatch = useAppDispatch();
-    const dispatch = useDispatch();
     const nav = useNavigate();
+    const user = useSelector((state: RootState) => state.auth.user);
+    const reviews = useSelector((state: RootState) => state.reviewProduct.reviews)
+    const dispatch = useDispatch();
     const [modelSelected, setModelSelected] = useState<ModelType>(product.model[0]);
     const [quantity, setQuantity] = useState<number>(1);
-
-    const handleSelectColor = (model: ModelType) => {
-        setModelSelected(model);
-    };
-
-    const [openDialog, setOpenDialog] = useState(false);
-    const [textReview, setTextReview] = useState<string>('');
     const [rating, setRating] = useState<number>(3);
-
-    const handleValidReview = () => {
-        return textReview === '';
-    }
-
-    const handleChangeTextReview = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTextReview(event.target.value);
-    }
-
-    const handleClickOpenDialog = () => {
-        setOpenDialog(true);
-    };
-
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-    };
-
-    const handleAddReview = () => {
-        if (handleValidReview() || !user || !user?._id ) return;
-        appDispatch(addReview({
+    const {register, setValue, handleSubmit, formState: {errors}} = useForm<AddReviewRequest>({
+        defaultValues: {
+            userId: user?._id,
             productId: product._id,
-            user_id: user._id,
-            rating: rating,
-            comment: textReview,
-        }));
+        }
+    });
+    const onSubmitAddReview = (request: AddReviewRequest) => {
+        request.rating = rating;
+        toast.promise<AxiosResponse<ResponseApi<ReviewProductResponseType>>, AxiosError<string>, any>(
+            axiosHttp.post("/api/reviews/add", request),
+            {
+                pending: "Đang gửi đánh giá",
+                success: {
+                    render({data: response}) {
+                        return response.data.message
+                    },
+                },
+                error: {
+                    render: ({data: {response}}) => {
+                        return response?.data ?? "Đã có lỗi xảy ra"
+                    }
+                }
+            }
+        ).then((response) => {
+            if (!response?.data?.data) return;
+            setValue("comment", "");
+            setRating(3);
+            const review = response.data.data;
+            dispatch(addReview(review))
+        })
     }
+
+    useEffect(() => {
+        return () => {
+            dispatch(setReviews(product.reviews))
+        }
+    }, []);
+
     return (
         <Container>
             <Row>
@@ -142,7 +149,7 @@ const ProductDetailCol = (product: ProductType) => {
                                                     return model;
                                                 })}
                                                 selectedColor={modelSelected.color}
-                                                onSelectColor={handleSelectColor}
+                                                onSelectColor={(model) => setModelSelected(model)}
                                             />
                                         </div>
                                         <hr/>
@@ -211,9 +218,9 @@ const ProductDetailCol = (product: ProductType) => {
                         <div>
                             <p>Nội Dung Mục Lục</p>
                             <ul>
-                                <li><a href="#basic-des">Mô Tả Cơ Bản</a></li>
-                                <li><a href="#tech-spec">Bảng Thông Số Kỹ Thuật</a></li>
-                                <li><a href="#product-content">Đặc Điểm Nổi Bật {product.name}</a></li>
+                                <li><a href={"#basic-des"}>Mô Tả Cơ Bản</a></li>
+                                <li><a href={"#tech-spec"}>Bảng Thông Số Kỹ Thuật</a></li>
+                                <li><a href={"#product-content"}>Đặc Điểm Nổi Bật {product.name}</a></li>
                             </ul>
                         </div>
                     </pdc.Toc>
@@ -289,89 +296,78 @@ const ProductDetailCol = (product: ProductType) => {
                                 </table>
                             </TechSpec>
                         </div>
-                        <div id="product-content"></div>
                     </pdc.Des>
-                    {user && user._id ?
-                        (<>
-                            <pdc.Comment className="mb-3">
-                                <div id="form">
-                                    <h3>Đánh giá</h3>
-                                    <div>
-                                        <Box style={{
-                                            width: '100%',
-                                            border: '2px solid #2372dc',
-                                            borderRadius: '10px',
-                                            padding: '30px'
-                                        }}>
-                                            <ReviewList reviews={product.review} userId={user._id}/>
-                                            {user._id &&
-                                                <Grid container>
-                                                    <Grid item xs={1}>
-                                                        <Avatar alt={!user.fullName ? `` : user.fullName}
-                                                                src={!user.urlAvatar ? `` : `${user.urlAvatar}`}
-                                                                className={'m-auto'}
-                                                                sx={{backgroundColor: green[500]}}></Avatar>
-                                                    </Grid>
-                                                    <Grid item xs={3}>
-                                                        <Stack direction={'column'} spacing={1}>
-                                                            <Box
-                                                                className={'fw-bold'}>{!user.fullName ? `Name` : user.fullName}</Box>
-                                                        </Stack>
-                                                    </Grid>
-                                                </Grid>
-                                            }
-                                            <HoverRating rating={rating}/>
-                                            <Box
-                                                component="form"
-                                                noValidate
-                                                autoComplete="off"
-                                            >
-                                                <TextField
-                                                    id="filled-multiline-static"
-                                                    onChange={handleChangeTextReview}
-                                                    label="Đánh giá của bạn"
-                                                    multiline
-                                                    rows={4}
-                                                    variant="filled"
-                                                    fullWidth
-                                                    {...(handleValidReview() ? {
-                                                        error: true,
-                                                        helperText: "Vui lòng nhập đánh giá"
-                                                    } : {})}
-                                                />
-                                            </Box>
-                                            <Button style={{marginTop: '20px', width: '150px', height: '45px'}}
-                                                    onClick={() => {
-                                                        !user._id ? handleClickOpenDialog() : handleAddReview()
-                                                    }}
-                                                    variant="contained" size="medium">
-                                                Gửi
-                                            </Button>
-                                            <ResponsiveDialog
-                                                open={openDialog}
-                                                handleClose={handleCloseDialog}
-                                                title="Thông báo"
-                                                content="Vui lòng đăng nhập trước khi bình luận."
-                                                actions={
+                    {
+                        (product.reviews.length || user?._id && product.hasBuy) ?
+                            <>
+                                <pdc.Comment className="mb-3">
+                                    <div id="form">
+                                        <h3>Đánh giá</h3>
+                                        <div>
+                                            <Box style={{
+                                                width: '100%',
+                                                border: '2px solid #2372dc',
+                                                borderRadius: '10px',
+                                                padding: '30px'
+                                            }}>
+                                                <ReviewList reviews={reviews} userId={user && user._id}/>
+                                                {(user?._id && product.hasBuy) ?
                                                     <>
-                                                        <Button onClick={handleCloseDialog} color="secondary">
-                                                            Hủy
-                                                        </Button>
-                                                        <Link to={'/login'}>
-                                                            <Button color="primary" autoFocus>
-                                                                Đồng ý
+                                                        <Grid container>
+                                                            <Grid item xs={1}>
+                                                                <Avatar alt={!user.fullName ? `` : user.fullName}
+                                                                        src={!user.urlAvatar ? `` : `${user.urlAvatar}`}
+                                                                        className={'m-auto'}
+                                                                        sx={{backgroundColor: green[500]}}></Avatar>
+                                                            </Grid>
+                                                            <Grid item xs={3}>
+                                                                <Stack direction={'column'} spacing={1}>
+                                                                    <Box
+                                                                        className={'fw-bold'}>{!user.fullName ? `Name` : user.fullName}</Box>
+                                                                </Stack>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <form method={"POST"}
+                                                              onSubmit={handleSubmit(onSubmitAddReview)}>
+                                                            <HoverRating rating={rating}
+                                                                         onClick={(rating) => setRating(rating)}/>
+                                                            <Box>
+                                                                <TextField
+                                                                    id="filled-multiline-static"
+                                                                    label="Đánh giá của bạn"
+                                                                    multiline
+                                                                    rows={4}
+                                                                    variant="filled"
+                                                                    fullWidth
+                                                                    {...register("comment", {
+                                                                        required: "Vui lòng nhập đánh giá"
+                                                                    })}
+                                                                    error={!!errors.comment}
+                                                                    helperText={errors.comment?.message}
+                                                                />
+                                                            </Box>
+                                                            <Button
+                                                                style={{
+                                                                    marginTop: '20px',
+                                                                    width: '150px',
+                                                                    height: '45px'
+                                                                }}
+                                                                variant={"contained"}
+                                                                type={"submit"}
+                                                                size={"medium"}>
+                                                                Gửi
                                                             </Button>
-                                                        </Link>
-                                                    </>
+                                                        </form>
+                                                    </> :
+                                                    <></>
                                                 }
-                                            />
-                                        </Box>
+                                            </Box>
+                                        </div>
                                     </div>
-                                </div>
-                            </pdc.Comment>
-                        </>) :
-                        (<></>)}
-
+                                </pdc.Comment>
+                            </> :
+                            <></>
+                    }
                 </Col>
             </Row>
         </Container>

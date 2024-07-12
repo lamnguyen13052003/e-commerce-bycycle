@@ -3,9 +3,10 @@ import {BaseDescriptionProductType} from "./baseDescriptionProduct.type";
 import {DetailDescriptionProductType} from "./detailDescriptionProduct.type";
 import {SpecificationsType} from "./specifications.type";
 import {ModelType} from "./modelProduct.type";
-import {ReviewProductType} from "./reviewProduct.type";
+import {ReviewProductResponseType} from "./reviewProductResponse.type";
 
 export type ProductType = {
+    product: { total: number; reviews: ReviewProductResponseType[]; };
     _id: ObjectId,
     sale?: boolean,
     new?: boolean,
@@ -17,6 +18,7 @@ export type ProductType = {
     detail_description: DetailDescriptionProductType[],
     specifications: SpecificationsType,
     model: ModelType[],
-    review: ReviewProductType[]
+    reviews: ReviewProductResponseType[],
+    hasBuy: boolean,
 }
 

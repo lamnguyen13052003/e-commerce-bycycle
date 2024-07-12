@@ -38,13 +38,13 @@ function Home() {
 
     useEffect(() => {
         return () => {
-            dispatch(getProductsByCategory({category: 0, page: 0}))
-            dispatch(getProductsByCategory({category: 1, page: 0}))
-            dispatch(getProductsByCategory({category: 2, page: 0}))
-            dispatch(getProductsByCategory({category: 3, page: 0}))
-            dispatch(getProductsByCategory({category: 4, page: 0}))
-            dispatch(getProductsByCategory({category: 5, page: 0}))
-            dispatch(getProductsByCategory({category: 6, page: 0}))
+            dispatch(getProductsByCategory({category: 0, page: 1}))
+            dispatch(getProductsByCategory({category: 1, page: 1}))
+            dispatch(getProductsByCategory({category: 2, page: 1}))
+            dispatch(getProductsByCategory({category: 3, page: 1}))
+            dispatch(getProductsByCategory({category: 4, page: 1}))
+            dispatch(getProductsByCategory({category: 5, page: 1}))
+            dispatch(getProductsByCategory({category: 6, page: 1}))
             dispatch(getProductsByBestSale(true))
             dispatch(getProductsByBestSale(false))
         }

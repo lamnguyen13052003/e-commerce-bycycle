@@ -65,6 +65,10 @@ const reviewIdNotExists: CustomError = {
     code: 404,
     message: "Id review không tồn tại"
 }
+const reviewExists: CustomError = {
+    code: 404,
+    message: "Bạn đã đánh giá sản phẩm này"
+}
 
 
 export {
@@ -82,5 +86,6 @@ export {
     updateProfileFail,
     wrongPassword,
     userNotFound,
-    reviewIdNotExists
+    reviewIdNotExists,
+    reviewExists
 };

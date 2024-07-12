@@ -27,6 +27,19 @@ export default class BillService {
             throw payFailed;
         });
     }
+
+    public async checkBuy(productId: string, userId: string) {
+        return await this.billRepository
+            .findOne(
+                {
+                    "products._id": ObjectId.createFromHexString(productId),
+                    "infoPay._id": ObjectId.createFromHexString(userId)
+                }
+            )
+            .then((response) => {
+                return !!response;
+            })
+    }
 }
 
 

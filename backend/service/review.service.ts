@@ -2,49 +2,63 @@ import {connection} from "../database.connect";
 import {ReviewProductType} from "../types/reviewProduct.type";
 import {Collection, ObjectId} from "mongodb";
 import {checkUserId} from "./user.service";
-import {productNotFound, reviewIdNotExists, userNotFound} from "../errors/error.enum";
+import {productNotFound, reviewExists, reviewIdNotExists, userNotFound} from "../errors/error.enum";
 import {checkProductId} from "./product.service";
 import {ReviewProductResponseType} from "../types/reviewProductResponse.type";
+import {AddReviewProductType} from "../requests/addReviewProduct.type";
+import {ProductType} from "../types/product.type";
 
 const collection = 'reviews';
 const reviewProductRepository: Collection<ReviewProductType> = connection.collection<ReviewProductType>(collection);
 
-async function addReview(review: ReviewProductType): Promise<boolean> {
-    await checkUserId(review.userId).then(response => {
-        if (!response) throw userNotFound
+async function addReview(request: AddReviewProductType): Promise<ReviewProductResponseType> {
+    request.userId = ObjectId.createFromHexString(request.userId.toString())
+    request.productId = ObjectId.createFromHexString(request.productId.toString())
+    const promiseUser = checkUserId(request.userId)
+    const promiseProduct = checkProductId(request.productId);
+    const promiseReview = reviewProductRepository.countDocuments({userId: request.userId, productId: request.productId})
+
+    return Promise.all([promiseUser, promiseProduct, promiseReview]).then(async ([user, product, reviews]) => {
+        if (!user) throw userNotFound
+        if (!product) throw productNotFound
+        if (reviews) throw reviewExists
+        const review: ReviewProductType = {
+            ...request,
+            userId: ObjectId.createFromHexString(request.userId.toString()),
+            productId: ObjectId.createFromHexString(request.productId.toString()),
+            date: new Date()
+        }
+        const response = await reviewProductRepository.insertOne(review);
+        return {
+            ...review,
+            _id: response.insertedId,
+            fullName: user.fullName ?? "",
+            avatar: user.urlAvatar ?? "",
+        } as ReviewProductResponseType;
+    }).catch((error) => {
+        throw error
     });
-
-    await checkProductId(review.productId).then(response => {
-        if (!response) throw productNotFound
-    })
-
-
-    return reviewProductRepository.insertOne(
-        review
-    ).then((response): boolean => {
-        return response !== null
-    })
 }
 
-async function getReviews(productId: ObjectId, seeMore: number) {
+async function getReviews(productId: ObjectId, seeMore: number): Promise<{
+    total: number,
+    reviews: ReviewProductResponseType[]
+}> {
     const total = await reviewProductRepository.countDocuments({productId: productId});
-    let y = 5 * seeMore
-    if (seeMore === 1) y = 3
-    if (y >= total) y = total;
-
-    const pipeline = [
+    if (!total) return {total: 0, reviews: []}
+    let limit = Math.min(5 * seeMore, total)
+    const reviews = await reviewProductRepository.aggregate<ReviewProductResponseType>([
         {
-            $match: {
-                productId: productId
-            }
+            $match: {productId: productId}
         },
         {
-            $lookup: {
-                from: 'products',
-                localField: 'productId',
-                foreignField: '_id',
-                as: 'product'
-            }
+            $sort: {date: -1}
+        },
+        {
+            $skip: 5 * (seeMore - 1)
+        },
+        {
+            $limit: limit
         },
         {
             $lookup: {
@@ -55,15 +69,12 @@ async function getReviews(productId: ObjectId, seeMore: number) {
             }
         },
         {
-            $unwind: '$product' // Đảm bảo rằng kết quả là một tài liệu duy nhất
-        },
-        {
-            $unwind: '$user' // Đảm bảo rằng kết quả là một tài liệu duy nhất
+            $unwind: '$user'
         },
         {
             $project: {
                 _id: 1,
-                name: '$user.fullName',
+                fullName: '$user.fullName',
                 userId: '$user._id',
                 avatar: '$user.avatar',
                 rating: 1,
@@ -71,30 +82,34 @@ async function getReviews(productId: ObjectId, seeMore: number) {
                 date: 1
             }
         }
-    ];
-
-    const reviews = await reviewProductRepository.aggregate<ReviewProductResponseType>(pipeline).limit(y).toArray()
+    ]).toArray()
     return {total, reviews};
 }
 
-async function updateReview(review: ReviewProductType): Promise<boolean> {
-   if(!review._id) throw reviewIdNotExists
+async function updateReview(review: ReviewProductType): Promise<ReviewProductResponseType> {
+    if (!review._id) throw reviewIdNotExists
+    review.date = new Date();
+    const user = await checkUserId(ObjectId.createFromHexString(review.userId.toString()))
+    if (!user) throw userNotFound
     return reviewProductRepository.findOneAndUpdate(
         {
             _id: ObjectId.createFromHexString(review._id.toString()),
-            userId:  ObjectId.createFromHexString(review.userId.toString())
+            userId: ObjectId.createFromHexString(review.userId.toString())
         },
         {
             $set: {
-                date: new Date(),
+                date: review.date,
                 comment: review.comment,
                 rating: review.rating
             }
         },
-    ).then((response): boolean => {
-        return response !== null
-    }).catch(() => {
-        return false
+    ).then((response): ReviewProductResponseType => {
+        return {
+            ...review,
+            _id: response?._id,
+            fullName: "",
+            avatar: ""
+        }
     })
 }
 

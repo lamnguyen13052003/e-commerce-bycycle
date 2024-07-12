@@ -32,11 +32,11 @@ const authSlice = createSlice({
             saveUsernameVerify(action.payload)
             state.usernameVerify = action.payload
         },
-        logout: (state, action: PayloadAction<{}>) => {
+        logout: (state, action: PayloadAction<void>) => {
             removeUser()
             state.user = undefined
         },
-        verifySuccess: (state, action: PayloadAction<{}>) => {
+        verifySuccess: (state, action: PayloadAction<void>) => {
             removeUsernameVerify()
             state.usernameVerify = undefined
         },
