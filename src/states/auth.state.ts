@@ -1,4 +1,4 @@
-import {User} from "../styles/type";
+import {User} from "../types/user.type";
 
 export  type AuthState = {
     user?: User,

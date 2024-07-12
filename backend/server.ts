@@ -6,6 +6,7 @@ import {runProductController} from "./controller/product.controller";
 import bodyParser = require("body-parser");
 import {runReviewController} from "./controller/review.controller";
 import {runPayController} from "./controller/pay.controller";
+import {runUserController} from "./controller/user.controller";
 
 export const log = (tag: string, title: string, body: object) => {
     console.log(`=================================${tag}==================================`)
@@ -17,6 +18,7 @@ const runService = (app: Express) => {
     runProductController(app);
     runAuthController(app);
     runPayController(app);
+    runUserController(app);
     runReviewController(app);
 }
 

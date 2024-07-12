@@ -6,8 +6,11 @@ import {toast} from "react-toastify";
 
 const loadCartState = () => {
     const cartString = localStorage.getItem("cart");
-    if (!cartString) return {cartItems: []};
-    return JSON.parse(cartString) as CartState
+    if (!cartString) return {cartItems: [], cartItemsPayNow: [], payNow: false} as CartState;
+    const cart = JSON.parse(cartString) as CartState;
+    cart.cartItemsPayNow = [];
+    cart.payNow = false;
+    return cart;
 }
 
 const initial: CartState = loadCartState();
@@ -33,6 +36,11 @@ const cartSlice = createSlice({
             }
 
             toast.success("Thêm sản phẩm thành công!")
+            saveLocalStorage(state)
+        },
+        addCartItemPayNow: function (state, payload: PayloadAction<CartItemType>) {
+            state.cartItemsPayNow.push(payload.payload)
+            state.payNow = true;
             saveLocalStorage(state)
         },
         increaseQuantityCartItem: function (state, payload: PayloadAction<{ _id: ObjectId, type: string }>) {
@@ -72,6 +80,17 @@ const cartSlice = createSlice({
             }
             saveLocalStorage(state)
         },
+        clearCartPayNow: function (state, payload: PayloadAction<void>) {
+            while (state.cartItemsPayNow.length) {
+                state.cartItemsPayNow.pop();
+            }
+            state.payNow = false;
+            saveLocalStorage(state)
+        },
+        setPayNow: function (state, payload: PayloadAction<boolean>) {
+            state.payNow = payload.payload;
+            saveLocalStorage(state)
+        },
     }
 });
 
@@ -88,5 +107,14 @@ const saveLocalStorage = (cart: CartState) => {
     localStorage.setItem("cart", JSON.stringify(cart))
 }
 
-export const {addCartItem, removeCartItem, increaseQuantityCartItem, decreaseCartItem, clearCart} = cartSlice.actions;
+export const {
+    addCartItem,
+    removeCartItem,
+    increaseQuantityCartItem,
+    decreaseCartItem,
+    clearCart,
+    addCartItemPayNow,
+    clearCartPayNow,
+    setPayNow
+} = cartSlice.actions;
 export const cartReducer = cartSlice.reducer

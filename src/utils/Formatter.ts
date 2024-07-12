@@ -4,8 +4,7 @@ const formatter = new Intl.NumberFormat('vi-VN', {
 });
 
 const formatterDateTime = new Intl.DateTimeFormat('vi-VN', {
-    dateStyle: "medium"
-
+    dateStyle: "short"
 })
 
 const formatCurrency = (n: number) => {

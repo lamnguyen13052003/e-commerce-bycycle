@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useSelector} from "react-redux";
 import {RootState} from "../configs/store";
 import {Container} from "react-bootstrap";
@@ -6,17 +6,11 @@ import {PayStatusEnum} from "../states/payStatus.stats";
 import {Button, Stack, Table} from "@mui/material";
 import {formatDateTime} from "../utils/Formatter";
 import {IC_CANCEL, IC_SUCCESS} from "../assets/images/icon/web.icon";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 function Pay() {
     document.title = "Thanh toán";
     const payStatus = useSelector((state: RootState) => state.payStatus)
-    const nav = useNavigate();
-    useEffect(() => {
-        return () => {
-            if (!payStatus.status) nav("/");
-        }
-    }, []);
 
     return (
         <Container className={"my-3"}>

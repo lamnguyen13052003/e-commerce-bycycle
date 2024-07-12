@@ -1,13 +1,17 @@
 import React from 'react';
-import {Button, TextField} from "@mui/material";
+import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {setTitle} from "../../slice/signTitle.slice";
 import {Link, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {RegisterRequest} from "../../requests/register.request";
-import axios from "axios";
 import {toast} from "react-toastify";
-import {login, userNameVerify} from "../../slice/auth.slice";
+import {userNameVerify} from "../../slice/auth.slice";
+import {Col, Row} from "react-bootstrap";
+import axiosHttp from "../../utils/axiosHttp";
+import {AxiosResponse} from "axios";
+import {ResponseApi} from "../../types/response.type";
+import {UserHasPasswordType} from "../../../backend/types/userHasPassword.type";
 
 function Register() {
     document.title = "Đăng ký tài khoản";
@@ -15,28 +19,18 @@ function Register() {
     dispatch(setTitle({title: "Đăng ký tài khoản"}));
     const nav = useNavigate();
 
-    const {register, handleSubmit, formState: {errors}} = useForm<RegisterRequest>();
-
-    const registerHandle = async (data: RegisterRequest) => {
-        return axios.request({
-            url: "http://localhost:1305/api/register",
-            method: "POST",
-            data: data,
-        })
-    }
+    const {register, getValues, handleSubmit, formState: {errors}} = useForm<RegisterRequest>();
 
     const onSubmit: SubmitHandler<RegisterRequest> = (form) => {
-        const promise = registerHandle(form)
+        const promise = axiosHttp.post<string, AxiosResponse<ResponseApi<UserHasPasswordType>>>("/api/auth/register", form)
         toast.promise(promise, {
             pending: "Promise is pending",
             success: {
                 render({data}) {
-                    dispatch(login(data.data.data))
                     return data.data.message
                 },
-                autoClose: 1000,
+                autoClose: 5000,
                 onClose: () => {
-                    dispatch(userNameVerify(form.username))
                     nav("/verify")
                 },
             },
@@ -47,7 +41,12 @@ function Register() {
                     return `${response.message}`
                 }
             }
-        });
+        }).then(response => {
+                const user: UserHasPasswordType | undefined = response.data.data;
+                if (user && user.username)
+                    dispatch(userNameVerify(user.username))
+            }
+        );
     }
 
     return (
@@ -56,7 +55,6 @@ function Register() {
               onSubmit={handleSubmit(onSubmit)}
         >
             <TextField
-                id="outlined-basic"
                 className={"w-100"}
                 type={"text"}
                 {...register(
@@ -76,12 +74,75 @@ function Register() {
                         required: "Tên đăng nhập không được để trống",
                     }
                 )}
-                id="outlined-basic"
                 className={"w-100"}
                 type={"string"}
                 error={!!errors.username}
                 helperText={errors.username?.message}
                 label="Tên đăng nhập" variant="outlined"/>
+            <br/>
+            <Row className={"w-100"}>
+                <Col md={6} className={"ps-0"}>
+                    <TextField
+                        {...register(
+                            "email",
+                            {
+                                required: "Email không được để trống",
+                            }
+                        )}
+                        className={"w-100"}
+                        type={"email"}
+                        error={!!errors.email}
+                        helperText={errors.email?.message}
+                        label="Email" variant="outlined"/>
+                </Col>
+                <Col md={6} className={"pe-0"}>
+                    <TextField
+                        {...register(
+                            "phone",
+                            {
+                                required: "Số điện thoại không được để trống",
+                            }
+                        )}
+                        className={"w-100"}
+                        type={"tel"}
+                        error={!!errors.phone}
+                        helperText={errors.phone?.message}
+                        label="Số điện thoại" variant="outlined"/>
+                </Col>
+            </Row>
+            <br/>
+            <Row className={"w-100"}>
+                <Col md={6} className={"ps-0"}>
+                    <FormControl className={"w-100"}>
+                        <InputLabel>Giới tính</InputLabel>
+                        <Select
+                            {...register(
+                                "gender",
+                            )}
+                            className={"w-100"}
+                            label="Giới tính"
+                            variant="outlined"
+                        >
+                            <MenuItem value={"Nam"} selected={true}>Nam</MenuItem>
+                            <MenuItem value={"Nữ"}>Nữ</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Col>
+                <Col md={6} className={"pe-0"}>
+                    <TextField
+                        {...register(
+                            "birthday",
+                            {
+                                required: "Ngày sinh không được để trống",
+                            }
+                        )}
+                        className={"w-100"}
+                        type={"date"}
+                        error={!!errors.birthday}
+                        helperText={errors.birthday?.message}
+                        variant="outlined"/>
+                </Col>
+            </Row>
             <br/>
             <TextField
                 {...register(
@@ -90,7 +151,6 @@ function Register() {
                         required: "Mật khẩu không được để trống",
                     }
                 )}
-                id="outlined-basic"
                 className={"w-100"}
                 type={"password"}
                 label="Mật khẩu"
@@ -103,13 +163,12 @@ function Register() {
                     "confirmPassword",
                     {
                         required: "Mật khẩu nhật lại không được để trống",
-                        validate: (value) => value === "password" || "Mật khẩu không khớp"
+                        validate: (value) => value === getValues().password || "Mật khẩu không khớp"
                     }
                 )}
-                id="outlined-basic"
                 className={"w-100"}
-                type={"Nhập lại mật khẩu"}
-                label="Confirm password"
+                type={"password"}
+                label="Nhập lại mật khẩu"
                 error={!!errors.confirmPassword}
                 helperText={errors.confirmPassword?.message}
                 variant="outlined"/>

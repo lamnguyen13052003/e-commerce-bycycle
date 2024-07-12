@@ -11,7 +11,8 @@ import QuantityCell from '../cart/QuantityCell';
 import {Avatar, Box, Button, Grid, Input, Stack, TextField} from '@mui/material';
 import {formatCurrency} from "../../utils/Formatter";
 import {ProductType} from "../../types/product.type";
-import {addCartItem} from "../../slice/cart.slice";
+import {useDispatch} from "react-redux";
+import {addCartItem, addCartItemPayNow} from "../../slice/cart.slice";
 import HoverRating from "../hover-rating";
 import {green} from "@mui/material/colors";
 import ReviewList from "../review-list";
@@ -19,6 +20,7 @@ import ResponsiveDialog from "../response-dialog/ResponsiveDialog";
 import {Link} from "react-router-dom";
 import {getUser} from "../../utils/sessionStorage";
 import {ModelType} from "../../types/modelProduct.type";
+import { useNavigate } from 'react-router';
 import {addReview} from "../../slice/reviewProduct.slice";
 import AddReviewRequest from "../../requests/addReview.request";
 import {useAppDispatch} from "../../configs/store";
@@ -26,7 +28,9 @@ import {useAppDispatch} from "../../configs/store";
 
 const ProductDetailCol = (product: ProductType) => {
     const user = getUser();
-    const dispatch = useAppDispatch();
+    const appDispatch = useAppDispatch();
+    const dispatch = useDispatch();
+    const nav = useNavigate();
     const [modelSelected, setModelSelected] = useState<ModelType>(product.model[0]);
     const [quantity, setQuantity] = useState<number>(1);
 
@@ -56,7 +60,7 @@ const ProductDetailCol = (product: ProductType) => {
 
     const handleAddReview = () => {
         if (handleValidReview() || !user || !user?._id ) return;
-        dispatch(addReview({
+        appDispatch(addReview({
             productId: product._id,
             user_id: user._id,
             rating: rating,
@@ -168,7 +172,17 @@ const ProductDetailCol = (product: ProductType) => {
                                                     Thêm vào giỏ hàng
                                                 </Button>
                                             </div>
-                                            <Button className={"buy-now"} variant="contained">
+                                            <Button className={"buy-now"} variant="contained" onClick={() => {
+                                                dispatch(addCartItemPayNow({
+                                                    id: product._id,
+                                                    name: product.name,
+                                                    url: product.model[0].pathImageColor,
+                                                    price: product.discount ? (100 - product.discount) * product.price / 100 : product.price,
+                                                    quantity: quantity,
+                                                    type: modelSelected.color,
+                                                }))
+                                                nav("/checkout")
+                                            }}>
                                                 Mua ngay
                                             </Button>
                                         </div>
@@ -181,7 +195,9 @@ const ProductDetailCol = (product: ProductType) => {
                                             </ul>
                                             <div className={"form-product"}>
                                                 <Input placeholder="Số điện thoại" fullWidth={true}/>
-                                                <Button variant="contained" href="#">Gửi</Button>
+                                                <Button variant="contained" href="#">
+                                                    Gửi
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>
@@ -363,3 +379,4 @@ const ProductDetailCol = (product: ProductType) => {
 };
 
 export default ProductDetailCol;
+

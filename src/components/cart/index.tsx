@@ -1,7 +1,6 @@
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import {Image} from "react-bootstrap";
-import ImageCycleBike from '../../assets/images/xe-dap-xanh-la.jpg';
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import {IconButton} from "@mui/material";
@@ -18,9 +17,17 @@ function CartItem(props: CartItemType) {
     return (
         <TableRow>
             <TableCell>
-                <Image className={"rounded-3"} src={ImageCycleBike} alt={name} style={{width: "100px"}}/>
+                <Image className={"rounded-3"} src={url} alt={name} style={{width: "100px"}}/>
             </TableCell>
-            <TableCell>{name}</TableCell>
+            <TableCell className={"overflow-x-hidden"}>
+                <span>
+                    {name}
+                </span>
+                <br />
+                <span>
+                   Mẫu: {type}
+                </span>
+            </TableCell>
             <TableCell align="left">{formatCurrency(price)}</TableCell>
             <TableCell>
                 <QuantityCell id={id} type={props.type} hasDispatch={true} onChange={(number) => {

@@ -4,15 +4,14 @@ import {ResponseApi} from "../types/response.type";
 import {
     getAll,
     getAttrForFilter,
+    getProductById,
     getProductsBestSale,
     getProductsByCategory,
-    getProductsByFilter,
-    getProductById
+    getProductsByFilter
 } from "../service/product.service";
 import {ProductHasTotalType} from "../types/productsHasTotal.type";
 import FilterAttributeType from "../types/filterAttribute.type";
 import {ProductType} from "../types/product.type";
-import QueryString from "qs";
 import {CustomError} from "../errors/custom.error.type";
 import {log} from "../server";
 
@@ -25,7 +24,7 @@ export const runProductController = (app: Express) => {
         getAll().then((response) => {
             res.send(Builder<ResponseApi<ProductType[]>>()
                 .code(202)
-                .message("Success")
+                .message("Thành công!")
                 .data(response)
                 .build());
         }).catch((error) => {
@@ -40,7 +39,7 @@ export const runProductController = (app: Express) => {
         getProductsByCategory(category, seeMore).then((response) => {
             res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)
-                .message("Success")
+                .message("Thành công!")
                 .data(response)
                 .build());
         }).catch((error) => {
@@ -54,7 +53,7 @@ export const runProductController = (app: Express) => {
         getProductsBestSale(bestSale).then((response) => {
             res.send(Builder<ResponseApi<ProductType[]>>()
                 .code(202)
-                .message("Success")
+                .message("Thành công!")
                 .data(response)
                 .build());
         }).catch((error) => {
@@ -68,7 +67,7 @@ export const runProductController = (app: Express) => {
         getAttrForFilter(category).then((response) => {
             res.send(Builder<ResponseApi<FilterAttributeType>>()
                 .code(202)
-                .message("Success")
+                .message("Thành công!")
                 .data(response)
                 .build());
         }).catch((error) => {
@@ -93,7 +92,7 @@ export const runProductController = (app: Express) => {
         getProductsByFilter(category, seeMore, brands, wheelSizes, materials, targetUsings, prices, newProduct, bestSale, sort).then((response) => {
             res.send(Builder<ResponseApi<ProductHasTotalType>>()
                 .code(202)
-                .message("Success")
+                .message("Thành công!")
                 .data(response)
                 .build());
         }).catch((error) => {
@@ -103,14 +102,14 @@ export const runProductController = (app: Express) => {
 
     app.get("/api/product-detail/:id", (req: Request<{
                                             id: string
-                                        }, any, any, QueryString.ParsedQs, Record<string, any>>,
+                                        }, any, any, any, any>,
                                         res) => {
         log(TAG, "get product by id", req.body)
         getProductById(req.params.id)
             .then((response) => {
                 res.send(Builder<ResponseApi<ProductType>>()
                     .code(202)
-                    .message("Success")
+                    .message("Thành công!")
                     .data(response)
                     .build());
             }).catch((error: CustomError) => {

@@ -1,6 +1,5 @@
-export type RegisterRequest = {
-    username: string,
-    password: string,
+import {UserHasPasswordType} from "../types/userHasPassword.type";
+
+export type RegisterRequest = UserHasPasswordType &{
     confirmPassword: string,
-    fullName: string,
 }

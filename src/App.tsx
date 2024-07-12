@@ -12,11 +12,12 @@ import Login from "./components/login-form";
 import Register from "./components/register-form";
 import ForgetPassword from "./components/forget-password-form";
 import ChangePassword from "./components/reset-password-form";
-import Verify from "./components/verify-form";
+import VerifyAccount from "./components/verify-form";
 import {ProductDetail} from "./pages/ProductDetail";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Pay from "./pages/Pay";
+import Profile from "./pages/Profile";
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
                     <Route path={"/register"} element={<Register/>}/>
                     <Route path={"/forget-password"} element={<ForgetPassword/>}/>
                     <Route path={"/change-password"} element={<ChangePassword/>}/>
-                    <Route path={"/verify"} element={<Verify/>}/>
+                    <Route path={"/verify"} element={<VerifyAccount/>}/>
                 </Route>
                 <Route path={"/:category/page/:page"} element={<Products />}/>
                 <Route path="/:category/page/:page/filter" element={<Products />} />
@@ -38,6 +39,7 @@ function App() {
                 <Route path={"/contact"} element={<Contact/>}/>
                 <Route path={"/checkout"} element={<Checkout/>}/>
                 <Route path={"/pay"} element={<Pay/>}/>
+                <Route path={"/profile"} element={<Profile/>} />
             </Route>
         </Routes>
     );

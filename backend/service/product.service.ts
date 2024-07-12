@@ -9,15 +9,15 @@ const productRepository = connection.collection<ProductType>(collection);
 
 async function getAll() {
     return productRepository
-        .find<ProductType>({})
+        .find<ProductType>({"model.quantity": {$gte: 1}})
         .toArray()
 }
 
 async function getProductsByCategory(category: number, count: number) {
-    const total = await productRepository.countDocuments({category: category})
+    const total = await productRepository.countDocuments({category: category, "model.quantity": {$gte: 1}})
     let y = 8 * count
     if (y >= total) y = total
-    const products = await productRepository.find<ProductType>({category: category}).limit(y).toArray()
+    const products = await productRepository.find<ProductType>({category: category, "model.quantity": {$gte: 1}}).limit(y).toArray()
 
     return {
         total: total,
@@ -62,7 +62,7 @@ function getQuery(
     bestSale?: boolean,
 ): {} {
 
-    let query: {} = {category: category}
+    let query: {} = {category: category, "model.quantity": {$gte: 1}}
     let [minPrice, maxPrice] = (price === undefined ? price = '0-0' : price as string).split('-').map(Number)
 
     if (brands !== undefined) {
@@ -97,23 +97,23 @@ function getQuery(
 async function getProductsBestSale(bestSale: boolean) {
     if (bestSale) {
         return productRepository
-            .find({sale: true}).sort({"discount": -1}).limit(8)
+            .find({sale: true, "model.quantity": {$gte: 1}}).sort({"discount": -1}).limit(8)
             .toArray()
 
     }
     return productRepository
-        .find({new: true}).limit(8)
+        .find({new: true, "model.quantity": {$gte: 1}}).limit(8)
         .toArray()
 }
 
 async function getAttrForFilter(category: number) {
     const result = Promise.all(
-        [productRepository.distinct('base_description.brand', {category: category}),
-            productRepository.distinct('specifications.wheelSize', {category: category}),
-            productRepository.distinct('base_description.material', {category: category}),
-            productRepository.distinct('specifications.targetUsing', {category: category}),
-            productRepository.find({category: category}).sort({price: 1}).limit(1).toArray(),
-            productRepository.find({category: category}).sort({price: -1}).limit(1).toArray()])
+        [productRepository.distinct('base_description.brand', {category: category, "model.quantity": {$gte: 1}}),
+            productRepository.distinct('specifications.wheelSize', {category: category, "model.quantity": {$gte: 1}}),
+            productRepository.distinct('base_description.material', {category: category, "model.quantity": {$gte: 1}}),
+            productRepository.distinct('specifications.targetUsing', {category: category, "model.quantity": {$gte: 1}}),
+            productRepository.find({category: category, "model.quantity": {$gte: 1}}).sort({price: 1}).limit(1).toArray(),
+            productRepository.find({category: category, "model.quantity": {$gte: 1}}).sort({price: -1}).limit(1).toArray()])
     return result.then((values) => {
         return {
             brands: values[0],
@@ -127,7 +127,7 @@ async function getAttrForFilter(category: number) {
 
 async function getProductById(id: string) {
     return productRepository
-        .findOne({_id: ObjectId.createFromHexString(id)})
+        .findOne({_id: ObjectId.createFromHexString(id), "model.quantity": {$gte: 1}})
         .then((product): ProductType => {
             if (!product) throw productNotFound;
             return product;

@@ -1,5 +1,5 @@
 import {connection} from "../database.connect";
-import {UserHasPasswordType} from "../types/userHasPasswordType";
+import {UserHasPasswordType} from "../types/userHasPassword.type";
 import {
     accountExist,
     accountNotExist,
@@ -7,15 +7,18 @@ import {
     changePasswordFail,
     passwordNotCompare,
     registerFail,
+    updateProfileFail,
     verifyFail,
     wrongUsernameOrPassword,
-    wrongVerifyCode
+    wrongVerifyCode,
+    wrongPassword
 } from "../errors/error.enum";
 import {VerifyRequest} from "../requests/verify.request";
 import {LoginRequest} from "../requests/login.request";
 import {RegisterRequest} from "../requests/register.request";
 import {ChangePasswordRequest} from "../requests/changePassword.request";
 import {ObjectId} from "mongodb";
+import {User} from "../types/user.type";
 
 const collection = 'users';
 const userRepository = connection.collection<UserHasPasswordType>(collection);
@@ -48,19 +51,18 @@ async function register(registerRequest: RegisterRequest): Promise<UserHasPasswo
     const exist = await existUsername(registerRequest.username);
     if (registerRequest.password !== registerRequest.confirmPassword) throw passwordNotCompare;
     const user: UserHasPasswordType = {
-        username: registerRequest.username,
-        password: registerRequest.password,
-        fullName: registerRequest.fullName,
+        ...registerRequest,
+        urlAvatar: "https://i.imgur.com/7bIq1J9.png",
         verifyCode: generateVerifyCode(),
-        urlAvatar: ""
-    }
+    };
     if (exist) throw accountExist;
     return userRepository
         .insertOne(user)
         .then((response): UserHasPasswordType => {
             if (!response) throw registerFail;
             return {
-                id: response.insertedId,
+                username: user.username,
+                verifyCode: user.verifyCode,
             } as UserHasPasswordType;
         })
 }
@@ -96,20 +98,37 @@ async function forgetPassword(username: string): Promise<boolean> {
 }
 
 async function changePassword(changePasswordRequest: ChangePasswordRequest): Promise<boolean> {
-    const exist = await existUsername(changePasswordRequest.username);
-    if (changePasswordRequest.password !== changePasswordRequest.confirmPassword) throw passwordNotCompare;
-    if (!exist) throw accountNotExist;
     return userRepository
-        .updateOne({username: changePasswordRequest.username}, {
-            $set: {
-                password: changePasswordRequest.password
-            }
-        }).then((response): boolean => {
+        .findOneAndUpdate({
+                _id: ObjectId.createFromHexString(changePasswordRequest._id.toString()),
+                password: changePasswordRequest.currentPassword
+            },
+            {
+                $set: {
+                    password: changePasswordRequest.newPassword
+                }
+            })
+        .then((response): boolean => {
+            if (!response) throw wrongPassword;
             return true;
         })
-        .catch(() => {
-            throw changePasswordFail;
-        });
+}
+
+async function updateProfile(user: User): Promise<User> {
+    if (!user._id) throw accountNotExist;
+    return await userRepository
+        .findOneAndUpdate({_id: ObjectId.createFromHexString(user._id.toString())}, {
+            $set: {
+                birthday: user.birthday,
+                email: user.email,
+                fullName: user.fullName,
+                phone: user.phone,
+                gender: user.gender
+            }
+        }).then((response): User => {
+            if (!response) throw updateProfileFail;
+            return user;
+        })
 }
 
 
@@ -137,4 +156,4 @@ const generateVerifyCode = () => {
     }
 }
 
-export {login, register, verify, forgetPassword, changePassword, checkUserId};
+export {login, register, verify, forgetPassword, changePassword, checkUserId, updateProfile};
