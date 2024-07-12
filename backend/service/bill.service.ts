@@ -19,7 +19,8 @@ export default class BillService {
 
         return await this.billRepository.insertOne({
             products: payRequest.products,
-            infoPay: payRequest.infoPay
+            infoPay: payRequest.infoPay,
+            date: new Date()
         }).then(() => {
             return true;
         }).catch(() => {

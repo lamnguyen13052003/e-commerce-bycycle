@@ -6,9 +6,10 @@ import {toast} from "react-toastify";
 
 const loadCartState = () => {
     const cartString = localStorage.getItem("cart");
-    if (!cartString) return {cartItems: [], cartItemsPayNow: []};
+    if (!cartString) return {cartItems: [], cartItemsPayNow: [], payNow: false} as CartState;
     const cart = JSON.parse(cartString) as CartState;
     cart.cartItemsPayNow = [];
+    cart.payNow = false;
     return cart;
 }
 
@@ -38,7 +39,8 @@ const cartSlice = createSlice({
             saveLocalStorage(state)
         },
         addCartItemPayNow: function (state, payload: PayloadAction<CartItemType>) {
-            state.cartItems.push(payload.payload)
+            state.cartItemsPayNow.push(payload.payload)
+            state.payNow = true;
             saveLocalStorage(state)
         },
         increaseQuantityCartItem: function (state, payload: PayloadAction<{ _id: ObjectId, type: string }>) {
@@ -82,6 +84,11 @@ const cartSlice = createSlice({
             while (state.cartItemsPayNow.length) {
                 state.cartItemsPayNow.pop();
             }
+            state.payNow = false;
+            saveLocalStorage(state)
+        },
+        setPayNow: function (state, payload: PayloadAction<boolean>) {
+            state.payNow = payload.payload;
             saveLocalStorage(state)
         },
     }
@@ -107,6 +114,7 @@ export const {
     decreaseCartItem,
     clearCart,
     addCartItemPayNow,
-    clearCartPayNow
+    clearCartPayNow,
+    setPayNow
 } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer

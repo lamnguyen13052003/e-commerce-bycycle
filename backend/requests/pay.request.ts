@@ -3,5 +3,6 @@ import {BillItemType} from "../types/billItem.type";
 
 export type PayRequest = {
     infoPay: InfoPayType,
-    products: BillItemType[]
+    products: BillItemType[],
+    date: Date
 }

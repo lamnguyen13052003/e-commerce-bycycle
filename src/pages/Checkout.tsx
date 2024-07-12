@@ -19,13 +19,16 @@ import {ResponseApi} from "../types/response.type";
 import {BillItemType} from "../types/billItem.type";
 import {toast} from "react-toastify";
 import {PayRequest} from "../requests/pay.request";
-import {clearCart, clearCartPayNow} from "../slice/cart.slice";
+import {clearCart, clearCartPayNow, setPayNow} from "../slice/cart.slice";
 import {User} from "../types/user.type";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Checkout() {
     const user: User | undefined = useSelector((state: RootState) => state.auth.user);
-    let payNow: boolean = false;
-    let cartItems: CartItemType[] = useSelector((state: RootState) => state.cart.cartItems);
+    const cart = useSelector((state: RootState) => state.cart);
+    const cartItems = cart.payNow ? cart.cartItemsPayNow : cart.cartItems;
+    const [qrPayStatus, setQrPayStatus] = React.useState<boolean>();
+    const [qrPay, setQrPay] = React.useState<string>();
     const nav = useNavigate();
     const {register, handleSubmit, formState: {errors}} = useForm<InfoPayType>();
     const [provinces, setProvinces] = React.useState<LocaltionEsgooType[]>([])
@@ -61,7 +64,7 @@ export default function Checkout() {
                     status: PayStatusEnum.SUCCESS,
                     infoPay: infoPay
                 }))
-                if (payNow)
+                if (cart.payNow)
                     dispatch(clearCartPayNow());
                 else
                     dispatch(clearCart());
@@ -78,12 +81,15 @@ export default function Checkout() {
 
     useEffect(() => {
         document.title = "Tiến hành thanh toán"
-        if (!cartItems.length) {
-            cartItems = useSelector((state: RootState) => state.cart.cartItemsPayNow);
-            payNow = true;
+        if (!cart.cartItems.length && !cart.cartItemsPayNow.length) nav("/");
+
+        const eventBack = (event: BeforeUnloadEvent) => {
+            dispatch(setPayNow(false))
         }
-        if (!cartItems.length) nav("/");
+        window.addEventListener('beforeunload', eventBack);
+
         return () => {
+            window.removeEventListener('beforeunload', eventBack);
             axios.get<any, AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>, any>("https://esgoo.net/api-tinhthanh/1/0.htm")
                 .then((response: AxiosResponse<ResponseApiEsgoo<LocaltionEsgooType[]>>) => {
                     setProvinces(response.data.data)
@@ -128,6 +134,26 @@ export default function Checkout() {
 
     const getBorderPayMethod = (method: PayMethodEnum) => {
         return method === payMethodSelect ? 'border-2 border-success' : 'border-1 border-secondary'
+    }
+
+    const generateQRPay = () => {
+        if (qrPay) return qrPay;
+        const totalPay = cartItems.map((item: CartItemType) => item.price * item.quantity).reduce((a, b) => a + b, 0);
+        axios.post("https://api.vietqr.io/v2/generate", {
+            "accountNo": "0855354919",
+            "accountName": "Nguyễn Đình Lam",
+            "acqId": 963388,
+            "amount": Math.floor(totalPay),
+            "addInfo": "Thanh toán đơn hàng",
+            "format": "text",
+            "template": "compact"
+        })
+            .then(response => {
+                setQrPay(response.data.data.qrDataURL)
+            })
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     return (
@@ -298,20 +324,33 @@ export default function Checkout() {
                         <Col md={3}>
                             <h3>Thông tin thanh toán</h3>
                             <Stack direction={"row"} className="mb-3" gap={1}>
-                                <Button title={"Thanh toán khi nhận hàng"} className={`p-2 border ${getBorderPayMethod(PayMethodEnum.CASH)}`}
+                                <Button title={"Thanh toán khi nhận hàng"}
+                                        className={`p-2 border ${getBorderPayMethod(PayMethodEnum.CASH)}`}
                                         onClick={() => {
                                             setPayMethodSelect(PayMethodEnum.CASH)
+                                            setQrPayStatus(false)
                                         }}>
                                     <img width={30} src={IC_CASH} alt={"cash.png"}/>
                                 </Button>
 
-                                <Button title={"Chuyển khoản"} className={`p-2 border ${getBorderPayMethod(PayMethodEnum.QR)}`}
+                                <Button title={"Chuyển khoản"}
+                                        className={`p-2 border ${getBorderPayMethod(PayMethodEnum.QR)}`}
                                         onClick={() => {
                                             setPayMethodSelect(PayMethodEnum.QR)
+                                            setQrPayStatus(true)
+                                            generateQRPay()
                                         }}>
                                     <img width={30} src={IC_QR} alt={"cash.png"}/>
                                 </Button>
                             </Stack>
+                            <Box sx={{
+                               justifyContent: "center",
+                                 alignItems: "center",
+                            }} className={` ${qrPayStatus ? 'd-flex' : 'd-none'}`}>
+                                {
+                                    qrPay ? <img className={"w-100"} src={qrPay} alt={"qrPay"}/> : <CircularProgress color="success"/>
+                                }
+                            </Box>
                         </Col>
                     </Row>
                     <Stack direction={"row"} justifyContent={"end"}>

@@ -4,7 +4,6 @@ import BillService from "../service/bill.service";
 import {Builder} from "builder-pattern";
 import {ResponseApi} from "../types/response.type";
 import {log} from "../server";
-import {ObjectId} from "mongodb";
 
 const TAG = "Pay Controller"
 const billService = BillService.newInstance();
