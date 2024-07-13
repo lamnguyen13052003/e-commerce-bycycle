@@ -18,6 +18,7 @@ import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Pay from "./pages/Pay";
 import Profile from "./pages/Profile";
+import ShoppingGuide from "./pages/ShoppingGuide";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
                 <Route path={"/checkout"} element={<Checkout/>}/>
                 <Route path={"/pay"} element={<Pay/>}/>
                 <Route path={"/profile"} element={<Profile/>} />
+                <Route path={"/shopping-guide"} element={<ShoppingGuide/>} />
             </Route>
         </Routes>
     );
