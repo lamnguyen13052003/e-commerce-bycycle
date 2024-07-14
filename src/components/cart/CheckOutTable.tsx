@@ -37,20 +37,25 @@ export function CheckOutTable({cartItems}: { cartItems: CartItemType[] }) {
                         <TableRow>
                             <TableCell align="left">
                                 <SellIcon fontSize="small"/>
-                                Phiếu Ưu Đãi</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <Input sx={{
-                                width: "100%",
-                                maxWidth: "100%",
-                                margin: "10px 0px",
-                                border: "1px solid #ddds !important"
-                            }} placeholder="Mã ưu đãi"></Input>
+                                Phiếu Ưu Đãi
+                            </TableCell>
                         </TableRow>
                     </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>
+                                <Input sx={{
+                                    width: "100%",
+                                    maxWidth: "100%",
+                                    margin: "10px 0px",
+                                    border: "1px solid #ddds !important"
+                                }} placeholder="Mã ưu đãi"></Input>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
                 </Table>
             </TableContainer>
-            <Link to={"/checkout"}  onClick={(event) => {
+            <Link to={"/checkout"} onClick={(event) => {
                 if (!cartItems.length) {
                     alert("Giỏ hàng của bạn đang trống!")
                     event.preventDefault()

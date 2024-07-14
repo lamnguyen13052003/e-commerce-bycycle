@@ -1,25 +1,33 @@
 import {User} from "../types/user.type";
 import {ProductType} from "../types/product.type";
+import {ObjectId} from "mongodb";
 
 enum KEY {
     USER = "USER",
-    USERNAME_VERIFY = "USERNAME_VERIFY",
+    _ID = "_ID",
     RECENTLY_PRODUCT = "RECENTLY_PRODUCT"
+}
+
+const saveId = (_id: ObjectId) => {
+    sessionStorage.setItem(KEY._ID, JSON.stringify(_id))
+}
+
+const removeId = () => {
+    sessionStorage.removeItem(KEY._ID)
+}
+
+const getId = (): ObjectId | undefined => {
+    const data = sessionStorage.getItem(KEY._ID);
+    if (!data) return undefined;
+    return JSON.parse(data);
 }
 
 const saveUser = (user: User) => {
     sessionStorage.setItem(KEY.USER, JSON.stringify(user))
 }
 
-const saveUsernameVerify = (usernameVerify: string) => {
-    sessionStorage.setItem(KEY.USER, usernameVerify)
-}
-
 const removeUser = () => {
     sessionStorage.removeItem(KEY.USER)
-}
-const removeUsernameVerify = () => {
-    sessionStorage.removeItem(KEY.USERNAME_VERIFY)
 }
 
 const getUser = (): User | undefined => {
@@ -39,9 +47,6 @@ const updateProfile = (user: User): void => {
     saveUser(oldUser);
 }
 
-const getUsernameVerify = (): string | undefined => {
-    return sessionStorage.getItem(KEY.USERNAME_VERIFY) ?? undefined;
-}
 const getRecentlyProduct = (): ProductType[] => {
     const data = sessionStorage.getItem(KEY.RECENTLY_PRODUCT);
     return data ? JSON.parse(data) as ProductType[] : [];
@@ -59,11 +64,11 @@ const pushRecentlyProduct = (product: ProductType) => {
 
 export {
     saveUser,
-    saveUsernameVerify,
+    saveId,
     removeUser,
-    removeUsernameVerify,
+    removeId,
     getUser,
-    getUsernameVerify,
+    getId,
     getRecentlyProduct,
     pushRecentlyProduct,
     updateProfile

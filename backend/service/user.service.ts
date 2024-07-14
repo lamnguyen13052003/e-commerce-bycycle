@@ -18,16 +18,18 @@ import {RegisterRequest} from "../requests/register.request";
 import {ChangePasswordRequest} from "../requests/changePassword.request";
 import {ObjectId} from "mongodb";
 import {User} from "../types/user.type";
+import {ResetPasswordRequest} from "../requests/resetPassword.request";
 
 const collection = 'users';
 const userRepository = connection.collection<UserHasPasswordType>(collection);
 
-async function existUsername(username?: string): Promise<boolean> {
+async function existUsername(username?: string): Promise<ObjectId | undefined> {
+    if (!username) throw accountNotExist;
     const query = {username: username}
     return userRepository
         .findOne(query)
-        .then((response): boolean => {
-            return !!response;
+        .then((response): ObjectId | undefined => {
+            return response?._id;
         });
 }
 
@@ -39,7 +41,7 @@ async function login(loginRequest: LoginRequest): Promise<UserHasPasswordType> {
         .findOne(loginRequest)
         .then((response: UserHasPasswordType | null): UserHasPasswordType => {
             if (!response) throw wrongUsernameOrPassword;
-            if (response.verifyCode || response.verifyCode === "") throw accountNotVerify;
+            if (response.verifyCode || response.verifyCode === "") throw accountNotVerify(exist);
             response.password = undefined;
             response.verifyCode = undefined;
             return response;
@@ -55,49 +57,41 @@ async function register(registerRequest: RegisterRequest): Promise<UserHasPasswo
         verifyCode: generateVerifyCode(),
     };
     if (exist) throw accountExist;
-    return userRepository
+    return await userRepository
         .insertOne(user)
         .then((response): UserHasPasswordType => {
             if (!response) throw registerFail;
             return {
-                username: user.username,
+                _id: user._id,
                 verifyCode: user.verifyCode,
             } as UserHasPasswordType;
         })
 }
 
 async function verify(verifyRequest: VerifyRequest): Promise<boolean> {
-    const exist = await existUsername(verifyRequest.username);
+    verifyRequest._id = ObjectId.createFromHexString(verifyRequest._id.toString());
+    const exist = await checkUserId(verifyRequest._id);
     if (!exist) throw accountNotExist;
     return userRepository
-        .findOne<UserHasPasswordType>(verifyRequest)
-        .then((response): Promise<boolean> => {
-            if (!response) throw wrongVerifyCode;
-            return verifySuccess(response._id);
-        });
-}
-
-async function verifySuccess(id?: ObjectId): Promise<boolean> {
-    return userRepository
-        .updateOne(
-            {_id: id}, {
-                $unset: {"verifyCode": ""},
-            }).then((response): boolean => {
-            return true;
+        .findOneAndUpdate(verifyRequest, {
+            $unset: {"verifyCode": ""},
         })
-        .catch(() => {
-            throw verifyFail;
+        .then((response): boolean => {
+            if (!response) throw wrongVerifyCode;
+            return true;
         });
 }
 
-async function forgetPassword(username: string): Promise<boolean> {
+
+async function forgetPassword(username: string): Promise<ObjectId> {
     const exist = await existUsername(username);
     if (!exist) throw accountNotExist;
-    return true;
+    return exist;
 }
 
 async function changePassword(changePasswordRequest: ChangePasswordRequest): Promise<boolean> {
-    return userRepository
+    if (changePasswordRequest.newPassword !== changePasswordRequest.confirmPassword) throw passwordNotCompare;
+    return await userRepository
         .findOneAndUpdate({
                 _id: ObjectId.createFromHexString(changePasswordRequest._id.toString()),
                 password: changePasswordRequest.currentPassword
@@ -105,6 +99,23 @@ async function changePassword(changePasswordRequest: ChangePasswordRequest): Pro
             {
                 $set: {
                     password: changePasswordRequest.newPassword
+                }
+            })
+        .then((response): boolean => {
+            if (!response) throw wrongPassword;
+            return true;
+        })
+}
+
+async function resetPassword(resetPasswordRequest: ResetPasswordRequest): Promise<boolean> {
+    if (resetPasswordRequest.newPassword !== resetPasswordRequest.confirmPassword) throw passwordNotCompare;
+    return await userRepository
+        .findOneAndUpdate({
+                _id: ObjectId.createFromHexString(resetPasswordRequest._id.toString()),
+            },
+            {
+                $set: {
+                    password: resetPasswordRequest.newPassword
                 }
             })
         .then((response): boolean => {
@@ -155,4 +166,4 @@ const generateVerifyCode = () => {
     }
 }
 
-export {login, register, verify, forgetPassword, changePassword, checkUserId, updateProfile};
+export {login, register, verify, forgetPassword, changePassword, checkUserId, updateProfile, resetPassword};

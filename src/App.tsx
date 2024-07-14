@@ -11,7 +11,7 @@ import Sign from "./pages/Sign";
 import Login from "./components/login-form";
 import Register from "./components/register-form";
 import ForgetPassword from "./components/forget-password-form";
-import ChangePassword from "./components/reset-password-form";
+import ResetPassword from "./components/reset-password-form";
 import VerifyAccount from "./components/verify-form";
 import {ProductDetail} from "./pages/ProductDetail";
 import Contact from "./pages/Contact";
@@ -31,7 +31,7 @@ function App() {
                     <Route path={"/login"} element={<Login/>}/>
                     <Route path={"/register"} element={<Register/>}/>
                     <Route path={"/forget-password"} element={<ForgetPassword/>}/>
-                    <Route path={"/change-password"} element={<ChangePassword/>}/>
+                    <Route path={"/reset-password"} element={<ResetPassword/>}/>
                     <Route path={"/verify"} element={<VerifyAccount/>}/>
                 </Route>
                 <Route path={"/:category/page/:page"} element={<Products />}/>

@@ -7,7 +7,7 @@ import {SubmitHandler, useForm} from "react-hook-form"
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {User} from "../../types/user.type";
-import {login, userNameVerify} from "../../slice/auth.slice";
+import {login, saveId} from "../../slice/auth.slice";
 import {LoginRequest} from "../../requests/login.request";
 import axiosHttp from "../../utils/axiosHttp";
 import {AxiosResponse} from "axios";
@@ -46,7 +46,7 @@ function Login() {
                     const code = response.code;
                     if (code == 401) {
                         setTimeout(() => {
-                            dispatch(userNameVerify(form.username))
+                            dispatch(saveId(response.data))
                             nav("/verify")
                         }, 1000);
                     }
@@ -61,7 +61,7 @@ function Login() {
     }
 
     return (
-        <form className={"p-3 d-flex flex-column w-100 align-items-center"}
+        <form className={"p-3 d-flex flex-column w-100 align-items-center gap-3"}
               method={"POST"}
               action={"http://localhost:1305/api/login"}
               onSubmit={handleSubmit(onSubmit)}
@@ -79,7 +79,6 @@ function Login() {
                 helperText={errors.username?.message}
                 label="Tên đăng nhập"
                 variant="outlined"/>
-            <br/>
             <TextField
                 className={"w-100"}
                 type={"password"}
@@ -93,7 +92,6 @@ function Login() {
                 error={!!errors.password}
                 helperText={errors.password?.message}
                 variant="outlined"/>
-            <br/>
             <Button className={"w-25"} type={"submit"} variant="contained" color="success">Đăng
                 nhập</Button>
             <Link to={"/forget-password"} className={"text-decoration-none mt-3"}>Quên mật khẩu?</Link>

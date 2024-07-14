@@ -33,7 +33,7 @@ function Footer() {
                 <div className={`${styles['flex-1']}`}>
                     <Box>
                         <Title title={"Chính sách và hỗ trợ"}/>
-                        <ItemPolicy to={"#"} title={"Hướng dẫn mua hàng"}/>
+                        <ItemPolicy to={"/shopping-guide"} title={"Hướng dẫn mua hàng"}/>
                         <ItemPolicy to={"#"} title={"Chính Sách Thanh Toán"}/>
                         <ItemPolicy to={"#"} title={"Chính sách giao hàng"}/>
                         <ItemPolicy to={"#"} title={"Chính Sách Đổi Trả Hàng"}/>

@@ -1,4 +1,6 @@
+import {ObjectId} from "mongodb";
+
 export type VerifyRequest = {
-    username: string,
+    _id: ObjectId,
     verifyCode: string
 }

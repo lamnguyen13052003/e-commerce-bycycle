@@ -1,8 +1,5 @@
-import {ObjectId} from "mongodb";
+import {ResetPasswordRequest} from "./resetPassword.request";
 
-export type ChangePasswordRequest = {
-    _id: ObjectId,
+export type ChangePasswordRequest =  ResetPasswordRequest & {
     currentPassword: string,
-    newPassword: string,
-    confirmPassword: string
 }

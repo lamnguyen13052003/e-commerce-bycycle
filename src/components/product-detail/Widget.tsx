@@ -65,7 +65,7 @@ const StickyWidget = (props: { warranty: string }) => {
                                     Hỗ Trợ Mua Hàng
                                 </h5>
                                 <h5>
-                                    0999.999.999
+                                    0855354919
                                 </h5>
                             </div>
                         </div>

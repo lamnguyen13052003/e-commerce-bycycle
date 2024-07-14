@@ -1,9 +1,11 @@
-import {changePassword, forgetPassword, login, register, verify} from "../service/user.service";
+import {forgetPassword, login, register, resetPassword, verify} from "../service/user.service";
 import {Express, Request} from "express";
 import {Builder} from "builder-pattern";
 import {ResponseApi} from "../types/response.type";
 import {UserHasPasswordType} from "../types/userHasPassword.type";
 import {log} from "../server";
+import {ResetPasswordRequest} from "../requests/resetPassword.request";
+import {ObjectId} from "mongodb";
 
 const TAG = "Authentication Controller"
 
@@ -34,9 +36,11 @@ export const runAuthController = (app: Express) => {
         })
     });
 
-    app.post("/api/auth/change-password", (req, res) => {
-        log(TAG, "Change password", req.body)
-        changePassword(req.body)
+    app.post("/api/auth/reset-password", (
+        req: Request<any, any, ResetPasswordRequest, any, any>,
+        res) => {
+        log(TAG, "Reset password", req.body)
+        resetPassword(req.body)
             .then((data) => {
                 res.send(Builder<ResponseApi<boolean>>()
                     .code(202)
@@ -44,7 +48,7 @@ export const runAuthController = (app: Express) => {
                     .data(data)
                     .build())
             }).catch((error) => {
-            res.status(error.code).send(error)
+            res.status(error.code).send(error.message)
         })
     });
 
@@ -62,14 +66,17 @@ export const runAuthController = (app: Express) => {
         })
     });
 
-    app.post("/api/auth/forget-password", (req, res) => {
+    app.post("/api/auth/forget-password", (
+        req
+        , res
+    ) => {
         log(TAG, "Forget password", req.body)
-        forgetPassword(req.body)
+        forgetPassword(req.body.username)
             .then((data) => {
-                res.send(Builder<ResponseApi<boolean>>()
+                res.send(Builder<ResponseApi<{ _id: ObjectId }>>()
                     .code(202)
                     .message("Thành công!")
-                    .data(data)
+                    .data({"_id": data})
                     .build())
             }).catch((error) => {
             res.status(error.code).send(error)

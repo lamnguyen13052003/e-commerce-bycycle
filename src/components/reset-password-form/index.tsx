@@ -1,24 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, TextField} from "@mui/material";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setTitle} from "../../slice/signTitle.slice";
 import {useForm} from "react-hook-form";
 import {ChangePasswordRequest} from "../../requests/changePassword.request";
 import axios from "axios";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
+import {ResetPasswordRequest} from "../../requests/resetPassword.request";
+import {RootState} from "../../configs/store";
 
-function ChangePassword() {
+function ResetPassword() {
     document.title = "Đổi mật khẩu";
     const dispatch = useDispatch();
     const nav = useNavigate();
+    const auth = useSelector((state: RootState) => state.auth);
 
-    const {register, handleSubmit, formState: {errors}} = useForm<ChangePasswordRequest>();
+    const {register, getValues, handleSubmit, formState: {errors}} = useForm<ResetPasswordRequest>({
+        defaultValues: {
+            _id: auth._id
+        }
+    });
 
-    const onSubmit = (form: ChangePasswordRequest) => {
+    const onSubmit = (form: ResetPasswordRequest) => {
         const promise = async () => {
             return axios.request({
-                url: "http://localhost:1305/api/change-password",
+                url: "http://localhost:1305/api/auth/reset-password",
                 method: "POST",
                 data: form,
             })
@@ -45,7 +52,12 @@ function ChangePassword() {
         });
     }
 
-    dispatch(setTitle({title: "Đổi mật khẩu"}));
+    useEffect(() => {
+        console.log(auth._id)
+        dispatch(setTitle({title: "Đổi mật khẩu"}));
+        if (!auth._id) nav("/")
+    }, [])
+
     return (
         <form className={"p-3 d-flex flex-column w-100 align-items-center"}
               method={"POST"} action={"/reset-password"}
@@ -53,11 +65,11 @@ function ChangePassword() {
         >
             <TextField id="outlined-basic" className={"w-100"} type={"password"}
                        label="Mật khẩu"
-                       {...register("password",
+                       {...register("newPassword",
                            {required: "Mật khẩu không được để trống"}
                        )}
-                       error={!!errors.password}
-                       helperText={errors.password?.message}
+                       error={!!errors.newPassword}
+                       helperText={errors.newPassword?.message}
                        variant="outlined"/>
             <br/>
             <TextField id="outlined-basic" className={"w-100"}
@@ -65,7 +77,7 @@ function ChangePassword() {
                        {...register("confirmPassword",
                            {
                                required: "Mật khẩu không được để trống",
-                               validate: (value) => value === "password" || "Mật khẩu không khớp"
+                               validate: (value) => value === getValues().newPassword || "Mật khẩu không khớp"
                            }
                        )}
                        error={!!errors.confirmPassword}
@@ -78,4 +90,4 @@ function ChangePassword() {
     );
 }
 
-export default ChangePassword;
+export default ResetPassword;

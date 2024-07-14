@@ -1,4 +1,5 @@
-export type CustomError = {
+export type CustomError<T> = {
     code: number
-    message: string
+    message: string,
+    data?: T
 }

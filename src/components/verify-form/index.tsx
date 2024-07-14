@@ -39,6 +39,7 @@ function VerifyAccount() {
         const keys = Object.keys(initialInputCode) as (keyof InputCode)[];
         return keys.map(key => <TextField
             type={"text"}
+            key={key.toString()}
             label="*"
             style={{
                 width: "50px",
@@ -54,7 +55,7 @@ function VerifyAccount() {
 
     const onSubmit = (inputCode: InputCode) => {
         const verifyRequest: VerifyRequest = {
-            username: auth.usernameVerify ?? "",
+            _id: auth._id,
             verifyCode: Object.values(inputCode).join("")
         }
 
@@ -85,8 +86,9 @@ function VerifyAccount() {
     }
 
     useEffect(() => {
+        document.title = "Xác thực tài khoản"
+        if (!auth._id) nav("/")
         dispatch(setTitle({title: "Xác thực tài khoản"}));
-        if (!auth.usernameVerify) nav("/")
     }, []);
 
     return (

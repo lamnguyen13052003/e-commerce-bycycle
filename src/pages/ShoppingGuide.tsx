@@ -40,7 +40,7 @@ function ShoppingGuide() {
                             <li>Bạn tham khảo các mẫu xe đạp trên Website hiện có.</li>
                             <li>Ghi chú lại mã sản phẩm và các thông tin cần thiết để tiện lợi hơn khi gọi điện.</li>
                             <li>
-                                Gọi số <strong>0999.999.999</strong> từ 08:00 đến 21:00 các ngày trong tuần để đặt hàng.
+                                Gọi số <strong>0855354919</strong> từ 08:00 đến 21:00 các ngày trong tuần để đặt hàng.
                                 Nhân viên chúng tôi luôn sẵn sàng phục vụ, tư vấn và hỗ trợ quý khách mua được sản phẩm
                                 phù hợp, ưng ý.
                             </li>
@@ -48,7 +48,7 @@ function ShoppingGuide() {
                         <figure>
                             <img src="src/assets/images/shopping-guide/huong-dan-mua-hang-1.jpg" width="683"
                                  height="454"/>
-                            <figcaption>Gọi đến hotline 0999.999.999 từ 08:00 đến 21:00 để được tư vấn và hỗ trợ mua
+                            <figcaption>Gọi đến hotline 0855354919 từ 08:00 đến 21:00 để được tư vấn và hỗ trợ mua
                                 hàng
                             </figcaption>
                         </figure>
@@ -234,7 +234,7 @@ function ShoppingGuide() {
                                 <LocalPhoneIcon fontSize="large" />
                                 <div>
                                     <h5>Hỗ Trợ Mua Hàng</h5>
-                                    <h5>0999.999.999</h5>
+                                    <h5>0855354919</h5>
                                 </div>
                             </div>
                         </Col>

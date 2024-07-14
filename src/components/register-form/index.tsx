@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {setTitle} from "../../slice/signTitle.slice";
@@ -6,7 +6,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {RegisterRequest} from "../../requests/register.request";
 import {toast} from "react-toastify";
-import {userNameVerify} from "../../slice/auth.slice";
+import {saveId} from "../../slice/auth.slice";
 import {Col, Row} from "react-bootstrap";
 import axiosHttp from "../../utils/axiosHttp";
 import {AxiosResponse} from "axios";
@@ -16,10 +16,13 @@ import {UserHasPasswordType} from "../../../backend/types/userHasPassword.type";
 function Register() {
     document.title = "Đăng ký tài khoản";
     const dispatch = useDispatch();
-    dispatch(setTitle({title: "Đăng ký tài khoản"}));
     const nav = useNavigate();
 
     const {register, getValues, handleSubmit, formState: {errors}} = useForm<RegisterRequest>();
+
+    useEffect(() => {
+        dispatch(setTitle({title: "Đăng ký tài khoản"}));
+    }, [])
 
     const onSubmit: SubmitHandler<RegisterRequest> = (form) => {
         const promise = axiosHttp.post<string, AxiosResponse<ResponseApi<UserHasPasswordType>>>("/api/auth/register", form)
@@ -43,14 +46,14 @@ function Register() {
             }
         }).then(response => {
                 const user: UserHasPasswordType | undefined = response.data.data;
-                if (user && user.username)
-                    dispatch(userNameVerify(user.username))
+                if (user && user._id)
+                    dispatch(saveId(user._id))
             }
         );
     }
 
     return (
-        <form className={"p-3 d-flex flex-column w-100 align-items-center"}
+        <form className={"p-3 d-flex flex-column w-100 align-items-center gap-3"}
               method={"POST"} action={"http://localhost:1305/api/register"}
               onSubmit={handleSubmit(onSubmit)}
         >
@@ -66,7 +69,6 @@ function Register() {
                 error={!!errors.fullName}
                 helperText={errors.fullName?.message}
                 label="Họ và tên" variant="outlined"/>
-            <br/>
             <TextField
                 {...register(
                     "username",
@@ -79,7 +81,6 @@ function Register() {
                 error={!!errors.username}
                 helperText={errors.username?.message}
                 label="Tên đăng nhập" variant="outlined"/>
-            <br/>
             <Row className={"w-100"}>
                 <Col md={6} className={"ps-0"}>
                     <TextField
@@ -110,7 +111,6 @@ function Register() {
                         label="Số điện thoại" variant="outlined"/>
                 </Col>
             </Row>
-            <br/>
             <Row className={"w-100"}>
                 <Col md={6} className={"ps-0"}>
                     <FormControl className={"w-100"}>
@@ -123,7 +123,8 @@ function Register() {
                             label="Giới tính"
                             variant="outlined"
                         >
-                            <MenuItem value={"Nam"} selected={true}>Nam</MenuItem>
+                            <MenuItem value={undefined} hidden={true} disabled={true}>Chọn giới tính</MenuItem>
+                            <MenuItem value={"Nam"}>Nam</MenuItem>
                             <MenuItem value={"Nữ"}>Nữ</MenuItem>
                         </Select>
                     </FormControl>
@@ -143,7 +144,6 @@ function Register() {
                         variant="outlined"/>
                 </Col>
             </Row>
-            <br/>
             <TextField
                 {...register(
                     "password",
@@ -157,7 +157,6 @@ function Register() {
                 error={!!errors.password}
                 helperText={errors.password?.message}
                 variant="outlined"/>
-            <br/>
             <TextField
                 {...register(
                     "confirmPassword",
@@ -172,7 +171,6 @@ function Register() {
                 error={!!errors.confirmPassword}
                 helperText={errors.confirmPassword?.message}
                 variant="outlined"/>
-            <br/>
             <Button className={"w-25"}
                     type={"submit"}
                     variant="contained"

@@ -1,4 +1,5 @@
-export type ChangePasswordRequest = {
-    password: string,
-    confirmPassword: string
+import {ResetPasswordRequest} from "./resetPassword.request";
+
+export type ChangePasswordRequest =  ResetPasswordRequest & {
+    currentPassword: string,
 }

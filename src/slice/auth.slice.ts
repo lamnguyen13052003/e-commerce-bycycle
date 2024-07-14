@@ -3,18 +3,19 @@ import {AuthState} from "../states/auth.state";
 import {User} from "../types/user.type";
 import {
     getUser,
-    getUsernameVerify,
+    getId,
     removeUser,
-    removeUsernameVerify,
+    removeId,
     saveUser,
-    saveUsernameVerify,
+    saveId as saveIdSessionStorage,
     updateProfile as saveProfile,
 } from "../utils/sessionStorage";
+import {ObjectId} from "mongodb";
 
 const loadAuthState = () => {
     const auth: AuthState = {};
     auth.user = getUser()
-    auth.usernameVerify = getUsernameVerify()
+    auth._id = getId()
     return auth
 }
 
@@ -28,17 +29,17 @@ const authSlice = createSlice({
             saveUser(action.payload)
             state.user = action.payload
         },
-        userNameVerify: (state, action: PayloadAction<string>) => {
-            saveUsernameVerify(action.payload)
-            state.usernameVerify = action.payload
+        saveId: (state, action: PayloadAction<ObjectId>) => {
+            saveIdSessionStorage(action.payload)
+            state._id = action.payload
         },
         logout: (state, action: PayloadAction<void>) => {
             removeUser()
             state.user = undefined
         },
         verifySuccess: (state, action: PayloadAction<void>) => {
-            removeUsernameVerify()
-            state.usernameVerify = undefined
+            removeId()
+            state._id = undefined
         },
         updateProfile: (state, action: PayloadAction<User>) => {
             const user = action.payload;
@@ -55,5 +56,5 @@ const authSlice = createSlice({
     }
 });
 
-export const {login, logout, userNameVerify, verifySuccess, updateProfile} = authSlice.actions;
+export const {login, logout, saveId, verifySuccess, updateProfile} = authSlice.actions;
 export const authReducer = authSlice.reducer
